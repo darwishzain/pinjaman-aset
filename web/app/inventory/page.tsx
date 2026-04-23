@@ -4,7 +4,7 @@ export default function Inventory(){
         <div className="flex h-screen bg-gray-100">
         {/* Sidebar */}
         <aside className="w-64 bg-white border-r hidden md:block">
-            <div className="p-4 font-bold text-xl">My App</div>
+            <div className="p-4 font-bold text-xl">Inventory Dashboard</div>
             <nav className="mt-4">
             <a href="/dashboard" className="block px-4 py-2 hover:bg-gray-200">Overview</a>
             <a href="/dashboard/invoices" className="block px-4 py-2 hover:bg-gray-200">Invoices</a>
