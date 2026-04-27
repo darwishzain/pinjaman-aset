@@ -1,3 +1,7 @@
+<?php
+include 'config.php';
+include 'samplesession.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
