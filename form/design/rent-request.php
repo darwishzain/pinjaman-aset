@@ -13,17 +13,27 @@ include 'samplesession.php';
 <body>
     <form class="w-75 m-auto" action="" method="post">
         <h1>Borang Permohonan Sewaan Alatan Komputer</h1>
-        <input class="form-control" type="text" value="" placeholder="Nama Pemohon">
+        <?php
+        $stmt = $conn -> prepare("SELECT * FROM user WHERE userid = ?");
+        $stmt->bind_param("s",$_SESSION['userid']);
+        $stmt->execute();
+        $u_r = mysqli_fetch_assoc($stmt->get_result());
+        $stmt->close();
+        ?>
+        <input class="form-control" name="userid" type="text" value="<?php echo($u_r['userid']);?>" placeholder="Nama Pemohon" hidden>
+        Nama Pemohon: <input class="form-control" name="username" type="text" value="<?php echo($u_r['username']);?>" placeholder="Nama Pemohon" readonly>
+        Jabatan/Syarikat:
         <select class="form-control" name="classification" id="">
             <option value="digital">BPH</option>
             <option value="digital">BD</option>
             <option value="digital">PSM</option>
         </select>
+        Tujuan:
         <input class="form-control" type="text" placeholder="Tujuan">
-        <input class="form-control" type="datetime-local" name="" id="" value="">
-        <input class="form-control" type="datetime-local" name="" id="" value="">
-        <input class="form-control" type="text" placeholder="Tempat Penggunaan">
-        <textarea class="form-control" name="remark" id="" placeholder="Catatan (Jika Perlu)" ></textarea>
+        Tarikh dan Masa Diperlukan Penggunaan:<input class="form-control" type="datetime-local" name="" id="" value="">
+        Tarikh Dipindah ke Lokasi Penggunaan: <input class="form-control" type="date" name="" id="" value="">
+        Tempat Penggunaan<input class="form-control" type="text" placeholder="Tempat Penggunaan">
+        Catatan (Jika Perlu)<textarea class="form-control" name="remark" id="" placeholder="Catatan (Jika Perlu)" ></textarea>
         <h2 class="text-center">Kegunaan</h2>
         <div class="form-check">
             <input type="radio" class="form-check-input" id="radio1" name="usage" value="option1" checked>Individu
