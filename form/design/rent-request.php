@@ -14,7 +14,7 @@ include 'samplesession.php';
     <form class="w-75 m-auto" action="" method="post">
         <h1>Borang Permohonan Sewaan Alatan Komputer</h1>
         <?php
-        $stmt = $conn -> prepare("SELECT * FROM user WHERE userid = ?");
+        $stmt = $conn -> prepare("SELECT * FROM `user` WHERE userid = ?");
         $stmt->bind_param("s",$_SESSION['userid']);
         $stmt->execute();
         $u_r = mysqli_fetch_assoc($stmt->get_result());
