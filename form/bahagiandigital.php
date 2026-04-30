@@ -33,7 +33,7 @@ if(!empty($_GET))
     }
     else if(isset($_GET['book']) && $_GET['book'] === 'new')
     {
-        $content .= "<form class='w-75 m-auto' action='' method='post'>";
+                $content .= "<form class='w-75 m-auto' action='' method='post'>";
         $content .= "<h1>Permohonan Sewaan Alatan Komputer</h1>";
         $content .= "<input type='hidden' value='$userid_s'>";
         $content .= "Nama Pemohon: <input class='form-control' type='text' name='username' value='{$userdata['username']}'>";
@@ -41,6 +41,16 @@ if(!empty($_GET))
         $content .= "Tujuan: <input class='form-control' name='reason' type='text' placeholder='Tujuan'>";
         $content .= "<input class='form-control' name='datetimestart' id='' type='datetime-local' value=''>";
         $content .= "<input class='form-control' name='datetimeend' id='' type='datetime-local' value=''>";
+        $content .= "Catatan (Jika Perlu): <input class='form-control' name='remark' type='text' placeholder='Catatan (Jika Perlu)'>";
+        $content .= "<h2 class='text-center'>Kegunaan</h2>";
+        $content .= "<div class='form-check'>";
+        $content .= "    <input type='radio' class='form-check-input' id='radio1' name='usage' value='individual' checked>Individu";
+        $content .= "    <label class='form-check-label' for='radio1'></label>";
+        $content .= "</div>";
+        $content .= "<div class='form-check'>";
+        $content .= "    <input type='radio' class='form-check-input' id='radio1' name='usage' value='department'>Bahagians";
+        $content .= "    <label class='form-check-label' for='radio1'></label>";
+        $content .= "</div>";
         $content .= "</form>";
     }
 
