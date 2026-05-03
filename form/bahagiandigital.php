@@ -1,6 +1,6 @@
 <?php
 include('config.php');
-include 'samplesession.php';
+include 'function.php';
 $content = '';
 $stmt = $conn->prepare("SELECT * FROM user WHERE userid LIKE ?");
 $stmt->bind_param("s",$_SESSION['userid']);
