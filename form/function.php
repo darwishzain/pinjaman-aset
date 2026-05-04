@@ -14,6 +14,6 @@ function e($string) {
 }
 function alert($string)
 {
-    echo("<script>alert($string);</script>");
+    echo("<script>alert('$string');</script>");
 }
 ?>
