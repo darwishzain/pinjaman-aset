@@ -3,6 +3,7 @@ include('config.php');
 include 'function.php';
 $content = '';
 //TODO: redirect out if not certain role
+//! delete testing asset add: DELETE FROM T2_asset WHERE T2_label NOT LIKE '%Sample%';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST['asset_add']))
     {
@@ -20,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssssss",$assetid,$assetlabel,$assettype,$handlerid,$assetstatus,$details);
         if($stmt->execute())
         {
-            header('asset.php');
-            alert($_POST['T2_assetid_add'] . " added by " . $_POST['T2_handlerid_add'] );
+            $message = $_POST['T2_assetid_add'] . " added by " . $_POST['T2_handlerid_add'];
+            alert($message,redirect:"./asset.php");
         }
         $stmt->close();
     }
@@ -40,22 +41,64 @@ if($_GET)
             <input class="form-control" type="text" name="T2_label_add" id="" placeholder="Label">
             <div class="row">
                 <div class="col-6">
-                    <select class="form-control" name="T2_type_add" id="">
-                        <option value="laptop">Laptop</option>
-                        <option value="projector">Projektor</option>
-                        <option value="monitor">Monitor</option>
+                    <select class="form-control" name="T2_type_add" id="T2_type_add">
+                    <?php
+                    $type_fields = [
+                        "laptop" => [
+                            "brand" => "str",
+                            "ram_type" => "str",
+                            "ram_count" => "int",
+                            "usb_a_female_count" => "int",
+                            "hdmi_input" => "bool"
+                        ],
+                        "projector" => [
+                            "brand" => "str",
+                            "hdmi_input" => "bool",
+                            "vga_input" => "bool"
+                        ],
+                        "monitor" => [
+                            "brand" => "str",
+                            "hdmi_input" => "bool",
+                            "vga_input" => "bool"
+                        ],
+                        "personal computer" => [
+                            "brand" => "str",
+                            "ram_count" => "int"
+                        ]
+                    ];
+                    $inventory_fields = ['laptop','projector','monitor','personal  computer'];
+                    foreach(array_keys($type_fields) as $field){
+                        $label = ucfirst($field);
+                        $value = preg_replace('/\s+/', '-', strtolower($field));
+                        ?><option value="<?php echo($value);?>"><?php echo($label);?></option><?php
+                    }
+                    ?>
                     </select>
                 </div>
-                <div class="col-3">
-                    <input type="text" name="asset" id="">
+                <!-- <div class="col-3"> -->
+                    <!-- <input type="text" name="asset" id=""> -->
                     <!-- <input class="form-control" name="bd-assetinventory" type="number" id="" value="0"> -->
-                </div>
-                <div class="col-3">
+                <!-- </div> -->
+                <div class="col-6">
                     <input class="form-control" name="asset_add" type="submit" value="Tambah">
                 </div>
-                <div id="details">
-                    Details
-                </div>
+                <div id="details"></div>
+                <script>
+                    const type_fields = <?= json_encode($type_fields) ?>;
+                    const dropdown = document.getElementById('T2_type_add');
+                    dropdown.addEventListener('change', (event) => {
+                        detaildiv = document.getElementById('details');
+                        detaildiv.replaceChildren();
+                        const type = event.target.value;
+                        details_field = Array(type_fields[type]);
+                        details_field.forEach(detail => {
+                            //console.log(type_fields[type]);
+                            console.log(detail);
+                        });
+                        console.log("Selected:", type);
+                    });
+                </script>
+                
             </div>
         </form>
         <?php

@@ -14,8 +14,19 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 function e($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
-function alert($string)
+function alert($message,$redirect = null)
 {
-    echo("<script>alert('$string');</script>");
+    ?>
+    <script>
+    <?php
+    echo("alert('$message');");
+    if($redirect)
+    {
+        echo("window.location.href = '$redirect';");
+    }
+    ?>
+    </script>
+    <?php
+    //exit;
 }
 ?>
