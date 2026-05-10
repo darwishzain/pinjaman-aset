@@ -303,7 +303,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="161" value="T4_lend" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;whiteSpace=wrap;fillColor=default;fillStyle=solid;swimlaneFillColor=none;strokeColor=default;perimeterSpacing=0;swimlaneLine=1;shadow=0;strokeWidth=2;labelBorderColor=none;labelBackgroundColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="860" y="110" width="280" height="180" as="geometry"/>
+                    <mxGeometry x="860" y="110" width="280" height="210" as="geometry"/>
                 </mxCell>
                 <mxCell id="162" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=default;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;html=1;labelBackgroundColor=none;labelBorderColor=none;swimlaneFillColor=none;" parent="161" vertex="1">
                     <mxGeometry y="30" width="280" height="30" as="geometry"/>
@@ -366,6 +366,19 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="176" value="T4_timereturn DATETIME" style="shape=partialRectangle;connectable=0;fillColor=default;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;html=1;whiteSpace=wrap;labelBackgroundColor=none;labelBorderColor=none;swimlaneFillColor=none;" parent="174" vertex="1">
+                    <mxGeometry x="60" width="220" height="30" as="geometry">
+                        <mxRectangle width="220" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="236" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=default;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;html=1;labelBackgroundColor=none;labelBorderColor=none;swimlaneFillColor=none;" vertex="1" parent="161">
+                    <mxGeometry y="180" width="280" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="237" value="" style="shape=partialRectangle;connectable=0;fillColor=default;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;html=1;whiteSpace=wrap;labelBackgroundColor=none;labelBorderColor=none;swimlaneFillColor=none;" vertex="1" parent="236">
+                    <mxGeometry width="60" height="30" as="geometry">
+                        <mxRectangle width="60" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="238" value="T4_status VARCHAR(40)" style="shape=partialRectangle;connectable=0;fillColor=default;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;html=1;whiteSpace=wrap;labelBackgroundColor=none;labelBorderColor=none;swimlaneFillColor=none;" vertex="1" parent="236">
                     <mxGeometry x="60" width="220" height="30" as="geometry">
                         <mxRectangle width="220" height="30" as="alternateBounds"/>
                     </mxGeometry>
