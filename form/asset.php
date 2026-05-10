@@ -114,7 +114,7 @@ if($_GET)
 }
 else{
     ob_start();?>
-    <h1>Senarai Aset</h1>
+    <h1>Senarai Aset <a href="?asset">+</a></h1>
     <table class="table table-bordered w-75 m-auto">
         <tr>
             <th>Label</th>
@@ -126,10 +126,12 @@ else{
         $data = $stmt->get_result();
         while($list = mysqli_fetch_assoc($data))
         {
+            $details = json_decode($list['T2_details'],true);
             ?>
             <tr>
                 <td><?php echo($list['T2_label']);?></td>
                 <td><?php echo($list['T2_type']);?></td>
+                <td><?php echo('details...');?></td>
             </tr>
             <?php
         }
