@@ -43,30 +43,6 @@ if($_GET)
                 <div class="col-6">
                     <select class="form-control" name="T2_type_add" id="T2_type_add">
                     <?php
-                    $type_fields = [
-                        "laptop" => [
-                            "brand" => "str",
-                            "ram_type" => "str",
-                            "ram_count" => "int",
-                            "usb_a_female_count" => "int",
-                            "hdmi_input" => "bool"
-                        ],
-                        "projector" => [
-                            "brand" => "str",
-                            "hdmi_input" => "bool",
-                            "vga_input" => "bool"
-                        ],
-                        "monitor" => [
-                            "brand" => "str",
-                            "hdmi_input" => "bool",
-                            "vga_input" => "bool"
-                        ],
-                        "personal computer" => [
-                            "brand" => "str",
-                            "ram_count" => "int"
-                        ]
-                    ];
-                    $inventory_fields = ['laptop','projector','monitor','personal  computer'];
                     foreach(array_keys($type_fields) as $field){
                         $label = ucfirst($field);
                         $value = preg_replace('/\s+/', '-', strtolower($field));

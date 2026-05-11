@@ -11,6 +11,29 @@ $stmt->close();
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
+$type_fields = [
+    "laptop" => [
+        "brand" => "str",
+        "ram_type" => "str",
+        "ram_count" => "int",
+        "usb_a_female_count" => "int",
+        "hdmi_input" => "bool"
+    ],
+    "projector" => [
+        "brand" => "str",
+        "hdmi_input" => "bool",
+        "vga_input" => "bool"
+    ],
+    "monitor" => [
+        "brand" => "str",
+        "hdmi_input" => "bool",
+        "vga_input" => "bool"
+    ],
+    "personal computer" => [
+        "brand" => "str",
+        "ram_count" => "int"
+    ]
+];
 function e($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
