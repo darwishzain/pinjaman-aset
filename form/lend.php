@@ -34,23 +34,17 @@ if($_GET)
     {
         ob_start();
         ?>
-        <h1>Peminjaman</h1>
+        <h1>Borang Penggunaan Perlalatan Komputer</h1>
         <form action="" method="post">
             <input class="form-control" type="text" name="T1_userid" id="" value="<?php echo(e($_SESSION['userid']));?>" hidden>
-            <div class="row">
-                <div class="col">
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="form-label">Peminjam</label>
-                            <input class="form-control" type="text" name="T1_name" id="" value="Sample Name" readonly>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label">Jabatan/Syarikat</label>
-                            <input class="form-control" type="text" name="T1_department" id="" value="Sample Department/Company" readonly>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php
+            $stmt = $conn->prepare("SELECT T1_username,T1_role FROM T1_user WHERE T1_userid = ?");
+            $stmt->bind_param("i", $_SESSION['userid']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
+            ?>
+            <h3><?php echo($user['T1_username'].'('.ucwords($user['T1_role']).')'); ?></h3>
             <div class="row">
                 <div class="col">
                     <div class="row">
@@ -88,10 +82,9 @@ if($_GET)
             </div>
             <h4>Butiran Aset</h4>
             <?php
-            foreach (['laptop','projector','monitor','personal computer'] as $assettype) {
+            foreach (array_keys($type_fields) as $assettype) {
                 $label = ucwords($assettype);
                 $value = preg_replace('/\s+/', '-', strtolower($assettype));
-                
                 ?>
                 <div class="row w-50 m-auto">
                     <div class="col-6">
