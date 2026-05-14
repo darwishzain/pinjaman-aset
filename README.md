@@ -14,18 +14,19 @@
 - one asset can only be handled by one user
 ---
 **T3-T4/T4-T3**
-- one rent can only belong to one request
-- one request may not have rent
-- one request can only have one rent
+- one loan can only belong to one request
+- one request may not have loan
+- one request can have multiple loan
 ---
-**T3-T5/T5-T3**
+**T3-T5/T5-T3** 
+`KIV for now.`
 - one book can only belong to one request
 - one request may not have book
 - one request can only have one book
 ---
 **T2-T4/T4-T2**
-- rent need to have at least one asset
-- rent can have multiple asset
-- asset may not have a rent at all
-- asset can be in multiple rent
+- loan need to have at least one asset
+- loan can only have one asset
+- asset may not have a loan at all
+- asset can be in multiple loan
 

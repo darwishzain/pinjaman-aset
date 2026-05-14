@@ -5,7 +5,12 @@ $content = '';
 $title = 'Peminjaman';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
 {
-    if(isset($_POST['submitlendrequest']))
+    if(isset($_POST['userid_user']))
+    {
+        $userid = $_POST['userid_user'];
+        alert("Redirecting as User with ID: $userid", "lend.php?request");
+    }
+    else if(isset($_POST['submitlendrequest']))
     {
         $userid = $_POST['T1_userid'];
         $reason = $_POST['T3_reason'];
@@ -30,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
 if($_GET)
 {
-    if(isset($_GET['new']))
+    if(isset($_GET['request']) && empty($_GET['request'] ))
     {
         ob_start();
         ?>
@@ -54,7 +59,14 @@ if($_GET)
                         </div>
                         <div class="col-4">
                             <label class="form-label">Tarikh untuk Ambil</label>
-                            <input class="form-control" type="date" name="T3_datetoreceive" id="" value="" required>
+                            <input class="form-control" type="date" name="T3_datetoreceive" id="T3_datetoreceive" value="" required>
+                            <script>
+                            const date = new Date();
+                            date.setDate(date.getDate() + 1);
+                            const tomorrow = date.toISOString().split('T')[0];
+                            document.getElementById('T3_datetoreceive').value = tomorrow;
+                            document.getElementById('T3_datetoreceive').setAttribute('min', tomorrow);
+                            </script>
                         </div>
                         <div class="col-4">
                             <label class="form-label">Kegunaan</label>
@@ -80,6 +92,26 @@ if($_GET)
                     </div>
                 </div>
             </div>
+            <div>
+                <label for="T3_type">Jenis Permohonan</label>
+                <select class="form-control" name="T3_type" id="" required readonly>
+                    <?php
+                        //! Readonly as currently is asset borrow only
+                        $stmt = $conn->prepare("SELECT COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_NAME = 'T3_request' AND COLUMN_NAME = 'T3_type'");
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        $row = $result->fetch_assoc();
+                        //$requesttype = trim($row['COLUMN_TYPE'], "enum()");
+                        $requesttype = str_getcsv(preg_replace('/^enum\((.*)\)$/i', '$1', $row['COLUMN_TYPE']),",","'");
+                        foreach ($requesttype as $index => $type) {
+                            $selected = ($type == 'asset') ? 'selected' : '';
+                            $value = $index+1;
+                            $label = ucwords($type);
+                            echo "<option value='$value' $selected>$label</option>";
+                        }
+                    ?>
+                </select>
+            </div>
             <h4>Butiran Aset</h4>
             <?php
             foreach (array_keys($type_fields) as $assettype) {
@@ -100,6 +132,13 @@ if($_GET)
             <input class="btn btn-primary" type="submit" name="submitlendrequest" value="Hantar Permohonan" >
         </form>
         <?php
+        $content .= ob_get_clean();
+    }
+    else if(isset($_GET['request']) && !empty($_GET['request']))
+    {
+        //If asset or facility
+        ob_start();
+
         $content .= ob_get_clean();
     }
 }
