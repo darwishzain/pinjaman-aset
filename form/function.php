@@ -1,4 +1,5 @@
 <?php
+include('config.php');
 session_start();
 $stmt = $conn->prepare("SELECT * FROM T1_user LIMIT 1");
 $stmt->execute();
@@ -34,6 +35,7 @@ $type_fields = [
         "ram_count" => "int"
     ]
 ];
+$returnpage = '';//Page to return for non logged in user.
 function e($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }

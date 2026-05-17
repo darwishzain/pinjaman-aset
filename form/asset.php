@@ -1,5 +1,4 @@
 <?php
-include('config.php');
 include 'function.php';
 $content = '';
 //TODO: redirect out if not certain role

@@ -1,5 +1,4 @@
 <?php
-include('config.php');
 include 'function.php';
 $content = '';
 $title = 'Peminjaman';
@@ -29,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
             }
         }
         }
-        alert($_POST['T1_reason'], "lend.php?new");
+        alert($_POST['T1_reason'], "lend.php?request");
     }
 }
 
