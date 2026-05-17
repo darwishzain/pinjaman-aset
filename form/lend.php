@@ -37,18 +37,19 @@ if($_GET)
     if(isset($_GET['request']) && empty($_GET['request'] ))
     {
         ob_start();
+        echo $samplepassword;
         ?>
         <h1>Borang Penggunaan Perlalatan Komputer</h1>
         <form action="" method="post">
             <input class="form-control" type="text" name="T1_userid" id="" value="<?php echo(e($_SESSION['userid']));?>" hidden>
             <?php
-            $stmt = $conn->prepare("SELECT T1_username,T1_role FROM T1_user WHERE T1_userid = ?");
+            $stmt = $conn->prepare("SELECT T1_username,T1_type FROM T1_user WHERE T1_userid = ?");
             $stmt->bind_param("i", $_SESSION['userid']);
             $stmt->execute();
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
             ?>
-            <h3><?php echo($user['T1_username'].'('.ucwords($user['T1_role']).')'); ?></h3>
+            <h3><?php echo($user['T1_username'].'('.ucwords($user['T1_type']).')'); ?></h3>
             <div class="row">
                 <div class="col">
                     <div class="row">
