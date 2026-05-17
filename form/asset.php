@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $assetlabel = $_POST['T2_label_add'];
         $assettype = $_POST['T2_type_add'];
         $assetstatus = "good";
-        $stmt = $conn->prepare("INSERT INTO T2_asset (T2_assetid,T2_label,T2_type,T2_handlerid,T2_status,T2_details) VALUES(?,?,?,?,?,?)");
+        $stmt = $conn->prepare("INSERT INTO T2_asset (T2_assetid,T2_label,T2_type,T2T1_handler,T2_status,T2_details) VALUES(?,?,?,?,?,?)");
         $stmt->bind_param("ssssss",$assetid,$assetlabel,$assettype,$handlerid,$assetstatus,$details);
         if($stmt->execute())
         {
@@ -32,7 +32,7 @@ if($_GET)
     {
         $title = "Tambah Aset";
         ob_start();//Using output buffering?>
-        <form class="w-75 m-auto" action="" method="post">
+        <form class="w-75 m -auto" action="" method="post">
             <h1>Tambah Aset</h1>
             <input class="form-control" name="userid" type="text" hidden>
             <input class="form-control" name="T2_handlerid_add" type="text" value="<?php echo(e($_SESSION['userid']));//set handler be current user?>" hidden>

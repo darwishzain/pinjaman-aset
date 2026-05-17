@@ -1,4 +1,23 @@
-# item-rental
+# Peminjaman Alatan Komputer Bahagian Digital PKINK
+
+## TODO
+- handler asset management
+## Halaman
+- Pengguna (Peminjam) `staff`
+  - peminjaman(baru)`/?request`
+  - peminjaman(perihal)`/?request=REQUESTID`
+  - peminjaman(rekod)`/?list`
+- Pengurus `manager`
+  - peminjaman(rekod)
+  - peminjaman(pengesahan)
+- Pengendali `handler`
+  - aset(tambah)`/?asset&new`
+  - aset(senarai)`/?asset`
+  - aset(kemaskini)`/?asset=ASSETID`
+  - peminjaman(senarai)`/?status=STATUS`
+  - peminjaman(record)`/?request`
+  - peminjaman(pengesahan+tetapkan aset)`/?request=REQUESTID`
+
 ## Entity Relation Diagram (ERD)
 ![](erd.png)
 ### Justification

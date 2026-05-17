@@ -4,12 +4,7 @@ $content = '';
 $title = 'Peminjaman';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
 {
-    if(isset($_POST['userid_user']))
-    {
-        $userid = $_POST['userid_user'];
-        alert("Redirecting as User with ID: $userid", "lend.php?request");
-    }
-    else if(isset($_POST['submitlendrequest']))
+        if(isset($_POST['submitlendrequest']))
     {
         $userid = $_POST['T1_userid'];
         $reason = $_POST['T3_reason'];
@@ -37,7 +32,6 @@ if($_GET)
     if(isset($_GET['request']) && empty($_GET['request'] ))
     {
         ob_start();
-        echo $samplepassword;
         ?>
         <h1>Borang Penggunaan Perlalatan Komputer</h1>
         <form action="" method="post">
@@ -49,7 +43,7 @@ if($_GET)
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
             ?>
-            <h3><?php echo($user['T1_username'].'('.ucwords($user['T1_type']).')'); ?></h3>
+            <h3><?php echo($user['T1_username'].'('.ucwords($user['T1_type']).')'.$_SESSION['userid']); ?></h3>
             <div class="row">
                 <div class="col">
                     <div class="row">
