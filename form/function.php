@@ -14,7 +14,7 @@ INSERT INTO T1_user (T1_userid,T1_username,T1_email,T1_passwordhash,T1_type) VAL
 session_unset();
 session_destroy();
 session_start();
-$sampletype = 'handler';
+$sampletype = 'handler';//change this for testing each user type.
 $stmt = $conn->prepare("SELECT * FROM T1_user WHERE T1_type = ? LIMIT 1");
 $stmt->bind_param("s", $sampletype);
 $stmt->execute();
@@ -29,7 +29,7 @@ $stmt->close();
 //! TEST end
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-$type_fields = [
+$asset_fields = [
     "laptop" => [
         "brand" => "str",
         "ram_type" => "str",
@@ -52,9 +52,46 @@ $type_fields = [
         "ram_count" => "int"
     ]
 ];
-$returnpage = 'lend.php';//! Page to return for non logged in user.
+?>
+<script>
+    const assetFields = <?php echo(json_encode($asset_fields)); ?>;
+</script>
+<?php
+$returnpage = 'index.php';//! Page to return for non logged in user.
 function e($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+}
+function nav()
+{
+    ob_start();
+    if(isset($_SESSION['usertype']))
+    {
+        if($_SESSION['usertype'] == 'handler')
+        {
+            $navlist = [['handler.php','Utama'],['handler.php?asset&new','Tambah Aset'],['handler.php?asset','Senarai Aset']];
+        }
+        else if($_SESSION['usertype'] == 'manager')
+        {
+            $navlist = [];
+        }
+        else if($_SESSION['usertype'] == 'staff')
+        {
+            $navlist = [['staff.php','Utama'],['staff.php?request&new','Permohonan Baru'],['staff.php?request','Senarai Permohonan']];
+        }
+        foreach($navlist as $navitem)
+        {
+            ?>
+            <a class="btn btn-outline-primary" href="<?php echo($navitem[0]); ?>"><?php echo($navitem[1]); ?></a>
+            <?php
+        }
+        ?><br><?php
+    }
+    else
+    {
+        return '';
+    }
+
+    return ob_get_clean();
 }
 function alert($message,$redirect = null)
 {

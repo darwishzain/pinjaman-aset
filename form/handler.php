@@ -45,15 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 }
 $content = '';
 $title = 'Pengendalian';
-?>
-<?php
-ob_start();
-?>
-<a  class="" href="handler.php?">Utama</a>
-<a  class="" href="handler.php?asset&new">Tambah Aset</a>
-<a  class="" href="handler.php?asset">Senarai Aset</a>
-<?php
-$content .= ob_get_clean();
+$content .= nav();
 if($_GET)
 {
     if(isset($_GET['asset']) && isset($_GET['new']))
@@ -72,8 +64,8 @@ if($_GET)
     else if(isset($_GET['asset']))
     {
         //TODO: List assets. KIV(sort filter)
-         ob_start();?>
-        <h1>Senarai Aset <a href="?asset&new">+</a></h1>
+        ob_start();?>
+        <h1>Senarai Aset</h1>
         <table class="table table-bordered w-75 m-auto">
             <tr>
                 <th>Label</th>
@@ -116,7 +108,7 @@ else
 <?php
 function assetform($assetid = null)
 {
-    global $type_fields, $conn;
+    global $asset_fields, $conn;
     ob_start();
     if($assetid!= null  )
     {
@@ -151,9 +143,10 @@ function assetform($assetid = null)
         <input class="form-control" type="text" name="asset_label" id="" value="<?php echo($assetlabel);?>"placeholder="Label">
         <div class="row">
             <div class="col-6">
-                <select class="form-control" name="asset_type" id="">
-                <?php
-                foreach(array_keys($type_fields) as $field){
+                <select class="form-control" name="asset_type" id="asset_type" required>
+                    <option value="">--- Sila pilih jenis aset ---</option>
+                    <?php
+                foreach(array_keys($asset_fields) as $field){
                     $type_label = ucfirst($field);
                     $type_value = preg_replace('/\s+/', '-', strtolower($field));
                     ?><option value="<?php echo($type_value);?>"><?php echo($type_label);if($assettype == $type_value){ echo(' selected'); } ?></option><?php
@@ -162,26 +155,23 @@ function assetform($assetid = null)
                 </select>
             </div>
             <div class="col-6">
-                <input class="form-control" name="<?php echo($btnsubmit[0]); ?>" type="submit" value="<?php echo($btnsubmit[1]); ?>">
+                <input class="btn btn-primary" name="<?php echo($btnsubmit[0]); ?>" type="submit" value="<?php echo($btnsubmit[1]); ?>">
             </div>
-            <div id="details"></div>
-            <script>
-                const type_fields = <?= json_encode($type_fields) ?>;
-                const dropdown = document.getElementById('T2_type_add');
-                dropdown.addEventListener('change', (event) => {
-                    detaildiv = document.getElementById('details');
-                    detaildiv.replaceChildren();
-                    const type = event.target.value;
-                    details_field = Array(type_fields[type]);
-                    details_field.forEach(detail => {
-                        //console.log(type_fields[type]);
-                        console.log(detail);
-                    });
-                    console.log("Selected:", type);
-                });
-            </script>
-            
         </div>
+        <h3>Butiran Aset</h3>
+        <div id="details"></div>
+        <script>//TODO: generate input field for details of asset type
+            const asset_details = document.getElementById('details');
+            const asset_type = document.getElementById('asset_type');
+            asset_type.addEventListener('change', (event) => {
+                const type = asset_type.value;
+                asset_details.replaceChildren();
+                asset_details.textContent += "Abaikan buat masa ini";
+                Object.keys(assetFields[type]).forEach(detail => {
+                    asset_details.textContent += detail;
+                });
+            });
+        </script>
     </form>
     <?php
     return(ob_get_clean());

@@ -42,7 +42,7 @@ if($_GET)
                 <div class="col-6">
                     <select class="form-control" name="T2_type_add" id="T2_type_add">
                     <?php
-                    foreach(array_keys($type_fields) as $field){
+                    foreach(array_keys($asset_fields) as $field){
                         $label = ucfirst($field);
                         $value = preg_replace('/\s+/', '-', strtolower($field));
                         ?><option value="<?php echo($value);?>"><?php echo($label);?></option><?php
@@ -59,7 +59,7 @@ if($_GET)
                 </div>
                 <div id="details"></div>
                 <script>
-                    const type_fields = <?= json_encode($type_fields) ?>;
+                    const type_fields = <?= json_encode($asset_fields) ?>;
                     const dropdown = document.getElementById('T2_type_add');
                     dropdown.addEventListener('change', (event) => {
                         detaildiv = document.getElementById('details');

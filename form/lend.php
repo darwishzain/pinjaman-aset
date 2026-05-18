@@ -108,7 +108,7 @@ if($_GET)
             </div>
             <h4>Butiran Aset</h4>
             <?php
-            foreach (array_keys($type_fields) as $assettype) {
+            foreach (array_keys($asset_fields) as $assettype) {
                 $label = ucwords($assettype);
                 $value = preg_replace('/\s+/', '-', strtolower($assettype));
                 ?>

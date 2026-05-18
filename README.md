@@ -1,22 +1,26 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
 
 ## TODO
-- handler asset management
-## Halaman
+- [ ] handler asset management
+- [ ] better request id generation(?)
+
+## Feature suggestions
+- Close request if no asset available
+## Halaman (Status)
 - Pengguna (Peminjam) `staff`
-  - peminjaman(baru)`/?request`
-  - peminjaman(perihal)`/?request=REQUESTID`
-  - peminjaman(rekod)`/?list`
+  - [x] peminjaman(baru)`/?request`
+  - [ ] peminjaman(perihal)`/?request=REQUESTID` - only check status??
+  - [ ] peminjaman(rekod)`/?list`
 - Pengurus `manager`
-  - peminjaman(rekod)
-  - peminjaman(pengesahan)
+  - [ ] peminjaman(rekod)
+  - [ ] peminjaman(pengesahan)
 - Pengendali `handler`
-  - aset(tambah)`/?asset&new`
-  - aset(senarai)`/?asset`
-  - aset(kemaskini)`/?asset=ASSETID`
-  - peminjaman(senarai)`/?status=STATUS`
-  - peminjaman(record)`/?request`
-  - peminjaman(pengesahan+tetapkan aset)`/?request=REQUESTID`
+  - [x] aset(tambah)`/?asset&new`
+  - [x] aset(kemaskini)`/?asset=ASSETID`
+  - [x] aset(senarai)`/?asset`
+  - [ ] peminjaman(senarai)`/?status=STATUS`
+  - [ ] peminjaman(record)`/?request`
+  - [ ] peminjaman(pengesahan+tetapkan aset)`/?request=REQUESTID`
 
 ## Entity Relation Diagram (ERD)
 ![](erd.png)
