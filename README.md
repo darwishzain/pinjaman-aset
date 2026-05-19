@@ -1,11 +1,15 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
 
 ## TODO
-- [ ] handler asset management
+- [ ] login(important - and delete makeshift session assignment) - maybe on `index.php`
+- [ ] fix UI
 - [ ] better request id generation(?)
+- [ ] documentation on T*_details syntax
+- [ ] asset.details dynamic to datatype(str,int etc)
 
 ## Feature suggestions
-- Close request if no asset available
+- Close request option if no asset available
+- Warning if device availablity is low
 ## Halaman (Status)
 - Pengguna (Peminjam) `staff`
   - [x] peminjaman(baru)`/?request`
@@ -14,6 +18,7 @@
 - Pengurus `manager`
   - [ ] peminjaman(pengesahan) `?request=REQUESTID`
   - [ ] peminjaman(rekod) `?request`
+  - [x] peminjaman(--pending approval) `?`
 - Pengendali `handler`
   - [x] aset(tambah)`/?asset&new`
   - [x] aset(kemaskini)`/?asset=ASSETID`
