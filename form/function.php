@@ -5,16 +5,16 @@ session_start();
 //SAMPLE USER FOR EACH TYPE('manager','handler','staff','user') FOR TESTING PURPOSE ONLY. LOGIN SYSTEM NOT IMPLEMENTED YET.
 //$samplepassword = password_hash($_ENV['SAMPLE_PASSWORD'], PASSWORD_DEFAULT);
 /*
-INSERT INTO T1_user (T1_userid,T1_username,T1_email,T1_passwordhash,T1_type) VALUES
-('samplemanager01','Sample Manager 1','samplemanager@mail.com','password','manager'),
-('samplehandler01','Sample Handler 1','samplehandler@mail.com','password','handler'),
-('samplestaff01','Sample Staff 1','samplestaff@mail.com','password','staff'),
-('sampleuser01','Sample User 1','sampleuser@mail.com','password','user');
+INSERT INTO T1_user (T1_userid,T1_username,T1_email,T1_passwordhash,T1_type,T1_group) VALUES
+('samplemanager01','Sample Manager 1','samplemanager@mail.com','password','manager','samplegroup'),
+('samplehandler01','Sample Handler 1','samplehandler@mail.com','password','handler','samplegroup'),
+('samplestaff01','Sample Staff 1','samplestaff@mail.com','password','staff','samplegroup'),
+('sampleuser01','Sample User 1','sampleuser@mail.com','password','user','samplegroup');
 */
 session_unset();
 session_destroy();
 session_start();
-$sampletype = 'handler';//change this for testing each user type.
+$sampletype = 'manager';//change this for testing each user type.
 $stmt = $conn->prepare("SELECT * FROM T1_user WHERE T1_type = ? LIMIT 1");
 $stmt->bind_param("s", $sampletype);
 $stmt->execute();
@@ -24,6 +24,7 @@ while($u_r = mysqli_fetch_assoc($userinfo))
     $_SESSION['userid'] = $u_r['T1_userid'];
     $_SESSION['username'] = $u_r['T1_username'];
     $_SESSION['usertype'] = $u_r['T1_type'];
+    $_SESSION['usergroup'] = $u_r['T1_group'];
 }
 $stmt->close();
 //! TEST end
@@ -72,7 +73,7 @@ function nav()
         }
         else if($_SESSION['usertype'] == 'manager')
         {
-            $navlist = [];
+            $navlist = [['manager.php','Utama'],['manager.php?request','Senarai Permohonan']];
         }
         else if($_SESSION['usertype'] == 'staff')
         {
@@ -92,6 +93,10 @@ function nav()
     }
 
     return ob_get_clean();
+}
+function mytime($datetime)
+{
+    return date('d/m/Y H:i:s', strtotime($datetime));
 }
 function alert($message,$redirect = null)
 {

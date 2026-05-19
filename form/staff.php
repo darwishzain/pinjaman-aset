@@ -4,9 +4,12 @@ if($_SESSION['usertype'] != 'staff')
 {
     alert("Access Denied. Redirecting...", $returnpage);
 }
-
+//TODO: add datetouse+(loan:daycount,book:timestart,timeend) to staff
 if ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
+    //TODO: Sanitize and validate input. Add label for form input
+    //- check if ${asset}count at least has one > 0
+
     if(isset($_POST['addrequest']))
     {
         $userid = $_POST['request_userid'];
@@ -21,14 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $detailsdata['location'] = $_POST['request_location'];
         $detailsdata['datetoreceive'] = $_POST['request_datetoreceive'];
         foreach (array_keys($asset_fields) as $assettype) {
-            $value = preg_replace('/\s+/', '-', strtolower($assettype));
-            if(isset($_POST["request_${value}count"]))
+            $value = 'request_' . str_replace(' ', '_', trim(strtolower($assettype))) . '_count';
+            $label = str_replace(' ','_',$assettype).'_count';
+            if(isset($_POST[$value]) && $_POST[$value] > 0)
             {
-                $assetcount = $_POST["request_${value}count"];
-                if($assetcount > 0)
-                {
-                    $detailsdata["${assettype}count"] = $assetcount;
-                }
+                $detailsdata[$label] = $_POST[$value];
             }
         }
         $details = json_encode($detailsdata,JSON_PRETTY_PRINT);
@@ -64,6 +64,38 @@ if($_GET)
     else if(isset($_GET['request']))
     {
         // Handle request view all (for manager)
+        $stmt = $conn->prepare("SELECT * FROM T3_request WHERE T3T1_userid = ?");
+        $stmt->bind_param("s", $_SESSION['userid']);
+        $stmt->execute();
+        $requests = $stmt->get_result();
+        ob_start();?>
+        <h1>Senarai Permohonan</h1>
+        <table class="table table-bordered w-75 m-auto">
+            <tr>
+                <th>ID Permohonan</th>
+                <th>Jenis Permohonan</th>
+                <th>Tujuan</th>
+                <th>Status</th>
+                <th>Tarikh Hantar</th>
+                <th>Butiran</th>
+            </tr>
+            <?php
+            while($r = mysqli_fetch_assoc($requests))
+            {?>
+            <tr>
+                <td><?php echo(e($r['T3_requestid'])); ?></td>
+                <td><?php echo(e($r['T3_type'])); ?></td>
+                <td><?php echo(e($r['T3_reason'])); ?></td>
+                <td><?php echo(e($r['T3_status'])); ?></td>
+                <td><?php echo(e($r['T3_submittime'])); ?></td>
+                <td><button class="btn btn-info" onclick='alert(`<?php echo(e($r['T3_details'])); ?>`)'>Lihat Butiran</button></td>
+            </tr>
+            <?php
+            }
+            ?>
+        </table>
+        <?php
+        $content .= ob_get_clean();
     }
 }
 else
@@ -169,9 +201,10 @@ function requestform($requestid = null)
                 const label = document.createElement('label');
                 label.textContent = name.charAt(0).toUpperCase() + name.slice(1);
                 request_details.appendChild(label);
+                name = `request_${name.toLowerCase().trim().replace(/\s+/g, '_')}_count`;
                 const text = document.createElement('input');
                 text.setAttribute('type','number');
-                text.setAttribute('name',`request_${name}count`);
+                text.setAttribute('name',name);
                 text.setAttribute('value',value);
                 text.setAttribute('class','form-control');
                 request_details.appendChild(text);

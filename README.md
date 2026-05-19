@@ -12,8 +12,8 @@
   - [ ] peminjaman(perihal)`/?request=REQUESTID` - only check status??
   - [ ] peminjaman(rekod)`/?list`
 - Pengurus `manager`
-  - [ ] peminjaman(rekod)
-  - [ ] peminjaman(pengesahan)
+  - [ ] peminjaman(pengesahan) `?request=REQUESTID`
+  - [ ] peminjaman(rekod) `?request`
 - Pengendali `handler`
   - [x] aset(tambah)`/?asset&new`
   - [x] aset(kemaskini)`/?asset=ASSETID`
