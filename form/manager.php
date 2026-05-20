@@ -7,7 +7,38 @@ if($_SESSION['usertype'] != 'manager')
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-
+    if(isset($_POST['managerapprove_true']))
+    {
+        $requestid = $_POST['managerapprove_requestid'];
+        $approvaldata['managerid'] = $_POST['managerapprove_managerid'];
+        $approvaldata['time'] = date(' Y-m-d H:i:s', time());
+        $approvaldata['comment'] = $_POST['managerapprove_comment'];
+        $status = "PENDING_HANDLER_APPROVAL";
+        $managerapproval = json_encode($approvaldata,JSON_PRETTY_PRINT);
+        $stmt = $conn->prepare("UPDATE T3_request SET T3_managerapprove = ?,T3_status = ? WHERE T3_requestid = ?");
+        $stmt->bind_param("sss",$managerapproval,$status,$requestid);
+        if($stmt->execute())
+        {
+            $stmt->close();
+            alert("Permohonan Disahkan","manager.php");
+        }
+    }
+    else if($_POST['managerapprove_false'])
+    {
+        $requestid = $_POST['managerapprove_requestid'];
+        $approvaldata['managerid'] = $_POST['managerapprove_managerid'];
+        $approvaldata['time'] = date(' Y-m-d H:i:s', time());
+        $approvaldata['comment'] = $_POST['managerapprove_comment'];
+        $status = "MANAGER_REJECT";
+        $managerapproval = json_encode($approvaldata,JSON_PRETTY_PRINT);
+        $stmt = $conn->prepare("UPDATE T3_request SET T3_managerapprove = ?,T3_status = ? WHERE T3_requestid = ?");
+        $stmt->bind_param("sss",$managerapproval,$status,$requestid);
+        if($stmt->execute())
+        {
+            $stmt->close();
+            alert("Permohonan Ditolak","manager.php");
+        }
+    }
 }
 
 $content = '';
@@ -46,15 +77,15 @@ else
         AND u.T1_group = ?
     ");
     $stmt->bind_param("s", $_SESSION['usergroup']);
-    echo($_SESSION['usergroup']);
     $stmt->execute();
     $requests = $stmt->get_result();
+    $stmt->close();
     //username,type,purpose,submittime,details
     ?><table class="table table-bordered">
         <tr>
             <th>Pemohon</th>
             <th>Jenis Permohonan</th>
-            <th>Tujuan</th>
+            <th>Pengguna</th>
             <th>Masa Permohonan</th>
             <th>Butiran</th>
             <th>Pengesahan Pengurus</th>
@@ -69,6 +100,7 @@ else
             <?php
             if($r['T3_type'] == 'loan')
             {
+            $modaltitle = 'Permohonan Aset';
             ?>
             <td><?php echo('Peminjaman Aset'); ?></td>
             <td><?php echo(e($r['T3_purpose'])); ?></td>
@@ -88,23 +120,41 @@ else
             }
             else if($r['T3_type'] == 'book')
             {
+                $modaltitle = 'Permohonan Makmal Komputer';
                 ?>
                 <td>Jenis</td>
-                <td>Tempahan Makal Komputer Tidak Tersedia</td>
+                <td>Tempahan Makmal Komputer Tidak Tersedia</td>
             <?php
             }
             ?>
             <td>
-                <a class="btn btn-success" href="manager.php?approve=<?php echo e($r['T3_requestid']); ?>">Sahkan</a>
-                <a class="btn btn-danger" href="manager.php?reject=<?php echo e($r['T3_requestid']); ?>">Tolak</a>
+                <button class="btn btn-info" onclick="checkrequest('<?php echo($r['T3_requestid']);?>')">Semak</button>
+                <dialog id="dialog_<?php echo($r['T3_requestid']);?>" class="border-none">
+                    <button class="btn btn-light float-right" onclick="checkrequest('<?php echo($r['T3_requestid']);?>')">X</button>
+                    <h1><?php echo($modaltitle);?></h1>
+                    <section>
+                        Pemohon: <?php echo($r['T1_username']);?>
+                    </section>
+                    <form action="manager.php" method="post">
+                        <input type="hidden" name="managerapprove_managerid" value="<?php echo($_SESSION['userid']);?>">
+                        <input type="hidden" name="managerapprove_requestid" value="<?php echo($r['T3_requestid']);?>">
+                        <label for="managerapprove_comment">Komen</label>
+                        <input class="form-control" type="text" name="managerapprove_comment" id="managerapprove_comment">
+                        <div class="row m-auto">
+                            <input class="btn btn-success m-2" type="submit" name="managerapprove_true" value="Sahkan">
+                            <input class="btn btn-danger m-2" type="submit" name="managerapprove_false" value="Tolak">
+                        </div>
+                    </form>
+                </dialog>
+                <!--could use dialog if chromium based browser-->
             </td>
         </tr>
         <?php
     }
     ?>
-    </table><?php
-    
+    </table>
+    <?php
     $content.= ob_get_clean();
 }
-?>  
+?>
 <?php include('layout.php');?>

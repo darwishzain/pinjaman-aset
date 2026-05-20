@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $stmt->bind_param("ssssss",$assetid,$assetlabel,$assettype,$handlerid,$assetstatus,$assetdetails);
         if($stmt->execute())
         {
+            $stmt->close();
             $message = $_POST['asset_id'] . " added by " . $_SESSION['username'];
             alert($message,redirect:"./handler.php?asset"); 
         }
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $stmt->bind_param("ssss",$assetlabel,$assettype,$assetstatus,$assetdetails,$assetid);
         if($stmt->execute())
         {
+            $stmt->close();
             alert("Aset $assetlabel dikemaskini.", "handler.php?asset=".$assetid);
         }
     }
@@ -76,6 +78,7 @@ if($_GET)
             $stmt->bind_param("s", $_SESSION['userid']);
             $stmt->execute();
             $data = $stmt->get_result();
+            $stmt->close();
             while($list = mysqli_fetch_assoc($data))
             {
                 $details = json_decode($list['T2_details'],true);
@@ -90,16 +93,75 @@ if($_GET)
             ?>
         </table>
         <?php
-        $content .= ob_get_clean(); 
+        $content .= ob_get_clean();
+    }
+    else if(isset($_GET['request']) && !empty($_GET['request']))
+    {
+
+    }
+    else if(isset($_GET['request']))
+    {
+        ob_start();
+        ?><?php
+        $content .= ob_get_clean();
     }
 }
 else
 {
     ob_start();
-        //Home page for handler.
-    // TODO loan watch
+    $stmt = $conn->prepare("
+        SELECT
+            r.T3_requestid,
+            r.T3_type,
+            T3_datetouse,
+            r.T3_details,
+            u.T1_userid,
+            u.T1_username
+        FROM T3_request r
+        INNER JOIN T1_user u ON r.T3T1_userid = u.T1_userid
+        WHERE T3_status = 'PENDING_HANDLER_APPROVAL'
+    ");
+    $stmt->execute();
+    $requests = $stmt->get_result();
+    $stmt->close();
     ?>
-    <h1>Utama</h1>
+    <h2>Permohonan</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Pemohon</th>
+            <th>Tempoh Penggunaan</th>
+            <th>Butiran</th>
+            <th></th>
+        </tr>
+    <?php
+    while($r = mysqli_fetch_assoc($requests))
+    {
+        $details = json_decode($r['T3_details'],true);
+        ?>
+        <tr>
+            <td><?php echo($r['T1_username']);?></td>
+            <td>
+                <?php
+                echo($r['T3_datetouse']);
+                if($r['T3_type'] == 'loan')
+                {
+                    echo(" (".$details['daycount']." Hari)");
+                }
+                else if($r['T3_type'] == 'book')
+                {
+
+                }
+                ?>
+            </td>
+            <td>Butiran</td>
+            <td>
+                <button class="btn btn-primary">Semak</button>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
+    </table>
     <?php
     $content .= ob_get_clean();
 }
@@ -139,10 +201,27 @@ function assetform($assetid = null)
     ?>
     <form action="handler.php" method="post">
         <input class="form-control" type="text" name="asset_handlerid" value="<?php echo(e($_SESSION['userid']));?>" hidden>
-        <input class="form-control" type="text" name="asset_id" id="" value="<?php echo($assetid);?>"placeholder="ID Aset" <?php if($assetid){ echo(' readonly');} ?>>
-        <input class="form-control" type="text" name="asset_label" id="" value="<?php echo($assetlabel);?>"placeholder="Label">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
+                <label for="asset_id">ID Aset</label>
+            </div>
+            <div class="col-8">
+                <input class="form-control" type="text" name="asset_id" id="" value="<?php echo($assetid);?>"placeholder="ID Aset" <?php if($assetid){ echo(' readonly');} ?>>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <label for="asset_label">Label</label>
+            </div>
+            <div class="col-8">
+                <input class="form-control" type="text" name="asset_label" id="" value="<?php echo($assetlabel);?>"placeholder="Label">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <label for="asset_type">Jenis Aset</label>
+            </div>
+            <div class="col-8">
                 <select class="form-control" name="asset_type" id="asset_type" required>
                     <option value="">--- Sila pilih jenis aset ---</option>
                     <?php
@@ -154,12 +233,14 @@ function assetform($assetid = null)
                 ?>
                 </select>
             </div>
-            <div class="col-6">
-                <input class="btn btn-primary" name="<?php echo($btnsubmit[0]); ?>" type="submit" value="<?php echo($btnsubmit[1]); ?>">
-            </div>
         </div>
         <h3>Butiran Aset</h3>
         <div id="details"></div>
+        <div class="row">
+            <div class="col-12 m-auto">
+                <input class="btn btn-primary" name="<?php echo($btnsubmit[0]); ?>" type="submit" value="<?php echo($btnsubmit[1]); ?>">
+            </div>
+        </div>
         <script>//TODO: generate input field for details of asset type
             const asset_details = document.getElementById('details');
             const asset_type = document.getElementById('asset_type');

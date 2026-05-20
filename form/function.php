@@ -56,7 +56,45 @@ $asset_fields = [
 ?>
 <script>
     const assetFields = <?php echo(json_encode($asset_fields)); ?>;
+    function setdatetomorrow(inputfield){
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        inputfield.value = tomorrow.toISOString().split('T')[0];
+    }
+    function setmindatetomorrow(inputfield){
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        inputfield.setAttribute('min', tomorrow.toISOString().split('T')[0]);
+    }
+    function checkrequest(requestid)
+    {
+        const modal = document.getElementById('dialog_'+requestid);
+        if(modal.open)
+        {
+            modal.close();
+        }
+        else
+        {
+            modal.showModal();
+        }
+    }
 </script>
+<style>
+    dialog {
+        border: none;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+    }
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        backdrop-filter: blur(4px);            /* Blurs the background content */
+    }
+</style>
 <?php
 $returnpage = 'index.php';//! Page to return for non logged in user.
 function e($string) {
@@ -69,7 +107,7 @@ function nav()
     {
         if($_SESSION['usertype'] == 'handler')
         {
-            $navlist = [['handler.php','Utama'],['handler.php?asset&new','Tambah Aset'],['handler.php?asset','Senarai Aset']];
+            $navlist = [['handler.php','Utama'],['handler.php?asset&new','Tambah Aset'],['handler.php?asset','Senarai Aset'],["handler.php?request","Senarai Pinjaman"]];
         }
         else if($_SESSION['usertype'] == 'manager')
         {
@@ -85,6 +123,9 @@ function nav()
             <a class="btn btn-outline-primary" href="<?php echo($navitem[0]); ?>"><?php echo($navitem[1]); ?></a>
             <?php
         }
+        ?>
+        <a class="btn text-muted""><?php echo($_SESSION['username']); ?></a>
+        <?php
         ?><br><?php
     }
     else
