@@ -1,5 +1,7 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
-
+### Database
+- [Structure ](form/s21052026.sql) (`.sql`)
+- [Sample User](form/T1_user_21052026.sql) (`.sql`)
 ## TODO
 - [ ] login(important - and delete makeshift session assignment) - maybe on `index.php`
 - [ ] fix UI

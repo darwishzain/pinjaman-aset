@@ -1,33 +1,30 @@
 <?php
 include('config.php');
 session_start();
-//!TEST start
-//SAMPLE USER FOR EACH TYPE('manager','handler','staff','user') FOR TESTING PURPOSE ONLY. LOGIN SYSTEM NOT IMPLEMENTED YET.
-//$samplepassword = password_hash($_ENV['SAMPLE_PASSWORD'], PASSWORD_DEFAULT);
-/*
-INSERT INTO T1_user (T1_userid,T1_username,T1_email,T1_passwordhash,T1_type,T1_group) VALUES
-('samplemanager01','Sample Manager 1','samplemanager@mail.com','password','manager','samplegroup'),
-('samplehandler01','Sample Handler 1','samplehandler@mail.com','password','handler','samplegroup'),
-('samplestaff01','Sample Staff 1','samplestaff@mail.com','password','staff','samplegroup'),
-('sampleuser01','Sample User 1','sampleuser@mail.com','password','user','samplegroup');
-*/
-session_unset();
-session_destroy();
-session_start();
-$sampletype = 'manager';//change this for testing each user type.
-$stmt = $conn->prepare("SELECT * FROM T1_user WHERE T1_type = ? LIMIT 1");
-$stmt->bind_param("s", $sampletype);
-$stmt->execute();
-$userinfo = $stmt->get_result();
-while($u_r = mysqli_fetch_assoc($userinfo))
+if(isset($_GET['logout']))
 {
-    $_SESSION['userid'] = $u_r['T1_userid'];
-    $_SESSION['username'] = $u_r['T1_username'];
-    $_SESSION['usertype'] = $u_r['T1_type'];
-    $_SESSION['usergroup'] = $u_r['T1_group'];
+    session_unset();
+    session_destroy();
+    alert('Log Keluar Berjaya',"index.php");
 }
-$stmt->close();
-//! TEST end
+if(isset($_POST['login_true']))
+{
+    //TODO: Need more security
+    $username = $_POST['login_username'];
+    $password = $_POST['login_password'];
+    $stmt = $conn->prepare("SELECT * FROM T1_user WHERE T1_userid = ?");
+    $stmt->bind_param("s",$username);
+    $stmt->execute();
+    $login_r = mysqli_fetch_assoc($stmt->get_result());
+    if (password_verify($password, $login_r['T1_passwordhash']))
+    {
+        $_SESSION['userid'] = $login_r['T1_userid'];
+        $_SESSION['username'] = $login_r['T1_username'];
+        $_SESSION['usertype'] = $login_r['T1_type'];
+        $_SESSION['usergroup'] = $login_r['T1_group'];
+        alert('Log Masuk Berjaya','index.php');
+    }
+}
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
 $asset_fields = [
@@ -68,9 +65,9 @@ $asset_fields = [
         tomorrow.setDate(tomorrow.getDate() + 1);
         inputfield.setAttribute('min', tomorrow.toISOString().split('T')[0]);
     }
-    function checkrequest(requestid)
+    function togglemodal(elementid)
     {
-        const modal = document.getElementById('dialog_'+requestid);
+        const modal = document.getElementById(elementid);
         if(modal.open)
         {
             modal.close();
@@ -88,7 +85,7 @@ $asset_fields = [
         padding: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         width: 90%;
-        max-width: 500px;
+        max-width: 600px;
     }
     dialog::backdrop {
         background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
@@ -125,12 +122,20 @@ function nav()
         }
         ?>
         <a class="btn text-muted""><?php echo($_SESSION['username']); ?></a>
+        <a class="btn btn-danger" href="index.php?logout">Log Keluar</a>
         <?php
         ?><br><?php
     }
     else
     {
-        return '';
+        //!password is filled with samplepassword
+        ?>
+        <form class="w-75 m-auto"action="index.php" method="post">
+            <section class="row"><div class="col-12"><label for="login_username">Nama</label><input class="form-control" type="text" name="login_username" id="login_username"></div></section>
+            <section class="row"><div class="col-12"><label for="login_password">Kata Laluan</label><input class="form-control" type="text" name="login_password" id="login_password" value="<?php echo($_ENV['SAMPLE_PASSWORD']);?>"></div></section>
+            <section class="row"><div class="col-12"><input class="btn btn-primary" type="submit" name="login_true" value="Log Masuk"></div></section>
+        </form>
+        <?php
     }
 
     return ob_get_clean();
@@ -153,6 +158,21 @@ function alert($message,$redirect = null)
     </script>
     <?php
     //exit;
+}
+function devicecount($data)
+{
+    global $asset_fields;
+    ob_start();
+    foreach(array_keys($asset_fields) as $asset_type)
+    {
+        if(isset($data["${asset_type}_count"]))
+        {
+            $label = ucwords($asset_type)." x ".$data["${asset_type}_count"]."\n";
+            ?><a class="bg-light text-secondary m-2 rounded"><?php echo($label);?></a><?php
+            
+        }
+    }
+    return ob_get_clean();
 }
 ?>
 <!-- For switching user type during testing. Rework

@@ -100,7 +100,7 @@ else
             <?php
             if($r['T3_type'] == 'loan')
             {
-            $modaltitle = 'Permohonan Aset';
+            $modaltitle = 'Pengesahan Permohonan Aset';
             ?>
             <td><?php echo('Peminjaman Aset'); ?></td>
             <td><?php echo(e($r['T3_purpose'])); ?></td>
@@ -128,9 +128,9 @@ else
             }
             ?>
             <td>
-                <button class="btn btn-info" onclick="checkrequest('<?php echo($r['T3_requestid']);?>')">Semak</button>
+                <button class="btn btn-info" onclick="togglemodal('<?php echo('dialog_'.$r['T3_requestid']);?>')">Semak</button>
                 <dialog id="dialog_<?php echo($r['T3_requestid']);?>" class="border-none">
-                    <button class="btn btn-light float-right" onclick="checkrequest('<?php echo($r['T3_requestid']);?>')">X</button>
+                    <button class="btn btn-light float-right" onclick="togglemodal('<?php echo('dialog_'.$r['T3_requestid']);?>')">X</button>
                     <h1><?php echo($modaltitle);?></h1>
                     <section>
                         Pemohon: <?php echo($r['T1_username']);?>

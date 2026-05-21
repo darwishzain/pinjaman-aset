@@ -8,6 +8,7 @@
 </head>
 <body>
     <div id="container" class="text-center">
+        <h1>Permohonan Peminjaman Aset/Tempahan Makmal Komputer</h1>
         <?php if(!empty($content)){echo($content);}?>
     </div>
 </body>

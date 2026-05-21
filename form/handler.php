@@ -111,10 +111,7 @@ else
     ob_start();
     $stmt = $conn->prepare("
         SELECT
-            r.T3_requestid,
-            r.T3_type,
-            T3_datetouse,
-            r.T3_details,
+            r.*,
             u.T1_userid,
             u.T1_username
         FROM T3_request r
@@ -128,7 +125,7 @@ else
     <h2>Permohonan</h2>
     <table class="table table-bordered">
         <tr>
-            <th>Pemohon</th>
+            <th>Permohonan</th>
             <th>Tempoh Penggunaan</th>
             <th>Butiran</th>
             <th></th>
@@ -139,23 +136,64 @@ else
         $details = json_decode($r['T3_details'],true);
         ?>
         <tr>
-            <td><?php echo($r['T1_username']);?></td>
+            <?php
+            if($r['T3_type'] == 'loan')
+            {
+                $request_col = $r['T1_username']."(Aset)";
+                $modaltitle = "Pengesahan Permohonan Aset";
+                $duration_col = $r['T3_datetouse']."(".$details['daycount']." Hari)";
+                $details_col = devicecount($details);
+            }
+            else if($r['T3_type'] == 'book')
+            {
+                $request_col = $r['T1_username']."Makmal Komputer";
+                $modaltitle = "Pengesahan Tempahan Makmal Komputer";
+                $duration_col = $r['T3_datetouse']."(".$details['timestart']." - ".$details['timeend'].")";
+                $details_col = $details['devicecount'];
+            }
+            ?>
+            <td><?php echo($request_col);?></td>
+            <td><?php echo($duration_col);?></td>
+            <td><?php echo($details_col);?></td>
             <td>
-                <?php
-                echo($r['T3_datetouse']);
-                if($r['T3_type'] == 'loan')
-                {
-                    echo(" (".$details['daycount']." Hari)");
-                }
-                else if($r['T3_type'] == 'book')
-                {
-
-                }
-                ?>
-            </td>
-            <td>Butiran</td>
-            <td>
-                <button class="btn btn-primary">Semak</button>
+                <!--Maybe generate it on click-->
+                <button class="btn btn-info" onclick="togglemodal('<?php echo('dialog_'.$r['T3_requestid']);?>')">Semak</button>
+                <dialog id="dialog_<?php echo($r['T3_requestid']);?>">
+                    <button class="btn btn-light float-right" onclick="togglemodal('<?php echo('dialog_'.$r['T3_requestid']);?>')">X</button>
+                    <h1><?php echo($modaltitle);?></h1>
+                    <section class="row">
+                        <div class="col-4">Pemohon</div>
+                        <div class="col-8"><?php echo($r['T1_username']);?></div>
+                    </section>
+                    <section class="row">
+                        <div class="col-4">Tempoh Pinjaman</div>
+                        <div class="col-8"><?php echo($duration_col);?></div>
+                    </section>
+                    <section class="row">
+                        <div class="col-4">Tujuan</div>
+                        <div class="col-8"><?php echo($r['T3_reason']);?></div>
+                    </section>
+                    <section class="row">
+                        <div class="col-4">Catatan</div>
+                        <div class="col-8"><?php echo($r['T3_remark']);?></div>
+                    </section>
+                    <section class="row">
+                        <div class="col-4">Pengurus</div>
+                        <div class="col-8"><?php echo($r['T3_managerapprove']);?></div>
+                    </section>
+                    <section class="row">
+                        <div class="col-4">Masa Permohonan</div>
+                        <div class="col-8"><?php echo($r['T3_submittime']);?></div>
+                    </section>
+                    <form action="handler.php" method="post">
+                    <section class="row">
+                        <div class="col-4">Generate input by asset count requested</div>
+                        <div class="col-8"><?php echo($r['T3_details']);?></div>
+                    </section>
+                        <input class="btn btn-primary" type="submit" value="Sahkan">
+                        <input class="btn btn-danger" type="submit" value="Tolak">
+                    </form>
+                </dialog>
             </td>
         </tr>
         <?php
