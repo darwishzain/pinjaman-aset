@@ -140,6 +140,10 @@ function nav()
 
     return ob_get_clean();
 }
+function mydate($datetime)
+{
+    return date('d/m/Y', strtotime($datetime));
+}
 function mytime($datetime)
 {
     return date('d/m/Y H:i:s', strtotime($datetime));
@@ -168,8 +172,7 @@ function devicecount($data)
         if(isset($data["${asset_type}_count"]))
         {
             $label = ucwords($asset_type)." x ".$data["${asset_type}_count"]."\n";
-            ?><a class="bg-light text-secondary m-2 rounded"><?php echo($label);?></a><?php
-            
+            ?><code><?php echo($label);?></code><?php
         }
     }
     return ob_get_clean();

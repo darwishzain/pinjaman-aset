@@ -26,11 +26,20 @@
   - [x] aset(kemaskini)`/?asset=ASSETID`
   - [x] aset(senarai)`/?asset`
   - [ ] peminjaman(senarai)`/?status=STATUS`
-  - [ ] peminjaman(record)`/?request`
+  - [x] peminjaman(record)`/?request`
   - [ ] peminjaman(pengesahan+tetapkan aset)`/?request=REQUESTID`
 
+## Contoh Halaman
+![](image/handler@addasset.png)
+![](image/handler@listasset.png)
+![](image/handler@request-assignapprove.png)
+![](image/handler@request-pending.png)
+![](image/manager@request-approve.png)
+![](image/manager@request-pending.png)
+![](image/staff@newrequest.png)
+![](image/staff@request-all.png)
 ## Entity Relation Diagram (ERD)
-![](erd.png)
+![](image/erd.png)
 ### Justification
 
 **T1-T3/T3-T1**

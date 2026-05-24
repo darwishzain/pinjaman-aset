@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
 }
 $content = '';
-$title = 'Pengendalian';
+$title = 'Pegawai Bahagian Digital';
 $content .= nav();
 if($_GET)
 {
@@ -125,7 +125,9 @@ else
     <h2>Permohonan</h2>
     <table class="table table-bordered">
         <tr>
-            <th>Permohonan</th>
+            <th>Pemohon</th>
+            <th>Masa Permohonan</th>
+            <th>Kegunaan</th>
             <th>Tempoh Penggunaan</th>
             <th>Butiran</th>
             <th></th>
@@ -139,21 +141,27 @@ else
             <?php
             if($r['T3_type'] == 'loan')
             {
-                $request_col = $r['T1_username']."(Aset)";
+                $request_col = $r['T1_username']." (Peminjaman Aset)";
                 $modaltitle = "Pengesahan Permohonan Aset";
-                $duration_col = $r['T3_datetouse']."(".$details['daycount']." Hari)";
-                $details_col = devicecount($details);
+                $details_col = "
+                    Lokasi Penggunaan: ".$details['location']."<br>
+                    Tarikh untuk Serahan: <code>".mydate($details['datetoreceive'])."</code><br>
+                    Tempoh Penggunaan: <code>".mydate($r['T3_datetouse'])." - ".mydate(date('Y-m-d',strtotime($r['T3_datetouse']."+ ".$details['daycount']." days")))."</code><br>
+                    Bilangan Aset: ".devicecount($details)
+                ;
             }
             else if($r['T3_type'] == 'book')
             {
-                $request_col = $r['T1_username']."Makmal Komputer";
+                $request_col = $r['T1_username']." (Tempahan Makmal Komputer)";
                 $modaltitle = "Pengesahan Tempahan Makmal Komputer";
-                $duration_col = $r['T3_datetouse']."(".$details['timestart']." - ".$details['timeend'].")";
                 $details_col = $details['devicecount'];
             }
+
+            if($r['T3_purpose'] == 'individual'){$purpose_col = 'Individu';}else if($r['T3_purpose'] == 'department'){$purpose_col = 'Jabatan';}
             ?>
             <td><?php echo($request_col);?></td>
-            <td><?php echo($duration_col);?></td>
+            <td><code><?php echo($r['T3_submittime']);?></code></td>
+            <td><?php echo($purpose_col);?></td>
             <td><?php echo($details_col);?></td>
             <td>
                 <!--Maybe generate it on click-->
@@ -166,10 +174,6 @@ else
                         <div class="col-8"><?php echo($r['T1_username']);?></div>
                     </section>
                     <section class="row">
-                        <div class="col-4">Tempoh Pinjaman</div>
-                        <div class="col-8"><?php echo($duration_col);?></div>
-                    </section>
-                    <section class="row">
                         <div class="col-4">Tujuan</div>
                         <div class="col-8"><?php echo($r['T3_reason']);?></div>
                     </section>
@@ -179,16 +183,16 @@ else
                     </section>
                     <section class="row">
                         <div class="col-4">Pengurus</div>
-                        <div class="col-8"><?php echo($r['T3_managerapprove']);?></div>
+                        <div class="col-8"><code><?php echo($r['T3_managerapprove']);?></code></div>
                     </section>
                     <section class="row">
                         <div class="col-4">Masa Permohonan</div>
-                        <div class="col-8"><?php echo($r['T3_submittime']);?></div>
+                        <div class="col-8"><code><?php echo(mytime($r['T3_submittime']));?></code></div>
                     </section>
                     <form action="handler.php" method="post">
                     <section class="row">
                         <div class="col-4">Generate input by asset count requested</div>
-                        <div class="col-8"><?php echo($r['T3_details']);?></div>
+                        <div class="col-8"><code><?php echo($r['T3_details']);?></code></div>
                     </section>
                         <input class="btn btn-primary" type="submit" value="Sahkan">
                         <input class="btn btn-danger" type="submit" value="Tolak">
