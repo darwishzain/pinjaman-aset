@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $assetdetails = json_encode([
             "added" => date('m/d/Y H:i:s', time()),
             "updated" => date('m/d/Y H:i:s', time())
-        ],JSON_PRETTY_PRINT);
+        ]);
         $stmt = $conn->prepare("INSERT INTO T2_asset (T2_assetid,T2_label,T2_type,T2T1_handlerid,T2_status,T2_details) VALUES(?,?,?,?,?,?)");
         $stmt->bind_param("ssssss",$assetid,$assetlabel,$assettype,$handlerid,$assetstatus,$assetdetails);
         if($stmt->execute())
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $assetstatus = "good";
         $assetdetails = json_encode([
             "updated" => date('m/d/Y H:i:s', time())
-        ],JSON_PRETTY_PRINT);
+        ]);
         $stmt = $conn->prepare("UPDATE T2_asset SET T2_label = ?, T2_type = ?, T2_status = ?, T2_details = ? WHERE T2_assetid = ?");
         $stmt->bind_param("ssss",$assetlabel,$assettype,$assetstatus,$assetdetails,$assetid);
         if($stmt->execute())
@@ -128,7 +128,6 @@ else
             <th>Pemohon</th>
             <th>Masa Permohonan</th>
             <th>Kegunaan</th>
-            <th>Tempoh Penggunaan</th>
             <th>Butiran</th>
             <th></th>
         </tr>
@@ -165,39 +164,8 @@ else
             <td><?php echo($details_col);?></td>
             <td>
                 <!--Maybe generate it on click-->
-                <button class="btn btn-info" onclick="togglemodal('<?php echo('dialog_'.$r['T3_requestid']);?>')">Semak</button>
-                <dialog id="dialog_<?php echo($r['T3_requestid']);?>">
-                    <button class="btn btn-light float-right" onclick="togglemodal('<?php echo('dialog_'.$r['T3_requestid']);?>')">X</button>
-                    <h1><?php echo($modaltitle);?></h1>
-                    <section class="row">
-                        <div class="col-4">Pemohon</div>
-                        <div class="col-8"><?php echo($r['T1_username']);?></div>
-                    </section>
-                    <section class="row">
-                        <div class="col-4">Tujuan</div>
-                        <div class="col-8"><?php echo($r['T3_reason']);?></div>
-                    </section>
-                    <section class="row">
-                        <div class="col-4">Catatan</div>
-                        <div class="col-8"><?php echo($r['T3_remark']);?></div>
-                    </section>
-                    <section class="row">
-                        <div class="col-4">Pengurus</div>
-                        <div class="col-8"><code><?php echo($r['T3_managerapprove']);?></code></div>
-                    </section>
-                    <section class="row">
-                        <div class="col-4">Masa Permohonan</div>
-                        <div class="col-8"><code><?php echo(mytime($r['T3_submittime']));?></code></div>
-                    </section>
-                    <form action="handler.php" method="post">
-                    <section class="row">
-                        <div class="col-4">Generate input by asset count requested</div>
-                        <div class="col-8"><code><?php echo($r['T3_details']);?></code></div>
-                    </section>
-                        <input class="btn btn-primary" type="submit" value="Sahkan">
-                        <input class="btn btn-danger" type="submit" value="Tolak">
-                    </form>
-                </dialog>
+                <button id="<?php echo($r['T3_requestid']);?>" class="request-btn btn btn-info" onclick="document.getElementById('<?php echo('dialog_'.$r['T3_requestid']);?>').showModal()">Semak</button>
+                <dialog id="dialog_<?php echo($r['T3_requestid']);?>"></dialog>
             </td>
         </tr>
         <?php

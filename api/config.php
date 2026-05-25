@@ -23,11 +23,11 @@ $dbname = $_ENV['DB_NAME'] ?? '';
 $conn = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
 if(!$conn)
 {
-    $response["message"] = "Connection Failed";
+    $response["database_status"] = "Connection Failed";
     die("Connection Failed:".mysqli_connect_error());
 }
 else{
-    $response["message"] = "Connection Successful";
+    $response["database_status"] = "Connection Successful";
 }
 
 ?>

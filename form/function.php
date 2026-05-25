@@ -65,7 +65,7 @@ $asset_fields = [
         tomorrow.setDate(tomorrow.getDate() + 1);
         inputfield.setAttribute('min', tomorrow.toISOString().split('T')[0]);
     }
-    function togglemodal(elementid)
+    function togglemodal(elementid)//remove after updated manager dialog
     {
         const modal = document.getElementById(elementid);
         if(modal.open)
@@ -76,6 +76,79 @@ $asset_fields = [
         {
             modal.showModal();
         }
+    }
+    document.addEventListener('click', (event) => {
+        if (button = event.target.closest('.request-btn')) {
+            fetch('../api/request/get.php?request='+button.id)
+            .then(response => response.json())
+            .then(row => {
+                if(row.status == 'success')
+                {
+                    const dialog = document.getElementById('dialog_'+button.id);
+                    while (dialog.firstChild) {
+                        dialog.removeChild(dialog.firstChild);
+                    }
+                    const closebtn = document.createElement('button');
+                    closebtn.className = "btn btn-light float-right";
+                    closebtn.innerText = 'x';
+                    closebtn.onclick = () => {dialog.close()};
+                    dialog.appendChild(closebtn);
+                    let titleTxt = "Tajuk";
+                    data = row.data;
+                    let datetouse = new Date(data.T3_datetouse);
+                    details = JSON.parse(data.T3_details);
+                    manager = JSON.parse(data.T3_managerapprove);
+                    handler = JSON.parse(data.T3_handlerapprove);
+                    if (data.T3_type === "loan") 
+                    {
+                        titleTxt = "Pengesahan Pinjaman Aset";
+                        durationtxt = data.T3_datetouse;
+                        Object.keys(assetFields).forEach(assettype => {
+                            label = assettype.replaceAll(" ","_")+"_count";
+                            if(details[label]>0)
+                            {
+                                console.log(label+" :"+details[label]);
+                            }
+                        });
+                    }
+                    else if(data.T3_type === 'book')
+                    {
+                        titleTxt = "Pengesahan Tempahan Makmal Komputer";
+                        durationtxt = data.T3_datetouse;
+                    }
+
+                    if(data.T3_purpose === 'individual'){purposetxt='Individu';}else if(data.T3_purpose === 'department'){purposetxt = 'Jabatan';}
+                    dialog.insertAdjacentHTML("beforeend", `<h1>${titleTxt}</h1>`);
+                    sectionrow(dialog,"Pemohon",data.T1_username);
+                    sectionrow(dialog,"Kegunaan",purposetxt);
+                    sectionrow(dialog,"Tempoh",durationtxt);
+                    sectionrow(dialog,"Tujuan",data.T3_reason);
+                    sectionrow(dialog,"Catatan",data.T3_remark);
+                    sectionrow(dialog,"Masa Permohonan","<code>"+data.T3_submittime+"</code>");
+                    sectionrow(dialog,"Pengurus","<code>"+data.T3_managerapprove+"</code>");
+                    sectionrow(dialog,"Butiran","<code>"+data.T3_details+"</code>");
+
+                }
+            });
+        }
+    });
+    function sectionrow(parent,label,value)
+    {
+        //parent = document.getElementById(parentid);
+        const section = document.createElement('section');
+        section.className ='row';
+
+        const colleft = document.createElement('div');
+        colleft.className = 'col-4';
+        colleft.innerHTML = label;
+        section.appendChild(colleft);
+        
+        const colright = document.createElement('div');
+        colright.className = 'col-8';
+        colright.innerHTML = value;
+        section.appendChild(colright);
+        
+        parent.appendChild(section);
     }
 </script>
 <style>

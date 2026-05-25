@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
             }
         }
         $detailsdata['daycount'] = $_POST['request_daycount'];
-        $details = json_encode($detailsdata,JSON_PRETTY_PRINT);
+        $details = json_encode($detailsdata);
         $stmt = $conn->prepare("INSERT INTO T3_request (T3_requestid,T3T1_userid,T3_submittime,T3_reason,T3_remark,T3_purpose,T3_type,T3_datetouse,T3_status,T3_details) VALUES(?,?,?,?,?,?,?,?,?,?)");
         $stmt->bind_param("ssssssssss",$requestid,$userid,$submittime,$reason,$remark,$purpose,$type,$datetouse,$status,$details);
         if($stmt->execute())

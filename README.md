@@ -3,7 +3,8 @@
 - [Structure ](form/s21052026.sql) (`.sql`)
 - [Sample User](form/T1_user_21052026.sql) (`.sql`)
 ## TODO
-- [ ] login(important - and delete makeshift session assignment) - maybe on `index.php`
+- [x] login(important - hardcoded the password - delete later) - maybe on `index.php`
+- [ ] validate date not on weekends and datetouse > datetoreceive/datestart,dateend(dateend>datestart)
 - [ ] fix UI
 - [ ] better request id generation(?)
 - [ ] documentation on T*_details syntax

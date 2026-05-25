@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $approvaldata['time'] = date(' Y-m-d H:i:s', time());
         $approvaldata['comment'] = $_POST['managerapprove_comment'];
         $status = "PENDING_HANDLER_APPROVAL";
-        $managerapproval = json_encode($approvaldata,JSON_PRETTY_PRINT);
+        $managerapproval = json_encode($approvaldata);
         $stmt = $conn->prepare("UPDATE T3_request SET T3_managerapprove = ?,T3_status = ? WHERE T3_requestid = ?");
         $stmt->bind_param("sss",$managerapproval,$status,$requestid);
         if($stmt->execute())
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         $approvaldata['time'] = date(' Y-m-d H:i:s', time());
         $approvaldata['comment'] = $_POST['managerapprove_comment'];
         $status = "MANAGER_REJECT";
-        $managerapproval = json_encode($approvaldata,JSON_PRETTY_PRINT);
+        $managerapproval = json_encode($approvaldata);
         $stmt = $conn->prepare("UPDATE T3_request SET T3_managerapprove = ?,T3_status = ? WHERE T3_requestid = ?");
         $stmt->bind_param("sss",$managerapproval,$status,$requestid);
         if($stmt->execute())
