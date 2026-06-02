@@ -1,4 +1,8 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
+Redo by module(`./php/*`)
+- **User** `php/user.php`
+  - Manage user(add user,assign role,reset password) - superadmin
+  - 
 ### Database
 - [Structure ](form/s21052026.sql) (`.sql`)
 - [Sample User](form/T1_user_21052026.sql) (`.sql`)
