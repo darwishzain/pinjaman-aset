@@ -13,7 +13,7 @@ if(isset($_POST['login_true']))
     //TODO: Need more security
     $username = $_POST['login_id'];
     $password = $_POST['login_password'];
-    $stmt = $conn->prepare("SELECT * FROM T1_user WHERE T1_userid = ?");
+    $stmt = $conn->prepare("SELECT u.*,r.T2_name,T2_id FROM T1_user u LEFT JOIN T2_role r ON u.T1T2_roleid = r.T2_id WHERE u.T1_userid = ?");
     $stmt->bind_param("s",$username);
     $stmt->execute();
     $login_r = mysqli_fetch_assoc($stmt->get_result());
@@ -23,7 +23,7 @@ if(isset($_POST['login_true']))
         $_SESSION['username'] = $login_r['T1_username'];
         $_SESSION['usertype'] = $login_r['T1_type'];
         $_SESSION['usergroup'] = $login_r['T1_group'];
-        $_SESSION['userrole'] = $login_r['T1_role'];
+        $_SESSION['userrole'] = $login_r['T2_name'];
         //alert('Log Masuk Berjaya','index.php');
     }
 }
