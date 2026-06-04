@@ -1,8 +1,17 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
-Redo by module(`./php/*`)
+# Modules
 - **User** `php/user.php`
-  - Manage user(add user,assign role,reset password) - superadmin
-  - 
+  - [ ] Add User (username,password,role) `superadmin`
+  - [ ] Change User Role (role)`superadmin`
+  - [ ] Reset Password (password)`superadmin,admin`
+  - [ ] Reset Own Password (password) `*`
+  - [ ] View Profile(*) `superadmin,admin`
+  - [ ] View/Manage Own Profile (*) `*`
+- **Assett** `php/asset.php` !!
+  - [ ] Add Asset (label,type,status,details{CONNECTOR_,condition}) `superadmin`
+  - [ ] Manage Asset (status details{*}) `superadmin,admin`
+- **Request** `php/request.php` !!
+- **Pinjaman** `php` !!
 ### Database
 - [Structure ](form/s21052026.sql) (`.sql`)
 - [Sample User](form/T1_user_21052026.sql) (`.sql`)

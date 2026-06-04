@@ -13,7 +13,7 @@ if(isset($_POST['login_true']))
     //TODO: Need more security
     $username = $_POST['login_id'];
     $password = $_POST['login_password'];
-    $stmt = $conn->prepare("SELECT u.*,r.T2_name,T2_id FROM T1_user u LEFT JOIN T2_role r ON u.T1T2_roleid = r.T2_id WHERE u.T1_userid = ?");
+    $stmt = $conn->prepare("SELECT u.*,r.* FROM T1_user u LEFT JOIN T2_role r ON u.T1T2_roleid = r.T2_id WHERE u.T1_userid = ?");
     $stmt->bind_param("s",$username);
     $stmt->execute();
     $login_r = mysqli_fetch_assoc($stmt->get_result());
@@ -47,3 +47,13 @@ function escape($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
 ?>
+<script>
+    function closedialog(dialog) {
+        dialog.replaceChildren();
+        dialog.close();
+    }
+    function opendialog(dialog,content) {
+        dialog.replaceChildren(content);
+        dialog.showModal();
+    }
+</script>
