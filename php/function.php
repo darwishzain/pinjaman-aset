@@ -13,14 +13,14 @@ if(isset($_POST['login_true']))
     //TODO: Need more security
     $username = $_POST['login_id'];
     $password = $_POST['login_password'];
-    $stmt = $conn->prepare("SELECT u.*,r.* FROM T1_user u LEFT JOIN T2_role r ON u.T1T2_roleid = r.T2_id WHERE u.T1_userid = ?");
+    $stmt = $conn->prepare("SELECT u.*,r.* FROM T1_user u LEFT JOIN T2_role r ON u.T1T2_roleid = r.T2_id WHERE u.T1_id = ?");
     $stmt->bind_param("s",$username);
     $stmt->execute();
     $login_r = mysqli_fetch_assoc($stmt->get_result());
     if (password_verify($password, $login_r['T1_passwordhash']))
     {
-        $_SESSION['userid'] = $login_r['T1_userid'];
-        $_SESSION['username'] = $login_r['T1_username'];
+        $_SESSION['userid'] = $login_r['T1_id'];
+        $_SESSION['username'] = $login_r['T1_name'];
         $_SESSION['usertype'] = $login_r['T1_type'];
         $_SESSION['usergroup'] = $login_r['T1_group'];
         $_SESSION['userrole'] = $login_r['T2_name'];

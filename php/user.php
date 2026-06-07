@@ -83,7 +83,7 @@ if(isset($_SESSION['userid']))
     echo("<h3>Selamat Datang, ".$_SESSION['usertype'].$_SESSION['userrole']."</h3>");
     if($_SESSION['userrole'] == 'superadmin')
     {
-        $stmt = $conn->prepare("SELECT * FROM T1_user");
+        $stmt = $conn->prepare("SELECT u.*, r.T2_name FROM T1_user u INNER JOIN T2_role r ON u.T1T2_roleid = r.T2_id");
         $stmt->execute();
         $userlist = $stmt->get_result();
         ?>
@@ -99,14 +99,14 @@ if(isset($_SESSION['userid']))
         {
             ?>
             <tr>
-                <td><?= escape($user['T1_username']); ?></td>
-                <td><?= escape($user['T1_role']); ?></td>
+                <td><?= escape($user['T1_name']); ?></td>
+                <td><?= escape($user['T2_name']); ?></td>
                 <td>
                     <form action="user.php" method="post">
-                        <input type="text" name="role_userid" id="" value="<?= escape($user['T1_userid']); ?>" hidden>
+                        <input type="text" name="role_userid" id="" value="<?= escape($user['T1_id']); ?>" hidden>
                         
                     </form>
-                    <button class="btn btn-sm btn-primary" onclick="viewProfile('<?= escape($user['T1_username']); ?>')">View Profile</button>
+                    <button class="btn btn-sm btn-primary" onclick="viewProfile('<?= escape($user['T1_name']); ?>')">View Profile</button>
                 </td>
             </tr>
             <?php
