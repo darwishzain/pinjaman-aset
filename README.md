@@ -1,5 +1,9 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
 # Modules
+- **Home** `php/index.php`
+  - [ ] View Laptop Status Overview `superadmin, admin`
+  - [ ] View Loan Status Overview `superadmin, admin`
+  - [ ] View Own Loan Status Overview `user`
 - **User** `php/user.php`
   - [ ] Add User (username,password,role) `superadmin`
   - [ ] Change User Role (role)`superadmin`
