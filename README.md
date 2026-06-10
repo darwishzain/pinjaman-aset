@@ -3,18 +3,25 @@
 - **Home** `php/index.php`
   - [ ] View Laptop Status Overview `superadmin, admin`
   - [ ] View Loan Status Overview `superadmin, admin`
-  - [ ] View Own Loan Status Overview `user`
+  - [ ] View Own Loan Status Overview `staff`
 - **User** `php/user.php`
+  - [ ] View Users List `superadmin,admin`
   - [ ] Add User (username,password,role) `superadmin`
   - [ ] Change User Role (role)`superadmin`
   - [ ] Reset Password (password)`superadmin,admin`
-  - [ ] Reset Own Password (password) `*`
+  - [ ] Update Own Password (password) `*`
   - [ ] View Profile(*) `superadmin,admin`
   - [ ] View/Manage Own Profile (*) `*`
 - **Assett** `php/asset.php` !!
+  - [ ] View Asset Overview `superadmin, admin`
   - [ ] Add Asset (label,type,status,details{CONNECTOR_,condition}) `superadmin`
-  - [ ] Manage Asset (status details{*}) `superadmin,admin`
+  - [ ] Update Asset (status details{*}) `superadmin,admin`
 - **Request** `php/request.php` !!
+  - [ ] View Request Overview `superadmin,admin`
+  - [ ] View Request List `superadmin,admin`
+  - [ ] View Own Request List `staff`
+  - [ ] View Request `staff`
+  - [ ] Add Request `staff`
 - **Pinjaman** `php` !!
 ### Database
 - [Structure ](form/s21052026.sql) (`.sql`)
