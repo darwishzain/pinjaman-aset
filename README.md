@@ -13,7 +13,8 @@
   - [ ] View Profile(*) `superadmin,admin`
   - [ ] View/Manage Own Profile (*) `*`
 - **Assett** `php/asset.php` !!
-  - [ ] View Asset Overview `superadmin, admin`
+  - [ ] View Asset Overview (status,details(condition))`superadmin, admin`
+  - [ ] View List of Asset `superadmin,admin``
   - [ ] Add Asset (label,type,status,details{CONNECTOR_,condition}) `superadmin`
   - [ ] Update Asset (status details{*}) `superadmin,admin`
 - **Request** `php/request.php` !!
