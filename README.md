@@ -35,6 +35,34 @@
 - [ ] documentation on T*_details syntax
 - [ ] asset.details dynamic to datatype(str,int etc)
 
+## Activity and Role Access
+`SA: Superadmin A:Admin M:Manager S:Staff`
+| Activity | SA | A | M | S |
+| :---| --- | ---| ---| --- |
+| Review Request | :x: | :x: | :x: | |
+| Save Request | | | | :x: |
+| Submit Request | | | | :x: |
+| View Request | :x: | :x: | :x: | :x: |
+| View Request List | :x: | :x: | :x: | :x: |
+| Add Asset | :x: | | | |
+| View Asset | :x: |:x: | | |
+| View Asset List | :x: |:x: | | |
+| Update Asset | :x: |:x: | | |
+| Add User | :x: | | | |
+| Change Role | :x: | | | |
+| View User List | :x: | :x: | :x: | |
+| View Profile | :x: | :x: | :x: | :x: |
+| Update Profile | :x: | :x: | :x: | :x: |
+| Process Asset Transaction | :x: | :x: | | |
+| View Transaction | :x: | :x: | :x: | :x: |
+| View Transaction List | :x: | :x: | :x: | :x: |
+
+
+
+
+
+
+
 ## Feature suggestions
 - Close request option if no asset available
 - Warning if device availablity is low
