@@ -118,8 +118,36 @@ if(isset($_SESSION['userid']))
 }
 else
 {
-    ?><h3>Anda belum log masuk.</h3><?php
+    ?>
+    <button type="button" class="btn btn-primary" onclick="document.getElementById('dialog').showModal()">Log Masuk</button>
+    <h3>Anda belum log masuk.</h3><?php
 }
 $content = ob_get_clean();
 ?>
 <?php include('views/layout-master.php');?>
+<?php
+if(!isset($_SESSION['userid']))
+{
+    ?>
+    <script>
+        content = `
+            <button type="button" class="btn float-right" onclick="document.getElementById('logindialog').close()">x</button>
+            <h2>Log Masuk</h2>
+            <form method="post" action="user.php">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="login_id" placeholder="Pengguna" aria-label="User's Name" aria-describedby="basic-addon2">
+                    <span class="input-group-text" id="basic-addon2">@pkink.gov.my</span>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" name="login_password" id="" placeholder="Kata Laluan">
+                </div>
+                <div class="input-group mb-3">
+                    <button type="submit" class="btn btn-primary" name="login_true">Log Masuk</button>
+                </div>
+            </form>
+        `;
+        opendialog(document.getElementById('dialog'),content);
+    </script>
+    <?php
+}
+?>

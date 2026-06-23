@@ -53,6 +53,7 @@ function escape($string) {
         dialog.close();
     }
     function opendialog(dialog,content) {
+        
         dialog.replaceChildren(content);
         dialog.showModal();
     }
