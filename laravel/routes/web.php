@@ -15,9 +15,9 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/asset', function () {return view('asset');})->name('asset');
-    Route::get('/users', [UserController::class,'create'])->name('user');
+    //Route::get('/user', [UserController::class,'create'])->name('user');
     Route::get('/users/add', [UserController::class,'create'])->name('user.add');
-    Route::get('/users/all', [UserController::class,'list'])->name('users');
+    Route::get('/users/all', [UserController::class,'list'])->name('users.list');
 });
 
 Route::middleware('auth')->group(function () {
