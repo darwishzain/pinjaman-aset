@@ -8,7 +8,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <a href="{{ route('user.add') }}" class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded">
-                    Tambah Pengguna
+                    Daftar Pengguna
                 </a>
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="mb-4">Senarai Pengguna & Peranan</h2>
