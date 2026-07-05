@@ -7,7 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-
+use Spatie\Permission\Traits\HasRoles;
 class RoleAndUserSeeder extends Seeder
 {
     /**
@@ -18,10 +18,10 @@ class RoleAndUserSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // 1. Define the roles
-        $superAdminRole = Role::create(['name' => 'superadmin']);
-        $adminRole      = Role::create(['name' => 'admin']);
-        $managerRole    = Role::create(['name' => 'manager']);
-        $staffRole      = Role::create(['name' => 'staff']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'superadmin']);
+        $adminRole      = Role::firstOrCreate(['name' => 'admin']);
+        $managerRole    = Role::firstOrCreate(['name' => 'manager']);
+        $staffRole      = Role::firstOrCreate(['name' => 'staff']);
 
         // 2. Create Default Users & Assign Corresponding Roles
         

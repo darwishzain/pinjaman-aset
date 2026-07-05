@@ -37,25 +37,25 @@
 
 ## Activity and Role Access
 `SA: Superadmin A:Admin M:Manager S:Staff`
-| Activity | SA | A | M | S |
-| :---| --- | ---| ---| --- |
-| Review Request | :x: | :x: | :x: | |
-| Save Request | | | | :x: |
-| Submit Request | | | | :x: |
-| View Request | :x: | :x: | :x: | :x: |
-| View Request List | :x: | :x: | :x: | :x: |
-| Add Asset | :x: | | | |
-| View Asset | :x: |:x: | | |
-| View Asset List | :x: |:x: | | |
-| Update Asset | :x: |:x: | | |
-| Add User | :x: | | | |
-| Change Role | :x: | | | |
-| View User List | :x: | :x: | :x: | |
-| View Profile | :x: | :x: | :x: | :x: |
-| Update Profile | :x: | :x: | :x: | :x: |
-| Process Asset Transaction | :x: | :x: | | |
-| View Transaction | :x: | :x: | :x: | :x: |
-| View Transaction List | :x: | :x: | :x: | :x: |
+| Activity | SA | A | M | S | Route |
+| :---| --- | ---| ---| --- | ---|
+| Review Request | :x: | :x: | :x: | | `/request/review/:requestid` |
+| Save Request | | | | :x: |  |
+| Submit Request | | | | :x: | `/request/add` |
+| View Request | :x: | :x: | :x: | :x: | `/request/view/:requestid` |
+| View Request List | :x: | :x: | :x: | :x: | `/request/list` |
+| Add Asset | :x: | :x: | | | `/asset/add` |
+| View Asset | :x: |:x: | | | `/asset/view/:assetid` |
+| View Asset List | :x: |:x: | | | `/asset/list` |
+| Update Asset | :x: |:x: | | | `/asset/update/:assetid` |
+| Add User | :x: | :x: | | | `/user/add` |
+| Change Role | :x: | :x: | | | `/user/list/` |
+| View User List | :x: | :x: | :x: | | `/user/list` |
+| View Profile | :x: | :x: | :x: | :x: | `/profile/:userid` |
+| Update Profile | :x: | :x: | :x: | :x: | `/profile` |
+| Process Asset Transaction | :x: | :x: | | | `/transaction/out`,`transaction/in` |
+| View Transaction | :x: | :x: | :x: | :x: | `transaction/:transactionid` |
+| View Transaction List | :x: | :x: | :x: | :x: | `/transaction/list` |
 
 
 
