@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ManageUserController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
@@ -16,8 +18,17 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/asset', function () {return view('asset');})->name('asset');
     //Route::get('/user', [UserController::class,'create'])->name('user');
-    Route::get('/users/add', [UserController::class,'create'])->name('user.add');
-    Route::get('/users/all', [UserController::class,'list'])->name('users.list');
+    Route::get('/users/list', [UserController::class,'list'])->name('users.list');
+    Route::get('/users/create', [ManageUserController::class,'create'])->name('users.create');
+    Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
+});
+
+Route::middleware(['auth', 'role:manager'])->group(function () {
+
+});
+
+Route::middleware(['auth', 'role:staff'])->group(function () {
+    
 });
 
 Route::middleware('auth')->group(function () {

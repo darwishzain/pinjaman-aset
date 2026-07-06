@@ -3,18 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 
+
 class UserController extends Controller
 {
-    public function index()
-    {
-        // Place the eager-loading query here
-        $users = User::with('roles')->paginate(15);
-
-        return view('users.index', compact('users'));
-    }
     public function create()
     {
         $roles = Role::all();

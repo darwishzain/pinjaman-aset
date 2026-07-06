@@ -8,16 +8,32 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="" method="post">
-                        <input type="text" name="name" id="name" placeholder="Nama Pengguna">
-                        <input type="email" name="email" id="email" placeholder="Emel Pengguna">
-                        <select name="role" id="role">
+                    <form action="{{ route('users.store') }}" method="post">
+                        @csrf
+                        <x-input-label for="name" value="Nama Pengguna" />
+                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" placeholder="Nama Pengguna" required autofocus />
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        <x-input-label for="email" value="Emel Pengguna" class="mt-4" />
+                        <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" placeholder="Emel Pengguna" required />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <x-input-label for="role" value="Peranan Pengguna" class="mt-4" />
+                        <select name="role" id="role" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-900 rounded-md shadow-sm">
                         @foreach ($roles as $role)
-                            <option value="{{ $role->id }}">{{  $role->name }}</option>
+                            <option value="{{ $role->name }}" @if ($role->name == 'staff') selected @endif>
+                                {{ $role->name }}
+                            </option>
                         @endforeach
                         </select>
-                        <input type="password" name="password" id="password" placeholder="Kata Laluan">
-                        <input type="submit" value="Tambah">
+                        <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                        <x-input-label for="password" value="Kata Laluan Pengguna" class="mt-4" />
+                        <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" placeholder="Kata Laluan Pengguna" required />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <x-input-label for="password_confirmation" value="Sahkan Kata Laluan Pengguna" class="mt-4" />
+                        <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" placeholder="Sahkan Kata Laluan Pengguna" required />
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                        <x-primary-button class="mt-4">
+                            {{ __('Daftar Pengguna') }}
+                        </x-primary-button>
                     </form>
                 </div>
             </div>
