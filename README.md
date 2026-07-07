@@ -1,4 +1,23 @@
 # Peminjaman Alatan Komputer Bahagian Digital PKINK
+**Clone the Project**
+Run these commands in your terminal to download the files and enter the correct folder:
+```
+git clone https://github.com/darwishzain/pinjaman-aset
+cd pinjaman-aset/laravel
+```
+**Setup the Encironment**
+Create your local configuration file by copying the example template:
+`cp .env.example .env`
+Note: Open your new .env file and update the DB_DATABASE, DB_USERNAME, and DB_PASSWORD lines to match your local setup.
+
+**Initialize**
+Create an empty MySQL database matching your .env name, then run
+```
+composer install
+php artisan key:generate
+npm install && npm run dev
+```
+TODO: update seeder for add sample data only
 # Modules
 - **Home** `php/index.php`
   - [ ] View Laptop Status Overview `superadmin, admin`

@@ -3,9 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManageUserController;
+use App\Http\Controllers\ManageRoleController;
 
 use Illuminate\Support\Facades\Route;
-
+//* Redirect to login page
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -23,6 +24,10 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
 
+//  middleware('can:"view-any:requests"')
+Route::middleware(['auth'])->group(function(){
+
+});
 Route::middleware(['auth', 'role:manager'])->group(function () {
 
 });
