@@ -17,6 +17,9 @@ composer install
 php artisan key:generate
 npm install && npm run dev
 ```
+**Seeding Roles and Permissions**
+`php artisan db:seed --class=RolesAndPermissionsSeeder`
+
 TODO: update seeder for add sample data only
 # Modules
 - **Home** `php/index.php`

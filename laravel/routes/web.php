@@ -25,8 +25,8 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
 });
 
 //  middleware('can:"view-any:requests"')
-Route::middleware(['auth'])->group(function(){
-
+Route::middleware(['auth','can:"update:user-roles"'])->group(function(){
+    Route::get('/users/roles', [ManageRoleController::class,'list'])->name('roles.list');
 });
 Route::middleware(['auth', 'role:manager'])->group(function () {
 
