@@ -18,6 +18,9 @@ php artisan key:generate
 npm install && npm run dev
 ```
 **Seeding Roles and Permissions**
+Seed preset roles and permission
+`php artisan db:seed`
+Seed sample user (optional)
 `php artisan db:seed --class=RolesAndPermissionsSeeder`
 
 TODO: update seeder for add sample data only
