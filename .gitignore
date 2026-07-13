@@ -1,4 +1,6 @@
-design/.$*.bkp
+#backup files
+.$*.bkp
+.~lock.*#
 # Logs
 logs
 *.log
