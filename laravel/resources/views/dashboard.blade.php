@@ -8,21 +8,16 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <h1 class="text-2xl font-bold mb-4">Selamat Datang ke Papan Pemuka, {{ auth()->user()->name }} ({{ auth()->user()->roles->first()->name }})</h1>
+                <x-form-modal id="form-modal-body" title="Borang"></x-form-modal>
                 @hasrole('superadmin')
                 Role: Superadmin
-                <dialog id="dashboard-dialog" class="rounded-lg shadow-xl p-6 max-w-md w-[90%] backdrop:bg-black/50 backdrop:backdrop-blur-sm">
-                    <div id="dialog-content">
-                        
-                    </div>
-                    <!-- Content -->
-                </dialog>
                 @isset($users)
                 <table class="table-auto w-full border-collapse border border-gray-600">
                     <tr>
                         <th>Nama</th>
                         <th>Peranan</th>
                         <th>Kebenaran</th>
-                        <th></th>
+                        <th>Tindakan</th>
                     </tr>
                     @foreach ($users as $user)
                         <tr>
@@ -41,6 +36,7 @@
                             </td>
                             <td>
                                 <button type="button" id="{{ $user->id }}" class="edit-user-role-permission"><x-feathericon-settings /></button>
+                                <button type="button" id="{{ $user->id }}" class="edit-user-role-permission"><x-feathericon-trash class="text-red-500 fill-current" /></button>
                             </td>
                         </tr>
                     @endforeach
