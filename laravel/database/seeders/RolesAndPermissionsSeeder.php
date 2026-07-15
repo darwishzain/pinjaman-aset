@@ -15,15 +15,17 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run(): void
     {
         //* Roles
-        Role::firstOrCreate(['name' => 'superadmin']);
-        Role::firstOrCreate(['name' => 'admin']);
-        Role::firstOrCreate(['name' => 'manager']);
-        Role::firstOrCreate(['name' => 'staff']);
+        $superadminRole = Role::firstOrCreate(['name' => 'superadmin']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $managerRole = Role::firstOrCreate(['name' => 'manager']);
+        $staffRole = Role::firstOrCreate(['name' => 'staff']);
         //* User Permissions
         Permission::firstOrCreate(['name' => 'create:users']);
         Permission::firstOrCreate(['name' => 'view:users']);
         Permission::firstOrCreate(['name' => 'view-any:users']);
         Permission::firstOrCreate(['name' => 'update:user-roles']);
+        //* Give superadminRole Permission to manage user 
+        $superadminRole->givePermissionTo('create:users', 'view:users', 'view-any:users', 'update:user-roles');
         //* Asset Permissions
         Permission::firstOrCreate(['name' => 'create:assets']);
         Permission::firstOrCreate(['name' => 'view:assets']);
@@ -39,5 +41,6 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'create:transactions']);
         Permission::firstOrCreate(['name' => 'view:transactions']);
         Permission::firstOrCreate(['name' => 'view-any:transactions']);
+
     }
 }
