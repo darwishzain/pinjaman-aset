@@ -21,8 +21,13 @@ npm install && npm run dev
 Seed preset roles and permission
 `php artisan db:seed`
 Seed sample user (optional)
-`php artisan db:seed --class=RolesAndPermissionsSeeder`
+`php artisan db:seed --class=SampleUserSeeder`
 
+::Note::
+```
+# make volt components (e.g. user list)
+php artisan make:volt user.list
+```
 TODO: update seeder for add sample data only
 # Modules
 - **Home** `php/index.php`
