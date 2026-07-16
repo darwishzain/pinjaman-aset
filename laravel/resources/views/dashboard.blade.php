@@ -7,21 +7,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h1 class="text-2xl font-bold mb-4">Selamat Datang ke Papan Pemuka, {{ auth()->user()->name }} ({{ auth()->user()->roles->first()->name }})</h1>
-                <livewire:user.user-form />
-                <livewire:user.list />
-                @hasrole('admin')
-                Role: Admin
-                @endhasrole
-                @hasrole('manager')
-                Role: Manager
-                @endhasrole
-                @hasrole('staff')
-                Role: Staff
-                @endhasrole
-                @hasrole('guest')
-                Role: Guest
-                @endhasrole
+                <h1 class="text-2xl font-bold mb-4 text-center">Selamat Datang ke Papan Pemuka</h1>
+                <livewire:user.index />
             </div>
         </div>
     </div>

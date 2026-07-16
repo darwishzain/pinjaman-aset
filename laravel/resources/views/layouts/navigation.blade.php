@@ -15,12 +15,16 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Utama') }}
                     </x-nav-link>
+                    @canany(['create:users','view-any:users','update:user-roles'])
                     <x-nav-link :href="route('users.list')" :active="request()->routeIs('user')">
                         {{ __('Pengguna') }}
                     </x-nav-link>
+                    @endcanany
+                    @canany(['create:assets','view:assets','view-any:assets','update:assets'])
                     <x-nav-link :href="route('asset')" :active="request()->routeIs('asset')">
                         {{ __('Aset') }}
                     </x-nav-link>
+                    @endcanany
                 </div>
             </div>
 

@@ -5,20 +5,11 @@ use App\Models\User;
 
 with(fn() =>[
     'users' => User::all(),
+    
 ])
-
-
-//
-
 ?>
 
 <div>
-    @can('update:user-roles')
-    <button wire:click="$dispatch('create-user-form')">
-        Add User
-    </button>
-    @endcan
-
     <table class="w-full border border-collapse">
         <tr>
             <th>Nama</th>
@@ -42,8 +33,10 @@ with(fn() =>[
                 </div>
             </td>
             <td>
-                @foreach ($user->roles as $roles)
-                    {{ $roles->name }}
+                @foreach ($user->roles as $role)
+                    <button wire:click="$dispatch('edit-role-form',{id:{{$role->id}}})">
+                        {{ $role->name }}
+                    </button>
                 @endforeach
             </td>
             <td>
