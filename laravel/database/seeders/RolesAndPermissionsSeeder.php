@@ -24,8 +24,6 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'view:users']);
         Permission::firstOrCreate(['name' => 'view-any:users']);
         Permission::firstOrCreate(['name' => 'update:user-roles']);
-        //* Give superadminRole Permission to manage user 
-        $superadminRole->givePermissionTo('create:users', 'view:users', 'view-any:users', 'update:user-roles');
         //* Asset Permissions
         Permission::firstOrCreate(['name' => 'create:assets']);
         Permission::firstOrCreate(['name' => 'view:assets']);
