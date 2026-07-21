@@ -1,6 +1,7 @@
 <?php
 use function Livewire\Volt\{state,on,with,rules};
 use App\Models\User;
+use Livewire\Volt\Component;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 state([
@@ -21,13 +22,12 @@ rules(function () {
         'userpermissions' => ['array'],
     ];
 });
-$loadEmptyForm = function ()
-{
-    $this->show = true;
-    $this->title = 'Tambah Pengguna';
-    $this->user = null;
-    $this->userpermissions = [];
-    $this->userroles = [];
+$updateuserrolepermission = function (){
+    $this->validate();
+    $user = User::findOrFail($this->userid);
+    $user->syncRoles([$this->userroles]);
+    $user->syncPermissions([$this->userpermissions]);
+    $this->dispatch('update-user');
 };
 $loadUserForm = function ($id)
 {
@@ -46,6 +46,12 @@ on([
     'edit-user-form' => fn ($id) => $this->loadUserForm($id),
 ]);
 
+new class extends Component{
+    public $show = false;
+    public function refreshuser(){
+        
+    }
+};
 ?>
 
 <div>
@@ -61,7 +67,7 @@ on([
                 <!-- Scrollable Body -->
                 <div class="max-h-[65vh] overflow-y-auto p-6">
                     @can('update:user-roles')
-                    <form wire:submit="save">
+                    <form wire:submit="updateuserrolepermission">
                         @if ($user)
                         <input
                             type="text"
@@ -113,15 +119,15 @@ on([
                                 </label>
                             @endforeach
                         </div>
+                        <x-submit-button>
+                            Kemaskini
+                        </x-submit-button>
                     </form>
                     @endcan
                 </div>
 
                 <!-- Footer -->
-                <div class="flex justify-end gap-2 border-t p-6">
-                    <button wire:click="$set('show', false)">Batal</button>
-                    <button wire:click="save" class="">Simpan</button>
-                </div>
+                <x-modal-footer></x-modal-footer>
             </div>
         </div>
     </div>
