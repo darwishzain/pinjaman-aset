@@ -9,9 +9,6 @@ use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         //* Roles
@@ -19,6 +16,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $managerRole = Role::firstOrCreate(['name' => 'manager']);
         $staffRole = Role::firstOrCreate(['name' => 'staff']);
+        $guestRole = Role::firstOrCreate(['name' => 'guest']);
         //* User Permissions
         Permission::firstOrCreate(['name' => 'create:users']);
         Permission::firstOrCreate(['name' => 'view:users']);
@@ -39,6 +37,5 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'create:transactions']);
         Permission::firstOrCreate(['name' => 'view:transactions']);
         Permission::firstOrCreate(['name' => 'view-any:transactions']);
-
     }
 }
