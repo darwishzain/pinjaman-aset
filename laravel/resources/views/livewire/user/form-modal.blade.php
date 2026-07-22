@@ -27,6 +27,10 @@ new class extends Component {
     public array $userroles = [];
     public array $userpermissions = [];
     public array $rolepermissions = [];
+
+    public Role $role;
+    public string $roleid = '';
+
     #[On('loadcreateform')]
     public function loadcreateform(){
         $this->showform = true;
@@ -49,14 +53,75 @@ new class extends Component {
         $this->dispatch('refresh-user');
 
     }
-    #[On('loadeditform')]
-    public function loadeditform($id){
+    #[On('loadedituserform')]
+    public function loadedituserform($id){
         $this->showform = true;
         $this->title = 'Kemaskini Pengguna';
         $this->activeform = 'edit-user';
         $this->user = User::findOrFail($id);
+        $this->userid = $this->user->id;
         $this->allroles = Role::all();
         $this->allpermissions = Permission::all();
+        $this->userroles = $this->user
+            ->roles->pluck('id')
+            ->mapWithKeys(fn ($id) => [$id => true])
+            ->toArray();
+        $this->userpermissions = $this->user
+            ->permissions->pluck('id')
+            ->mapWithKeys(fn ($id) => [$id => true])
+            ->toArray();
+
+    }
+    public function updateuser(){
+        if(!$this->userid){
+            return;
+        }
+        $this->user = User::findOrFail($this->userid);
+        $roleids = collect($this->userroles)
+            ->filter(fn ($checked) => (bool) $checked)
+            ->keys()
+            ->map(fn ($id) => (int) $id)
+            ->toArray();
+        $permissionids = collect($this->userpermissions)
+            ->filter(fn ($checked) => (bool) $checked)
+            ->keys()
+            ->map(fn ($id) => (int) $id)
+            ->toArray();
+        $this->user->syncRoles($roleids);
+        $this->user->syncPermissions($permissionids);
+        $this->reset(['userid','userroles','userpermissions']);
+        $this->showform = false;
+        $this->dispatch('refresh-user');
+        $this->dispatch('refresh-role');
+    }
+    #[On('loadeditroleform')]
+    public function loadeditroleform($id){
+        $this->showform = true;
+        $this->title = 'Kemaskini Peranan';
+        $this->activeform = 'edit-role';
+        $this->role = Role::findOrFail($id);
+        $this->roleid = $this->role->id;
+        $this->allpermissions = Permission::all();
+        $this->rolepermissions = $this->role
+            ->permissions->pluck('id')
+            ->mapWithKeys(fn ($id) => [$id => true])
+            ->toArray();
+    }
+    public function updaterole(){
+        if (!$this->roleid) {
+            return;
+        }
+        $this->role = Role::findOrFail($this->roleid);
+        $permissionids = collect($this->rolepermissions)
+            ->filter(fn ($value) => (bool) $value)
+            ->keys()
+            ->map(fn ($id) => (int) $id)
+            ->toArray();
+        $this->role->syncPermissions($permissionids);
+        $this->reset(['roleid','rolepermissions']);
+        $this->showform = false;
+        $this->dispatch('refresh-user');
+        $this->dispatch('refresh-role');
     }
 
 }; ?>
@@ -123,15 +188,12 @@ new class extends Component {
                                 </x-submit-button>
                             </form>
                         @endcan
-                    @elseif($this->activeform === 'edit-user')
+                    @elseif($this->activeform === 'edit-user' && $user)
                         @can('update:user-roles')
-                            <form wire:submit="edituser">
-                                @if ($user)
+                            <form wire:submit="updateuser">
                                     <input
-                                        type="text"
+                                        type="hidden"
                                         wire:model="userid"
-                                        value="{{ $user->id }}"
-                                        hidden
                                     >
                                     <div class="grid grid-cols-2 gap-6">
                                         <div>
@@ -150,27 +212,23 @@ new class extends Component {
                                             <label class="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer">
                                                 <input
                                                     type="checkbox"
-                                                    wire:model="userroles"
-                                                    value="{{ $role->name }}"
+                                                    wire:model="userroles.{{ $role->id }}"
                                                     class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                 >
-
                                                 <span>{{ $role->name }}</span>
                                             </label>
                                         @endforeach
                                     </div>
                                     {{--Permissions--}}
-                                    <h3>Peranan</h3>
+                                    <h3>Kebenaran</h3>
                                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                                         @foreach ($allpermissions as $permission)
                                             <label class="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer">
                                                 <input
                                                     type="checkbox"
-                                                    wire:model="userroles"
-                                                    value="{{ $permission->name }}"
+                                                    wire:model="userpermissions.{{ $permission->id }}"
                                                     class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                 >
-
                                                 <span>{{ $permission->name }}</span>
                                             </label>
                                         @endforeach
@@ -178,9 +236,42 @@ new class extends Component {
                                     <x-submit-button>
                                         Kemaskini
                                     </x-submit-button>
-                                @endif
                             </form>
                         @endcan
+                    @elseif($this->activeform === 'edit-role' && $role)
+                        @can('update:user-roles')
+                            <form wire:submit="updaterole">
+                                <input
+                                    type="hidden"
+                                    wire:model="roleid"
+                                >
+                                <div class="grid grid-cols-1 gap-1">
+                                    <div>
+                                        <div class="text-sm text-gray-500">Nama Peranan</div>
+                                        <div class="font-medium">{{ $role->name }}</div>
+                                    </div>
+                                </div>
+                                {{--Permissions--}}
+                                <h3>Kebenaran</h3>
+                                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                    @foreach ($allpermissions as $permission)
+                                        <label class="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                wire:model="rolepermissions.{{ $permission->id }}" 
+                                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            >
+                                            <span>{{ $permission->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <x-submit-button>
+                                    Kemaskini
+                                </x-submit-button>
+                            </form>
+                        @endcan
+                    @elseif($this->activeform === 'error')
+                    Error
                     @endif
                 </div>
 
