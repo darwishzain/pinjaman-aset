@@ -11,11 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('T3_asset', function (Blueprint $table) {
-            $table->id('T3_id');
-            $table->string('T3_name');
-            $table->timestamps('T3_datetime_created');
-            $table->timestamps('T3_datetime_updated');
+        Schema::create('T21_asset_categories', function (Blueprint $table) {
+            $table->ulid('T21_id')->primary();
+            $table->string('T21_name');//category names
+            $table->timestamp('T21_created_at')->useCurrent();
+            $table->timestamp('T21_updated_at')->useCurrent()->useCurrentOnUpdate();
+        });
+        Schema::create('T20_assets', function (Blueprint $table) {
+            $table->ulid('T20_id')->primary();//system identifier
+            $table->string('T20_tag')->unique();//department/company asset tag
+            $table->foreignUlid('T20T21_category_id')
+                ->constrained(table: 'T21_asset_categories', column: 'T21_id')//category id for category type
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->string('T20_brand')->nullable();
+            $table->string('T20_model')->nullable();
+            $table->string('T20_serial_number')->nullable()->unique();
+            $table->json('T20_attributes')->nullable();
+            $table->string('T20_status');
+            $table->timestamp('T20_created_at')->useCurrent();
+            $table->timestamp('T20_updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
@@ -24,6 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asset');
+        Schema::dropIfExists('T20_asset');
+        Schema::dropIfExists('T21_asset_categories');
     }
 };
