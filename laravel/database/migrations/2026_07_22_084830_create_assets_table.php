@@ -39,7 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('T20_asset');
+        Schema::dropIfExists('T20_assets');
         Schema::dropIfExists('T21_asset_categories');
     }
 };
