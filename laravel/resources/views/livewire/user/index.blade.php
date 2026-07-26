@@ -12,7 +12,7 @@ new class extends Component{
     public $formlabel = '';
     #[Computed]
     public function users(){
-        return User::all();
+        return User::paginate(20);//! need to do eager load
     }
     #[On('refresh-user')]
     public function refreshList()
@@ -81,6 +81,9 @@ new class extends Component{
             <tr><td></td><td></td><td></td><td></td></tr>
             @endforelse
         </table>
+        <div class="mt-3">
+            {{ $this->users->links() }}
+        </div>
     </div>
 @endcanany
 </div>
