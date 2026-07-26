@@ -8,10 +8,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-use function Livewire\Volt\{state,on,rules};
-
 new class extends Component {
-    public bool $showform = false;
+    public bool $showuserform = false;
     public string $title = '';
     public string $activeform = '';
     public Collection $allroles;
@@ -33,7 +31,7 @@ new class extends Component {
 
     #[On('loadcreateform')]
     public function loadcreateform(){
-        $this->showform = true;
+        $this->showuserform = true;
         $this->title = 'Tambah Pengguna';
         $this->activeform = 'create-user';
     }
@@ -49,13 +47,13 @@ new class extends Component {
             'password' => Hash::make($this->password),
         ]);
         $this->reset('name', 'email', 'password', 'password_confirmation');
-        $this->showform = false;
+        $this->showuserform = false;
         $this->dispatch('refresh-user');
 
     }
     #[On('loadedituserform')]
     public function loadedituserform($id){
-        $this->showform = true;
+        $this->showuserform = true;
         $this->title = 'Kemaskini Pengguna';
         $this->activeform = 'edit-user';
         $this->user = User::findOrFail($id);
@@ -90,13 +88,13 @@ new class extends Component {
         $this->user->syncRoles($roleids);
         $this->user->syncPermissions($permissionids);
         $this->reset(['userid','userroles','userpermissions']);
-        $this->showform = false;
+        $this->showuserform = false;
         $this->dispatch('refresh-user');
         $this->dispatch('refresh-role');
     }
     #[On('loadeditroleform')]
     public function loadeditroleform($id){
-        $this->showform = true;
+        $this->showuserform = true;
         $this->title = 'Kemaskini Peranan';
         $this->activeform = 'edit-role';
         $this->role = Role::findOrFail($id);
@@ -119,7 +117,7 @@ new class extends Component {
             ->toArray();
         $this->role->syncPermissions($permissionids);
         $this->reset(['roleid','rolepermissions']);
-        $this->showform = false;
+        $this->showuserform = false;
         $this->dispatch('refresh-user');
         $this->dispatch('refresh-role');
     }
@@ -127,7 +125,7 @@ new class extends Component {
 }; ?>
 
 <div>
-    @if ($showform)
+    @if ($showuserform)
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center">
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
             <div class="w-full max-w-4xl rounded-xl bg-white shadow-xl">
@@ -136,7 +134,7 @@ new class extends Component {
                     <h2 class="text-lg font-semibold">
                         {{ $title }}
 
-                        <button wire:click="$set('showform', false)" class="float-right">
+                        <button wire:click="$set('showuserform', false)" class="float-right">
                             ✕
                         </button>
                     </h2>
@@ -278,7 +276,7 @@ new class extends Component {
                 <!-- Footer -->
                 <div class="flex justify-end gap-2 border-t p-6">
                     <h2 class="text-lg font-semibold">
-                        <button wire:click="$set('showform', false)" class="float-right">
+                        <button wire:click="$set('showuserform', false)" class="float-right">
                             Batal
                         </button>
                     </h2>

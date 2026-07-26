@@ -2,12 +2,9 @@
 
 use App\Models\User;
 use Livewire\Volt\Component;
-use function Livewire\Volt\{computed,on,state,with};
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
-on(['refresh-user' => function () {
 
-}]);
 new class extends Component{
     public $formlabel = '';
     #[Computed]
