@@ -1,12 +1,12 @@
 <?php
 
-use Livewire\Volt\Component;
-use Livewire\Attributes\On;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Collection;
+use Livewire\Volt\Component;
+use Livewire\Attributes\On;
 
 new class extends Component {
     public bool $showuserform = false;

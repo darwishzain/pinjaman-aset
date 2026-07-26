@@ -25,4 +25,8 @@ class AssetCategory extends Model
     {
         return $this->hasMany(Asset::class, 'T20T21_category_id', 'T21_id');
     }
+    public function getIdAttribute(){return $this->attributes['T21_id'];}
+    public function getNameAttribute(){return $this->attributes['T21_name'];}
+    public function getCreatedAtAttribute(){return $this->attributes['T20_created_at'];}
+    public function getUpdatedAtAttribute(){return $this->attributes['T20_updated_at'];}
 }

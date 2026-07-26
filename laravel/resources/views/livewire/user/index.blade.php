@@ -22,9 +22,9 @@ new class extends Component{
 @canany(['create:users','view:users','view-any:users','update:users','update:user-roles'])
     <livewire:user.form-modal />
     <livewire:user.view-modal />
-    @canany(['create:users'])
+    @can('create:users')
     <button wire:click="$dispatch('loadcreateform')">Tambah Pengguna</button>
-    @endcanany
+    @endcan
     <div>
         <table class="w-full border border-collapse">
             <tr>

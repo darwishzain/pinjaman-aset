@@ -15,11 +15,20 @@ class Asset extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    const CREATED_AT = 'T20_datetime_created';
-    const UPDATED_AT = 'T20_datetime_updated';
+    const CREATED_AT = 'T20_created_at';
+    const UPDATED_AT = 'T20_updated_at';
 
     protected $casts = [
         'T20_attributes' => 'array',
+    ];
+    protected $fillable = [
+        'T20_tag',
+        'T20T21_category_id',
+        'T20_brand',
+        'T20_model',
+        'T20_serial_number',
+        'T20_specifications',
+        'T20_status'
     ];
 
     public function category()
@@ -27,15 +36,17 @@ class Asset extends Model
         return $this->belongsTo(
             AssetCategory::class,
             'T20T21_category_id',
-            'T21_id',
-            'T21_tag',
-            'T21_brand',
-            'T21_model',
-            'T21_serial_number',
-            'T21_attributes',
-            'T21_status'
+            'T21_id'
         );
     }
+    public function getIdAttribute(){return $this->attributes['T20_id'];}
+    public function getTagAttribute(){return $this->attributes['T20_tag'];}
+    public function getBrandAttribute(){return $this->attributes['T20_brand'];}
+    public function getModelAttribute(){return $this->attributes['T20_model'];}
+    public function getSerialNumberAttribute(){return $this->attributes['T20_serial_number'];}
+    public function getCategoryIdAttribute(){return $this->attributes['T20T21_category_id'];}
+    public function getSpecificationsAttribute(){return $this->attributes['T20_specifications'];}
+    public function getStatusAttribute(){return $this->attributes['T20_status'];}
 }
 /*
 //* Examples
