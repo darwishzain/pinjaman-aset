@@ -7,16 +7,20 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 
 new class extends Component {
-    public Asset $assets;
     public AssetCategory $categories;
-    
+
     #[Computed]
     public function assets(){
-        return Asset::all();
+        return Asset::with('category')->get();
     }
     #[Computed]
     public function assetcategories(){
         return AssetCategory::all();
+    }
+    #[On('refresh-asset')]
+    public function refreshList()
+    {
+        unset($this->assets);
     }
 }; ?>
 
@@ -24,13 +28,57 @@ new class extends Component {
     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
         <livewire:asset.form-modal></livewire:asset.form-modal>
         @can('create:assets')
-        <button wire:click="$dispatch('loadcreateform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</button>
+        <button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</button>
         @endcan
-        {{-- @foreach ($this->assets as $asset)
-        {
-            {{ $asset->T20_tag }}
-        }
-        @endforeach--}}
+        @if($this->assets->isNotEmpty())
+        <table class="w-full border border-collapse">
+            <tr>
+                <th>{{ __('Label') }}</th>
+                <th>{{ __('Type') }}</th>
+                <th>{{ __('Status') }}</th>
+                <th>{{ __('Ownership') }}</th>
+                <th>{{ __('Action') }}</th>
+            </tr>
+            @foreach ($this->assets as $asset)
+                <tr wire:key="asset-row-{{ $asset->id }}">
+                    <td>
+                        <div class="ml-4">
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                                {{ $asset->tag }}
+                            </div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                {{ $asset->brand }} {{ $asset->model }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="rounded-full bg-blue-400 text-black px-2 py-1">
+                        {{ $asset->category->name }}
+                        </button>
+                        {{--<button class=""><x-feathericon-filter /></button>--}}
+                    </td>
+                    <td>
+                        <button class="rounded-full bg-blue-400 text-black px-2 py-1">
+                            {{ $asset->status }}
+                        </button>
+                    </td>
+                    <td></td>
+                    <td>
+                        <button wire:click="$dispatch('loadeditassetform',{id:'{{ $asset->id }}'})">
+                            <x-feathericon-settings />
+                        </button>
+                        <button>
+                            <x-feathericon-info />
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+        @else
+        <div class="">
+            {{ __('No asset records found' )}}
+        </div>
+        @endif
         @foreach ($this->assetcategories as $category)
             {{ $category->T21_name }}
         @endforeach

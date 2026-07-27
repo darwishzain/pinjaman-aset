@@ -23,7 +23,7 @@ class AssetCategory extends Model
     ];
     public function assets()
     {
-        return $this->hasMany(Asset::class, 'T20T21_category_id', 'T21_id');
+        return $this->hasMany(Asset::class, 'T20_assets', 'T20_id','T20_name');
     }
     public function getIdAttribute(){return $this->attributes['T21_id'];}
     public function getNameAttribute(){return $this->attributes['T21_name'];}

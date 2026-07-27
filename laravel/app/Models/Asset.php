@@ -19,7 +19,7 @@ class Asset extends Model
     const UPDATED_AT = 'T20_updated_at';
 
     protected $casts = [
-        'T20_attributes' => 'array',
+        'T20_specifications' => 'array',
     ];
     protected $fillable = [
         'T20_tag',
@@ -36,17 +36,27 @@ class Asset extends Model
         return $this->belongsTo(
             AssetCategory::class,
             'T20T21_category_id',
-            'T21_id'
+            'T21_id',
+            'T21_name',
+            'T21_specifications',
         );
     }
-    public function getIdAttribute(){return $this->attributes['T20_id'];}
-    public function getTagAttribute(){return $this->attributes['T20_tag'];}
-    public function getBrandAttribute(){return $this->attributes['T20_brand'];}
-    public function getModelAttribute(){return $this->attributes['T20_model'];}
-    public function getSerialNumberAttribute(){return $this->attributes['T20_serial_number'];}
-    public function getCategoryIdAttribute(){return $this->attributes['T20T21_category_id'];}
-    public function getSpecificationsAttribute(){return $this->attributes['T20_specifications'];}
-    public function getStatusAttribute(){return $this->attributes['T20_status'];}
+    public function getIdAttribute(){return $this->attributes['T20_id'] ?? null;}
+    public function getTagAttribute(){return $this->attributes['T20_tag'] ?? null;}
+    public function getCategoryIdAttribute(){return $this->attributes['T20T21_category_id'] ?? null;}
+    public function getBrandAttribute(){return $this->attributes['T20_brand'] ?? null;}
+    public function getModelAttribute(){return $this->attributes['T20_model'] ?? null;}
+    public function getSerialNumberAttribute(){return $this->attributes['T20_serial_number'] ?? null;}
+    public function getSpecificationsAttribute(){return $this->attributes['T20_specifications'] ?? null;}
+    public function getStatusAttribute(){return $this->attributes['T20_status'] ?? null;}
+
+    public function setTagAttribute($value){$this->attributes['T20_tag'] = $value;}
+    public function setCategoryIdAttribute($value){$this->attributes['T20T21_category_id'] = $value;}
+    public function setBrandAttribute($value){$this->attributes['T20_brand'] = $value;}
+    public function setModelgAttribute($value){$this->attributes['T20_model'] = $value;}
+    public function setSerialNumberAttribute($value){$this->attributes['T20_serial_number'] = $value;}
+    public function setSpecificationsAttribute($value){$this->attributes['T20_specifications'] = $value;}
+    public function setStatusAttribute($value){$this->attributes['T20_status'] = $value;}
 }
 /*
 //* Examples
