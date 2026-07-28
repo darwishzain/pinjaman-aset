@@ -20,7 +20,8 @@ new class extends Component {
     #[On('refresh-asset')]
     public function refreshList()
     {
-        unset($this->assets);
+        //unset($this->assets);
+        //$this->dispatch('$refresh');
     }
 }; ?>
 
@@ -28,7 +29,7 @@ new class extends Component {
     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
         <livewire:asset.form-modal></livewire:asset.form-modal>
         @can('create:assets')
-        <button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</button>
+            <button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</button>
         @endcan
         @if($this->assets->isNotEmpty())
         <table class="w-full border border-collapse">
@@ -44,32 +45,33 @@ new class extends Component {
                     <td>
                         <div class="ml-4">
                             <div class="text-sm font-semibold text-gray-900 dark:text-white">
-                                {{ $asset->tag }}
+                                {{ $asset->T20_tag }}
                             </div>
                             <div class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $asset->brand }} {{ $asset->model }}
+                                {{ $asset->T20_brand }} {{ $asset->T20_model }}
                             </div>
                         </div>
                     </td>
+
                     <td>
                         <button class="rounded-full bg-blue-400 text-black px-2 py-1">
-                        {{ $asset->category->name }}
+                            {{ $asset->category?->name ?? 'Uncategorized' }}
                         </button>
-                        {{--<button class=""><x-feathericon-filter /></button>--}}
                     </td>
+
                     <td>
                         <button class="rounded-full bg-blue-400 text-black px-2 py-1">
-                            {{ $asset->status }}
+                            {{ $asset->T20_status }}
                         </button>
                     </td>
                     <td></td>
                     <td>
-                        <button wire:click="$dispatch('loadeditassetform',{id:'{{ $asset->id }}'})">
-                            <x-feathericon-settings />
-                        </button>
-                        <button>
-                            <x-feathericon-info />
-                        </button>
+                    @can('update:assets')
+                        <button wire:click="$dispatch('loadeditassetform', { id: '{{ $asset->id }}' })"><x-feathericon-settings /></button>
+                    @endcan
+                    @can('view:assets')
+                        <button wire:click="$dispatch('loadviewasset',{ id: '{{ $asset->id }}' })"><x-feathericon-info /></button>
+                    @endcan
                     </td>
                 </tr>
             @endforeach
@@ -79,10 +81,7 @@ new class extends Component {
             {{ __('No asset records found' )}}
         </div>
         @endif
-        @foreach ($this->assetcategories as $category)
-            {{ $category->T21_name }}
-        @endforeach
-    @else
-    <h1>Anda Tidak Memiliki Kebenaran Untuk Menguruskan Aset</h1>
+        @else
+        <h1>Anda Tidak Memiliki Kebenaran Untuk Menguruskan Aset</h1>
     @endcanany
 </div>
