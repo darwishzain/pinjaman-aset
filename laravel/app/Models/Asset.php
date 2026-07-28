@@ -30,6 +30,21 @@ class Asset extends Model
         'T20_specifications',
         'T20_status'
     ];
+    public const CONNECTORS = [
+        'hdmi'         => 'HDMI',
+        'vga'          => 'VGA',
+        'rj45'         => 'RJ45 (Ethernet)',
+        'display_port' => 'DisplayPort',
+        'usb_a'        => 'USB-A',
+        'usb_c'        => 'USB-C',
+    ];
+    public const STATUS = [
+        'active' => "Loaned",
+        'available' => 'In storage',
+        'maintenance' => 'Under maintenance',
+        'lost' => 'Mising',
+        'retired' => 'retired',
+    ];
 
     public function category()
     {
@@ -40,6 +55,10 @@ class Asset extends Model
             'T21_name',
             'T21_specifications',
         );
+    }
+    public function getConnectorLabels():array
+    {
+        return self::CONNECTORS;
     }
     public function getIdAttribute(){return $this->attributes['T20_id'] ?? null;}
     public function getTagAttribute(){return $this->attributes['T20_tag'] ?? null;}
