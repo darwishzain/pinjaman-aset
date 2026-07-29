@@ -1,5 +1,5 @@
 <?php
-
+//! T20_*
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +9,7 @@ class Asset extends Model
 {
     use HasUlids;
     protected $table = 'T20_assets';
-
     protected $primaryKey = 'T20_id';
-
-    public $incrementing = false;
-    protected $keyType = 'string';
 
     const CREATED_AT = 'T20_created_at';
     const UPDATED_AT = 'T20_updated_at';
@@ -39,22 +35,17 @@ class Asset extends Model
         'usb_c'        => 'USB-C',
     ];
     public const STATUS = [
-        'active' => "Loaned",
-        'available' => 'In storage',
-        'maintenance' => 'Under maintenance',
+        'pending' => "Processing",
+        'active' => "Already Lended",
+        'available' => 'Available for Lending',
+        'maintenance' => 'Under Maintenance',
         'lost' => 'Mising',
-        'retired' => 'retired',
+        'retired' => 'To be Disposed',
     ];
 
     public function category()
     {
-        return $this->belongsTo(
-            AssetCategory::class,
-            'T20T21_category_id',
-            'T21_id',
-            'T21_name',
-            'T21_specifications',
-        );
+        return $this->belongsTo(AssetCategory::class,'T20T21_category_id');
     }
     public function getConnectorLabels():array
     {

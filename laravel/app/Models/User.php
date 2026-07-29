@@ -24,7 +24,12 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'group',
         'password',
+    ];
+    public const GROUPS = [
+        'bd' => 'Bahagian Digital',
+        'bph' => 'Bahagian Pengurusan Harta'
     ];
 
     /**

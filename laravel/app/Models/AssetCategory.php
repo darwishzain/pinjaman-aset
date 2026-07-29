@@ -1,5 +1,5 @@
 <?php
-
+//! T21_*
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +9,7 @@ class AssetCategory extends Model
 {
     use HasUlids;
     protected $table = 'T21_asset_categories';
-
     protected $primaryKey = 'T21_id';
-
-    public $incrementing = false;
-    protected $keyType = 'string';
 
     const CREATED_AT = 'T21_created_at';
     const UPDATED_AT = 'T21_updated_at';
@@ -23,7 +19,7 @@ class AssetCategory extends Model
     ];
     public function assets()
     {
-        return $this->hasMany(Asset::class, 'T20_assets', 'T20_id','T20_name');
+        return $this->hasMany(Asset::class, 'T20_id');
     }
     public function getIdAttribute(){return $this->attributes['T21_id'];}
     public function getNameAttribute(){return $this->attributes['T21_name'];}
