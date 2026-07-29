@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('T20_model')->nullable();
             $table->string('T20_serial_number')->nullable()->unique();
             $table->json('T20_specifications')->nullable();
-            $table->string('T20_status');
+            $table->string('T20_status')->default('pending');
             $table->timestamp('T20_created_at')->useCurrent();
             $table->timestamp('T20_updated_at')->useCurrent()->useCurrentOnUpdate();
         });
