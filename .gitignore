@@ -1,6 +1,7 @@
 #backup files
 .$*.bkp
 .~lock.*#
+design/temp/*
 # Logs
 logs
 *.log
