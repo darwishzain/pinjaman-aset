@@ -24,15 +24,15 @@ new class extends Component{
     <livewire:user.form-modal />
     <livewire:user.view-modal />
     @can('create:users')
-    <button wire:click="$dispatch('loadcreateform')">Tambah Pengguna</button>
+    <x-primary-button wire:click="$dispatch('loadcreateform')">Tambah Pengguna</x-primary-button>
     @endcan
     <div>
         <div class="text-center bold"> Peranan </div>
         <div class="grid grid-cols-1 md:grid-cols-5">
             @foreach (Role::all() as $role)
-                <button wire:click="$dispatch('loadeditroleform',{id:{{$role->id}}})">
+                <x-primary-button wire:click="$dispatch('loadeditroleform',{id:{{$role->id}}})">
                     {{ $role->name }}
-                </button>
+                </x-primary-button>
             @endforeach
         </div>
         <table class="w-full border border-collapse">

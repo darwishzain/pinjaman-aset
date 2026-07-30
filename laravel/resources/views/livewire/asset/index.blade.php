@@ -29,7 +29,7 @@ new class extends Component {
     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
         <livewire:asset.form-modal></livewire:asset.form-modal>
         @can('create:assets')
-            <button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</button>
+            <x-primary-button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</x-primary-button>
         @endcan
         @if($this->assets->isNotEmpty())
         <table class="w-full border border-collapse">
