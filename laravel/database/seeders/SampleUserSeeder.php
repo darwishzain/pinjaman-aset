@@ -20,24 +20,28 @@ class SampleUserSeeder extends Seeder
         $userSuperAdmin = User::firstOrCreate([
             'name' => 'Sample Super Admin',
             'email' => 'superadmin@example.com',
+            'group' => '071',
             'password' => Hash::make('password'),
         ]);
         $userSuperAdmin->assignRole('superadmin');
         $userAdmin = User::firstOrCreate([
             'name' => 'Sample Admin',
             'email' => 'admin@example.com',
+            'group' => '071',
             'password' => Hash::make('password'),
         ]);
         $userAdmin->assignRole('admin');
         $userManager = User::firstOrCreate([
             'name' => 'Sample Manager',
             'email' => 'manager@example.com',
+            'group' => '072',
             'password' => Hash::make('password'),
         ]);
         $userManager->assignRole('manager');
         $userStaff = User::firstOrCreate([
             'name' => 'Sample Staff',
             'email' => 'staff@example.com',
+            'group' => '072',
             'password' => Hash::make('password'),
         ]);
         $userStaff->assignRole('staff');

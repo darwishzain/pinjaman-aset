@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Asset;
+use App\Models\Request;
 
 class User extends Authenticatable
 {
@@ -28,10 +30,29 @@ class User extends Authenticatable
         'password',
     ];
     public const GROUPS = [
-        'bd' => 'Bahagian Digital',
-        'bph' => 'Bahagian Pengurusan Harta'
+        '041' => 'Bahagian Khidmat Teknikal',
+        '052' => "Bahagian Galakan Industri, Penyelidikan dan Pembangunan Perniagaan",
+        '051' => "Bahagian Audit Dalaman",
+        '061' => 'Bahagian Pengurusan Harta',//06
+        '071' => 'Bahagian Digital',//DEFAULT
+        '072' => 'Bahagian Perancangan Korporat',//07
+        '082' => 'Bahagian Perundangan dan Integriti',//08
+        '081' => 'Bahagian Hartanah dan Sumber Asli',//08
+        '092' => 'Bahagian Pembangunan Usahawan dan Pelaburan',//09
+        '091' => 'Bahagian Kewangan',//09
+        '101' => 'Bahagian Pengurusan Sumber Manusia'//10
     ];
 
+    public function assets(){
+        return $this->hasMany(Asset::class, 'T20_id');
+    }
+    public function requests(){
+        return $this->hasMany(Request::class, 'T30_id');
+    }
+    public function getGroup()
+    {
+        
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

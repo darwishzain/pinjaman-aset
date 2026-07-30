@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Livewire\Volt\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -26,10 +27,18 @@ new class extends Component{
     <button wire:click="$dispatch('loadcreateform')">Tambah Pengguna</button>
     @endcan
     <div>
+        <div class="text-center bold"> Peranan </div>
+        <div class="grid grid-cols-1 md:grid-cols-5">
+            @foreach (Role::all() as $role)
+                <button wire:click="$dispatch('loadeditroleform',{id:{{$role->id}}})">
+                    {{ $role->name }}
+                </button>
+            @endforeach
+        </div>
         <table class="w-full border border-collapse">
             <tr>
                 <th>Nama</th>
-                <th>Peranan</th>
+                <th></th>
                 <th>Kebenaran Tambahan</th>
                 <th>Tindakan</th>
             </tr>
@@ -54,16 +63,25 @@ new class extends Component{
                     </div>
                 </td>
                 <td>
-                    @foreach ($user->roles as $role)
-                        <button wire:click="$dispatch('loadeditroleform',{id:{{$role->id}}})">
-                            {{ $role->name }}
-                        </button>
-                    @endforeach
+                    <div class="ml-4">
+                        <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                            {{ User::GROUPS[$user->group] ?? ' ' }}
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            @foreach ($user->roles as $role)
+                                <span class="mr-2">
+                                    {{ $role->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
                 </td>
                 <td>
-                    @foreach ($user->permissions as $permission)
-                        {{ $permission->name }}
-                    @endforeach
+                    <div class="text-xs text-black-200 dark:text-gray-400 mt-1 break-words whitespace-normal">
+                        @foreach ($user->permissions as $permission)
+                            {{ $permission->name }}
+                        @endforeach
+                    </div>
                 </td>
                 <td>
                     @can('update:user-roles')
