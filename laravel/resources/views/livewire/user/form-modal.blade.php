@@ -127,18 +127,18 @@ new class extends Component {
             @can('create:users')
                 <form wire:submit="createuser">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <x-input type="text" wire:model="name" label="Nama" id="name"></x-input>
-                        <x-input type="email" wire:model="email" label="E-mel" id="email"></x-input>
-                        <x-select wire:model="group" label="Kumpulan" id="group">
+                        <x-ui.input type="text" wire:model="name" label="Nama" id="name"></x-ui.input>
+                        <x-ui.input type="email" wire:model="email" label="E-mel" id="email"></x-ui.input>
+                        <x-ui.select wire:model="group" label="Kumpulan" id="group">
                             <option value="" disabled selected>{{ __('Pilih Kumpulan Pengguna') }}</option>
                             @foreach(User::GROUPS as $key => $name)
                             <option value="{{ $key }}">{{ $name }}</option>
                             @endforeach
-                        </x-select>
+                        </x-ui.select>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <x-input type="password" wire:model="password" label="Kata Laluan" id="password"></x-input>
-                        <x-input type="password" wire:model="password_confirmation" label="Pengesahan Kata Laluan" id="password_confirmation"></x-input>
+                        <x-ui.input type="password" wire:model="password" label="Kata Laluan" id="password"></x-ui.input>
+                        <x-ui.input type="password" wire:model="password_confirmation" label="Pengesahan Kata Laluan" id="password_confirmation"></x-ui.input>
                     </div>
                     <x-submit-button>
                         Tambah Pengguna

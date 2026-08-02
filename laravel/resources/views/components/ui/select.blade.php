@@ -3,7 +3,7 @@
     'id'=>'',
     'label'=>'',
 ])
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!--<div class="grid grid-cols-1 md:grid-cols-3 gap-4">-->
     <div>
         <label
             for="{{ $id }}"
@@ -23,4 +23,4 @@
             {{ $slot }}
         </select>
     </div>
-</div>
+<!--</div>-->

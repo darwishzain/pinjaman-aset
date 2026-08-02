@@ -128,27 +128,27 @@ new class extends Component {
                     @if($asset?->exists)
                     <div class="grid grid-cols-1">
                         <div>{{ $asset->tag }}</div>
-                        <x-input type="hidden" wire:model="asset_id"></x-input>
+                        <x-ui.input type="hidden" wire:model="asset_id"></x-ui.input>
                     </div>
                     @endif
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <x-select wire:model.live="category_id" id="category_id" label="Type" required>
+                        <x-ui.select wire:model.live="category_id" id="category_id" label="Type" required>
                             <option value="" disabled selected>{{ __('Choose Asset Type') }}</option>
                             @foreach (AssetCategory::all() as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
-                        </x-select>
-                        <x-input type="text" placeholder="Tag" wire:model="tag" label="Tag" id="tag"></x-input>
+                        </x-ui.select>
+                        <x-ui.input type="text" placeholder="Tag" wire:model="tag" label="Tag" id="tag"></x-ui.input>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <x-input type="text" placeholder="Brand" wire:model="brand" label="Brand" id="brand"></x-input>
-                        <x-input type="text" placeholder="Model" wire:model="model" label="Model" id="model"></x-input>
-                        <x-input type="text" placeholder="Serial Number" wire:model="serial_number" label="Serial Number" id="serial_number"></x-input>
+                        <x-ui.input type="text" placeholder="Brand" wire:model="brand" label="Brand" id="brand"></x-ui.input>
+                        <x-ui.input type="text" placeholder="Model" wire:model="model" label="Model" id="model"></x-ui.input>
+                        <x-ui.input type="text" placeholder="Serial Number" wire:model="serial_number" label="Serial Number" id="serial_number"></x-ui.input>
                     </div>{{--
                     <div> Spesifikasi</div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         @foreach(Asset::CONNECTORS as $key => $label )
-                            <x-input type="number" wire:model="connectors.{{ $key }}_count" id="{{ $key }}_count" label="Bilangan {{ strtoupper($label) }}"></x-input>
+                            <x-ui.input type="number" wire:model="connectors.{{ $key }}_count" id="{{ $key }}_count" label="Bilangan {{ strtoupper($label) }}"></x-ui.input>
                         @endforeach
                     </div>--}}
                     <x-submit-button>
