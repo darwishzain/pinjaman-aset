@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\RequestStatus;
+use App\Enums\ReviewStatus;
 
 return new class extends Migration
 {
@@ -24,14 +26,20 @@ return new class extends Migration
             $table->foreignUlid('T30T10_supported_by_id')->nullable()
                 ->constrained(table:'users',column:'id')
                 ->cascadeOnUpdate()->restrictOnDelete();
-            $table->date('T30_supported_comment')->nullable();
-            $table->date('T30_supported_at')->nullable();
+            $table->string('T30_supported_comment')->nullable();
+            $table->enum('T30_supported_status', array_column(ReviewStatus::cases(), 'value'))
+                ->default(ReviewStatus::PENDING->value);
+            $table->timestamp('T30_supported_at')->nullable();
             //* Approved details
             $table->foreignUlid('T30T10_approved_by_id')->nullable()
                 ->constrained(table:'users',column:'id')
                 ->cascadeOnUpdate()->restrictOnDelete();
-            $table->date('T30_approved_comment')->nullable();
-            $table->date('T30_approved_at')->nullable();
+            $table->string('T30_approved_comment')->nullable();
+            $table->enum('T30_approved_status', array_column(ReviewStatus::cases(), 'value'))
+                ->default(ReviewStatus::PENDING->value);
+            $table->timestamp('T30_approved_at')->nullable();
+            $table->enum('T30_status', array_column(RequestStatus::cases(), 'value'))
+                ->default(RequestStatus::PENDING->value);
             $table->timestamp('T30_created_at')->useCurrent();
             $table->timestamp('T30_updated_at')->useCurrent()->useCurrentOnUpdate();
         });

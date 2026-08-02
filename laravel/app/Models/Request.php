@@ -15,9 +15,19 @@ class Request extends Model
     const CREATED_AT = 'T30_created_at';
     const UPDATED_AT = 'T30_updated_at';
     public const TYPE = [
-        'individual',
-        'department'
+        'individual'=>'Individu',
+        'department'=>'Jabatan/Bahagian'
     ];
+    protected function casts(): array
+    {
+        return [
+            'T30_status'   => RequestStatus::class,
+            'T30_supported_status' => ReviewStatus::class,
+            'T30_approved_status'  => ReviewStatus::class,
+            'T30_supported_at'     => 'datetime',
+            'T30_approved_at'      => 'datetime',
+        ];
+    }
     protected $fillable = [
         'T30T10_user_id',
         'T30_reason',
@@ -29,9 +39,12 @@ class Request extends Model
         'T30_type',
         'T30T10_supported_by_id',
         'T30_supported_comment',
+        'T30_supported_status',
         'T30_supported_at',
         'T30T10_approved_by_id',
         'T30_approved_comment',
+        'T30_approved_status',
+        'T30_status',
         'T30_approved_at'
     ];
 
