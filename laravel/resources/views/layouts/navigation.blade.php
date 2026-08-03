@@ -25,6 +25,16 @@
                         {{ __('Aset') }}
                     </x-nav-link>
                     @endcanany
+                    @canany(['create:requests','view:requests','view-any:requests','support:requests','approve:requests'])
+                    <x-nav-link :href="route('requests.index')" :active="request()->routeIs('requests.index')">
+                        {{ __('Permohonan') }}
+                    </x-nav-link>
+                    @endcanany
+                    @canany(['create:transactions','view:transactions','view-any:transactions'])
+                    <x-nav-link >
+                        {{ __('Transaksi Aset') }}
+                    </x-nav-link>
+                    @endcanany
                 </div>
             </div>
 

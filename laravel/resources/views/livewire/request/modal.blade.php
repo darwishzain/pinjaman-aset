@@ -77,8 +77,9 @@ new class extends Component {
                 ]);
             }
         }
+        $this->activemodal = null;
+        $this->dispatch('refresh-request');
         $this->reset(['type','start_date','end_date','reason','location','remark','quantity']);
-        //$this->activemodal = null;
     }
     #[On('loadsupportrequest')]
     

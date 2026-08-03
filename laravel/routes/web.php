@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManageUserController;
 use App\Http\Controllers\ManageRoleController;
+use App\Http\Controllers\ManageRequestController;
 
 use Illuminate\Support\Facades\Route;
 //* Redirect to login page
@@ -29,7 +30,10 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/users/create', [ManageUserController::class,'create'])->name('users.create');
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
-
+Route::middleware(['auth'])->group(function(){
+    Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
+    Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
+});
 //  middleware('can:"view-any:requests"')
 Route::middleware(['auth','can:"update:user-roles"'])->group(function(){
     Route::get('/users/roles', [ManageRoleController::class,'list'])->name('roles.list');
