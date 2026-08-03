@@ -49,7 +49,7 @@ return new class extends Migration
                 ->constrained(table:'T30_requests',column:'T30_id')
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignUlid('T31T21_asset_category_id')
-                ->cosntrained(table:'T21_asset_categories',column:'T21_id')
+                ->constrained(table:'T21_asset_categories',column:'T21_id')
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->integer('T31_quantity');
         });
