@@ -8,6 +8,6 @@ $colors = [
 ];
 $colorClasses = $colors[$color] ?? $colors['gray'];
 @endphp
-<a {{ $attributes->merge(['class' => "inline-flex items-center px-4 py-2 m-2 $colorClasses"]) }}>
+<a {{ $attributes->merge(['href' => $href, 'class' => "inline-flex items-center px-4 py-2 m-2 tracking-widest border border-transparent rounded-md font-semibold text-xs uppercase $colorClasses transition ease-in-out duration-150"]) }}>
     {{ $slot }}
 </a>

@@ -5,15 +5,17 @@
 ])
 <!--<div class="grid grid-cols-1 md:grid-cols-3 gap-4">-->
     <div>
-        <label
-            for="{{ $id }}"
-            class="block mb-1"
-        >
-            {{ $label }}
-            @if($attributes->has('required'))
-                <span class="text-red-500 font-bold ml-0.5">*</span>
-            @endif
-        </label>
+        @if($label)
+            <label
+                for="{{ $id }}"
+                class="block mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                {{ $label }}
+                @if($attributes->has('required'))
+                    <span class="text-red-500 font-bold ml-0.5">*</span>
+                @endif
+            </label>
+        @endif
         <select
             @disabled($disabled)
             id="{{ $id }}"

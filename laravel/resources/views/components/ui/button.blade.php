@@ -8,6 +8,6 @@ $colors = [
 ];
 $colorClasses = $colors[$color] ?? $colors['gray'];
 @endphp
-<button {{ $attributes->merge(['type' => 'submit', 'class' => "inline-flex items-center px-4 py-2 m-2 $colorClasses"]) }}>
+<button {{ $attributes->merge(['type' => 'submit', 'class' => "inline-flex items-center px-4 py-2 m-2 tracking-widest border border-transparent rounded-md font-semibold text-xs uppercase $colorClasses transition ease-in-out duration-150"]) }}>
     {{ $slot }}
 </button>

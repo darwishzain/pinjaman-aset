@@ -11,6 +11,9 @@
             {{ $user->name }}
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400">
+            {{ $user->groupName() }}
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">
             {{ $user->email }}
         </div>
     </div>
