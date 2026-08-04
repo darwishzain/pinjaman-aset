@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\User;
+use App\Models\AssetCategory;
+use App\Models\RequestAsset;
 use App\Enums\RequestStatus;
 use App\Enums\ReviewStatus;
 
@@ -49,7 +51,30 @@ class Request extends Model
         'T30_status',
         'T30_approved_at'
     ];
-
+    public function needSupport()
+    {
+        return $this->T30_supported_status === ReviewStatus::PENDING;
+    }
+    public function isSupported()
+    {
+        return $this->T30_supported_status === ReviewStatus::ACCEPTED;
+    }
+    public function isNotSupported()
+    {
+        return $this->T30_supported_status === ReviewStatus::REJECTED;
+    }
+    public function needApproval()
+    {
+        return $this->T30_supported_status === ReviewStatus::ACCEPTED && $this->T30_approved_status === ReviewStatus::PENDING;
+    }
+    public function isApproved()
+    {
+        return $this->T30_approved_status === ReviewStatus::ACCEPTED;
+    }
+    public function isRejected()
+    {
+        return $this->T30_approved_status === ReviewStatus::REJECTED;
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'T30T10_user_id');
@@ -61,5 +86,9 @@ class Request extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'T30T10_approved_by_id');
+    }
+    public function requestAssets()
+    {
+        return $this->hasMany(RequestAsset::class, 'T31T30_request_id', 'T30_id');
     }
 }

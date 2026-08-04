@@ -23,12 +23,13 @@ class ManageRequestController extends Controller
     {
         if(auth()->user()->can('support:requests')){
             $user = auth()->user();
+            $title = 'Sokong Permohonan';
             $requests = RequestModel::where('T30_supported_status', 'pending')
                 ->whereHas('user', function ($query) use ($user) {
                     $query->where('group', $user->group);
                 })
                 ->get();
-            return view('request', compact('requests'));
+            return view('request', compact('title', 'requests'));
         }
         else
         {
@@ -39,10 +40,11 @@ class ManageRequestController extends Controller
     {
         if(auth()->user()->can('approve:requests')){
             $user = auth()->user();
+            $title = 'Luluskan Permohonan';
             $requests = RequestModel::where('T30_approved_status', 'pending')
                 ->where('T30_supported_status', 'accepted')
                 ->get();
-            return view('request', compact('requests'));
+            return view('request', compact('title', 'requests'));
         }
         else
         {

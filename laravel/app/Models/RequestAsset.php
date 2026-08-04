@@ -18,8 +18,12 @@ class RequestAsset extends Model
         'T31T21_asset_category_id',
         'T31_quantity'
     ];
-    public function assetCategory()
+    public function request()
     {
-        return $this->belongsTo(assetCategory::class,'T31T21_asset_category_id');
+        return $this->belongsTo(Request::class, 'T31T30_request_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(AssetCategory::class, 'T31T21_asset_category_id');
     }
 }

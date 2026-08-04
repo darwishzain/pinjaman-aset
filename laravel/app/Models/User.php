@@ -30,11 +30,12 @@ class User extends Authenticatable
         'password',
     ];
     public const GROUPS = [
+        '000' => 'Tiada Kumpulan',//Default
         '041' => 'Bahagian Khidmat Teknikal',
         '052' => "Bahagian Galakan Industri, Penyelidikan dan Pembangunan Perniagaan",
         '051' => "Bahagian Audit Dalaman",
         '061' => 'Bahagian Pengurusan Harta',//06
-        '071' => 'Bahagian Digital',//DEFAULT
+        '071' => 'Bahagian Digital',
         '072' => 'Bahagian Perancangan Korporat',//07
         '082' => 'Bahagian Perundangan dan Integriti',//08
         '081' => 'Bahagian Hartanah dan Sumber Asli',//08
@@ -49,9 +50,14 @@ class User extends Authenticatable
     public function requests(){
         return $this->hasMany(Request::class, 'T30_id');
     }
-    public function getGroup()
+    public static function getGroupName(?string $code): string
     {
-        
+        // If code is null or doesn't exist in the array, default to '000' (Tiada Kumpulan)
+        return self::GROUPS[$code] ?? self::GROUPS['000'];
+    }
+    public function groupName(): string
+    {
+        return $this->getGroupName($this->group);
     }
     /**
      * The attributes that should be hidden for serialization.

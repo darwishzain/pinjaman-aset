@@ -22,10 +22,7 @@ new class extends Component {
 
 <div>
     @can('create:requests')
-        <x-primary-button wire:click="$dispatch('loadcreaterequest')">Permohonan Baru</x-primary-button>
-    @endcan
-    @can('support:requests')
-        <x-primary-button href="{{ route('requests.support') }}">Sokong Permohonan</x-primary-button>
+        <x-ui.button wire:click="$dispatch('loadcreaterequest')">Permohonan Baru</x-ui.button>
     @endcan
     @canany(['create:requests','support:requests','approve:requests', 'view:requests', 'view-any:requests'])
         <livewire:request.modal></livewire:request.modal>
@@ -42,13 +39,26 @@ new class extends Component {
             </x-slot>
             <x-slot name="slot">
                 @foreach($requests as $request)
-                    <tr>
+                    <tr wire:key="request-{{ $request->T30_id }}">
                         <x-ui.td>
                             <x-ui.user-list-item :user="$request->user"></x-ui.user-list-item>
                         </x-ui.td>
                         <x-ui.td>{{ $request->T30_reason }}</x-ui.td>
                         <x-ui.td>{{ $request->T30_location }}</x-ui.td>
                         <x-ui.td>{{ $request->T30_status->label() }}</x-ui.td>
+                        <x-ui.td>
+                            @can('support:requests')
+                                @if($request->needSupport())
+                                    <x-ui.button color="blue" wire:click="$dispatch('loadsupportrequest', { id: '{{ $request->T30_id }}' })">SOKONG</x-ui.button>
+                                @endif
+                            @endcan
+                            @can('approve:requests')
+                                @if($request->needApproval())
+                                    <x-ui.button color="blue" wire:click="$dispatch('loadapproverequest', { id: '{{ $request->T30_id }}' })">LULUSKAN</x-ui.button>
+                                @endif
+                            @endcan
+                            <x-ui.button wire:click="$dispatch('loadviewrequest', { id: '{{ $request->T30_id }}' })">PERIHAL</x-ui.button>
+                        </x-ui.td>
                     </tr>
                 @endforeach
             </x-slot>

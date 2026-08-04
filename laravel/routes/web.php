@@ -33,14 +33,11 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
 Route::middleware(['auth'])->group(function(){
     Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
+    Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
 });
 //  middleware('can:"view-any:requests"')
 Route::middleware(['auth','can:"update:user-roles"'])->group(function(){
     Route::get('/users/roles', [ManageRoleController::class,'list'])->name('roles.list');
 });
-Route::middleware(['auth','can:"create:user"'])->group(function(){
-
-});
-
 
 require __DIR__.'/auth.php';

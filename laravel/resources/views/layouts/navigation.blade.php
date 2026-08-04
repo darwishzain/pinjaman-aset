@@ -26,7 +26,7 @@
                     </x-nav-link>
                     @endcanany
                     @canany(['create:requests','view:requests','view-any:requests','support:requests','approve:requests'])
-                    <x-nav-link :href="route('requests.index')" :active="request()->routeIs('requests.index')">
+                    <x-nav-link :href="route('requests.index')" :active="request()->routeIs(['requests.index','requests.support','requests.approve'])">
                         {{ __('Permohonan') }}
                     </x-nav-link>
                     @endcanany
