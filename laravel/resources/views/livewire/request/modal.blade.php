@@ -17,6 +17,7 @@ new class extends Component {
     public string $type = '';
     public string $start_date = '';
     public string $end_date = '';
+    public string $scheduled_pickup_at = '';
     public string $reason = '';
     public string $location = '';
     public string $remark = '';
@@ -25,7 +26,7 @@ new class extends Component {
     public ?Request $request = null;
     public ?User $user = null;
     public array $support = ['comment' => '', 'status' => ''];
-    public array $approve = [];
+    public array $approve = ['comment' => '', 'status' => ''];
     protected function rules():array
     {
         if($this->activemodal === 'create-request')
@@ -33,7 +34,8 @@ new class extends Component {
             $rules = [
                 'user_id' => ['required','exists:users,id'],
                 'type' => ['required','in:individual,department'],
-                'start_date' => ['required','date','after_or_equal:tomorrow'],
+                'scheduled_pickup_at' => ['required','date'],
+                'start_date' => ['required','date','after:scheduled_pickup_at'],
                 'end_date' => ['required','date','after_or_equal:start_date'],
                 'reason' => ['required','string','max:255'],
                 'location' => ['required','string','max:255'],
@@ -54,7 +56,7 @@ new class extends Component {
         {
             $rules = [
                 'request_id' => ['required','exists:T30_requests,T30_id'],
-                'support.status' => ['required','in:accepted,decline'],
+                'support.status' => ['required','in:accepted,declined'],
                 'support.comment' => ['nullable','string','max:255'],
             ];
         }
@@ -62,7 +64,8 @@ new class extends Component {
         {
             $rules = [
                 'request_id' => ['required','exists:T30_requests,T30_id'],
-                'approve.status' => ['required','in:accepted,decline'],
+                'scheduled_pickup_at' => ['required','date'],
+                'approve.status' => ['required','in:accepted,declined'],
                 'approve.comment' => ['nullable','string','max:255'],
             ];
         }
@@ -73,11 +76,12 @@ new class extends Component {
     {
         $this->activemodal = 'create-request';
         $this->title = 'Permohonan Baru';
-        $this->reset(['request','user_id','type','start_date','end_date','reason','location','remark','quantity']);
+        $this->reset(['request','user_id','type','start_date','end_date','scheduled_pickup_at','reason','location','remark','quantity']);
         $this->user = User::findOrFail(auth()->user()->id);
         $this->user_id = $this->user->id;
-        $this->start_date = date('Y-m-d', strtotime('+1 day'));
-        $this->end_date = date('Y-m-d', strtotime('+2 day'));
+        $this->scheduled_pickup_at = date('Y-m-d\TH:i', strtotime('tomorrow 08:00'));
+        $this->start_date = date('Y-m-d', strtotime('+2 day'));
+        $this->end_date = date('Y-m-d', strtotime('+3 day'));
         foreach (AssetCategory::all() as $category) {
             $this->quantity[$category->T21_id] = 0;
         }
@@ -91,6 +95,7 @@ new class extends Component {
             'T30_type' => $this->type,
             'T30_start_date' => $this->start_date,
             'T30_end_date' => $this->end_date,
+            'T30_scheduled_pickup_at' => $this->scheduled_pickup_at,
             'T30_reason' => $this->reason,
             'T30_location' => $this->location,
             'T30_remark' => $this->remark,
@@ -107,7 +112,7 @@ new class extends Component {
         }
         $this->activemodal = null;
         $this->dispatch('refresh-request');
-        $this->reset(['type','start_date','end_date','reason','location','remark','quantity']);
+        $this->reset(['type','start_date','end_date','scheduled_pickup_at','reason','location','remark','quantity']);
     }
     #[On('loadsupportrequest')]
     public function loadsupportrequest($id)
@@ -127,9 +132,12 @@ new class extends Component {
     {
         $this->validate();
         $this->request = Request::findOrFail($this->request_id);
-        $this->request->T30T10_supported_by = auth()->user()->id;
+        $this->request->T30T10_support_by_id = auth()->user()->id;
         $this->request->T30_support_comment = $this->support['comment'] ?? '';
-        dd($this->support['status']);
+        if($this->support['status'] === 'declined'){
+            $this->request->T30_status = 'declined';
+            $this->request->T30_scheduled_pickp_at = null;
+        }
         $this->request->T30_support_status = $this->support['status'];
         $this->request->T30_support_at = now();
         $this->request->save();
@@ -138,7 +146,42 @@ new class extends Component {
         $this->reset(['support']);
     }
     #[On('loadapproverequest')]
-
+    public function loadapproverequest($id)
+    {
+        $this->activemodal = 'approve-request';
+        $this->title = 'Kelulusan Permohonan';
+        $this->request = Request::with('requestAssets')->findOrFail($id);
+        $this->request_id = $this->request->T30_id;
+        $this->user = $this->request->user;
+        $this->scheduled_pickup_at = $this->request->T30_scheduled_pickup_at;
+        $this->user_id = $this->user->id;
+        $this->approve = [
+            'status' => '',
+            'comment' => '',
+        ];
+    }
+    public function approverequest()
+    {
+        $this->validate();
+        $this->request = Request::findOrFail($this->request_id);
+        $this->request->T30T10_support_by_id = auth()->user()->id;
+        $this->request->T30_support_comment = $this->approve['comment'] ?? '';
+        if($this->approve['status'] === 'declined'){
+            $this->request->T30_status = 'declined';
+            $this->request->T30_scheduled_pickup_at = null;
+        }
+        else if($this->T30_approve['status'] === 'accepted')
+        {
+            $this->request->T30_status = 'pickup';
+            $this->request->T30_scheduled_pickup_at = $this->scheduled_pickup_at;
+        }
+        $this->request->T30_support_status = $this->approve['status'];
+        $this->request->T30_support_at = now();
+        $this->request->save();
+        $this->activemodal = null;
+        $this->dispatch('refresh-request');
+        $this->reset(['approve']);
+    }
 }; ?>
 
 <div>
@@ -148,7 +191,7 @@ new class extends Component {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <x-ui.user-list-item :user="$user"></x-ui.user-list-item>
             </div>
-            <form wire="
+            <form wire:submit="
                 @if($activemodal === 'create-request')
                     createrequest
                 @elseif($activemodal === 'support-request')
@@ -166,6 +209,11 @@ new class extends Component {
                         <x-ui.display-field label="Kegunaan" value="{{ Request::TYPE[$request->T30_type] }}" id="type"></x-ui.display-field>
                         <x-ui.display-field label="Dari" value="{{ $request->T30_start_date }}" id="start_date"></x-ui.display-field>
                         <x-ui.display-field label="Hingga" value="{{ $request->T30_end_date }}" id="end_date"></x-ui.display-field>
+                        <x-ui.display-field 
+                            label="Masa Dipindah ke Lokasi Penggunaan"
+                            value="{{ $request->T30_scheduled_pickup_at ? date('d/m/Y H:i', strtotime($request->T30_scheduled_pickup_at)) : '---' }}"
+                            id="scheduled_pickup_at">
+                        </x-ui.display-field>
                         <x-ui.display-field label="Tujuan" value="{{ $request->T30_reason }}" id="reason"></x-ui.display-field>
                         <x-ui.display-field label="Tempat Penggunaan" value="{{ $request->T30_location }}" id="location"></x-ui.display-field>
                         <x-ui.display-field label="Catatan" value="{{ !empty($request->T30_remark) ? $request->T30_remark : '--Tiada--' }}" id="remarks"></x-ui.display-field>
@@ -183,15 +231,27 @@ new class extends Component {
                     @if($activemodal === 'support-request')
                         <x-ui.title>Sokong Permohonan</x-ui.title>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <x-ui.select label="Sokongan" wire:model="support.status">
+                            <x-ui.select label="Sokongan" wire:model="support.status" required id="support_status">
                                 <option value="" disabled selected>Pilih Sokongan</option>
                                 <option value="accepted">Diterima</option>
-                                <option value="decline">Ditolak</option>
+                                <option value="declined">Ditolak</option>
                             </x-ui.select>
                             <x-ui.input wire:model="support.comment" label="Komen" id="comment"></x-ui.input>
                         </div>
+                    @elseif($activemodal === 'approve-request')
+                        <x-ui.title>Kelulusan Permohonan</x-ui.title>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <x-ui.select label="Kelulusan" wire:model="approve.status" required id="approve_status">
+                                <option value="" disabled selected>Pilih Kelulusan</option>
+                                <option value="accepted">Diterima</option>
+                                <option value="declined">Ditolak</option>
+                            </x-ui.select>
+                            <x-ui.input type="text" wire:model="approve.comment" label="Komen" id="comment"></x-ui.input>
+                            <x-ui.input type="datetime-local" wire:model="scheduled_pickup_at" label="Masa Dipindah ke Lokasi Penggunaan" id="scheduled_pickup_at"></x-ui.input>
+                        </div>
                     @endif
                 @else
+                    <x-ui.title>Perihal Permohonan</x-ui.title>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <x-ui.select wire:model="type" label="Kegunaan" id="type" required>
                             <option value="" disabled selected>Pilih Kegunaan</option>
@@ -201,8 +261,7 @@ new class extends Component {
                         </x-ui.select>
                         <x-ui.input type="date" wire:model="start_date" label="Dari" id="start_date" required></x-ui.input>
                         <x-ui.input type="date" wire:model="end_date" label="Hingga" id="end_date" required></x-ui.input>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <x-ui.input type="datetime-local" wire:model="scheduled_pickup_at" label="Masa Dipindah ke Lokasi Penggunaan" id="scheduled_pickup_at" required></x-ui.input>
                         <x-ui.input type="text" wire:model="reason" label="Tujuan" id="reason" required></x-ui.input>
                         <x-ui.input type="text" wire:model="location" label="Tempat Penggunaan" id="location" required></x-ui.input>
                         <x-ui.input type="text" wire:model="remark" label="Catatan (Jika Perlu)" id="remark"></x-ui.input>
