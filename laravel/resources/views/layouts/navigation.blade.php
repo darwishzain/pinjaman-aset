@@ -90,6 +90,26 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Utama') }}
             </x-responsive-nav-link>
+            @canany(['create:users','view-any:users','update:user-roles'])
+            <x-responsive-nav-link :href="route('users.list')" :active="request()->routeIs('user')">
+                {{ __('Pengguna') }}
+            </x-responsive-nav-link>
+            @endcanany
+            @canany(['create:assets','view:assets','view-any:assets','update:assets'])
+            <x-responsive-nav-link :href="route('asset')" :active="request()->routeIs('asset')">
+                {{ __('Aset') }}
+            </x-responsive-nav-link>
+            @endcanany
+            @canany(['create:requests','view:requests','view-any:requests','support:requests','approve:requests'])
+            <x-responsive-nav-link :href="route('requests.index')" :active="request()->routeIs(['requests.index','requests.support','requests.approve'])">
+                {{ __('Permohonan') }}
+            </x-responsive-nav-link>
+            @endcanany
+            @canany(['create:transactions','view:transactions','view-any:transactions'])
+            <x-responsive-nav-link >
+                {{ __('Transaksi Aset') }}
+            </x-responsive-nav-link>
+            @endcanany
         </div>
 
         <!-- Responsive Settings Options -->
