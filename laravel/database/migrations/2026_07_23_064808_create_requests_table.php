@@ -23,21 +23,21 @@ return new class extends Migration
             $table->text('T30_remark')->nullable();
             $table->string('T30_type');//loan type: individual/department
             //* Supported details
-            $table->foreignUlid('T30T10_supported_by_id')->nullable()
+            $table->foreignUlid('T30T10_support_by_id')->nullable()
                 ->constrained(table:'users',column:'id')
                 ->cascadeOnUpdate()->restrictOnDelete();
-            $table->string('T30_supported_comment')->nullable();
-            $table->enum('T30_supported_status', array_column(ReviewStatus::cases(), 'value'))
+            $table->string('T30_support_comment')->nullable();
+            $table->enum('T30_support_status', array_column(ReviewStatus::cases(), 'value'))
                 ->default(ReviewStatus::PENDING->value);
-            $table->timestamp('T30_supported_at')->nullable();
+            $table->timestamp('T30_support_at')->nullable();
             //* Approved details
-            $table->foreignUlid('T30T10_approved_by_id')->nullable()
+            $table->foreignUlid('T30T10_approve_by_id')->nullable()
                 ->constrained(table:'users',column:'id')
                 ->cascadeOnUpdate()->restrictOnDelete();
-            $table->string('T30_approved_comment')->nullable();
-            $table->enum('T30_approved_status', array_column(ReviewStatus::cases(), 'value'))
+            $table->string('T30_approve_comment')->nullable();
+            $table->enum('T30_approve_status', array_column(ReviewStatus::cases(), 'value'))
                 ->default(ReviewStatus::PENDING->value);
-            $table->timestamp('T30_approved_at')->nullable();
+            $table->timestamp('T30_approve_at')->nullable();
             $table->enum('T30_status', array_column(RequestStatus::cases(), 'value'))
                 ->default(RequestStatus::PENDING->value);
             $table->timestamp('T30_created_at')->useCurrent();

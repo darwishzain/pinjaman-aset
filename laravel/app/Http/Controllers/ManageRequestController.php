@@ -9,7 +9,7 @@ class ManageRequestController extends Controller
 {
     public function index()
     {
-        if(auth()->user()->can('view:requests')){
+        if(auth()->user()){
             $user = auth()->user();
             $requests = RequestModel::where('T30T10_user_id', $user->id)->get();
             return view('request', compact('requests'));
@@ -24,7 +24,7 @@ class ManageRequestController extends Controller
         if(auth()->user()->can('support:requests')){
             $user = auth()->user();
             $title = 'Sokong Permohonan';
-            $requests = RequestModel::where('T30_supported_status', 'pending')
+            $requests = RequestModel::where('T30_support_status', 'pending')
                 ->whereHas('user', function ($query) use ($user) {
                     $query->where('group', $user->group);
                 })
@@ -41,8 +41,8 @@ class ManageRequestController extends Controller
         if(auth()->user()->can('approve:requests')){
             $user = auth()->user();
             $title = 'Luluskan Permohonan';
-            $requests = RequestModel::where('T30_approved_status', 'pending')
-                ->where('T30_supported_status', 'accepted')
+            $requests = RequestModel::where('T30_approve_status', 'pending')
+                ->where('T30_support_status', 'accepted')
                 ->get();
             return view('request', compact('title', 'requests'));
         }

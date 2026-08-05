@@ -26,10 +26,10 @@ class Request extends Model
     {
         return [
             'T30_status'   => RequestStatus::class,
-            'T30_supported_status' => ReviewStatus::class,
-            'T30_approved_status'  => ReviewStatus::class,
-            'T30_supported_at'     => 'datetime',
-            'T30_approved_at'      => 'datetime',
+            'T30_support_status' => ReviewStatus::class,
+            'T30_approve_status'  => ReviewStatus::class,
+            'T30_support_at'     => 'datetime',
+            'T30_approve_at'      => 'datetime',
         ];
     }
     protected $fillable = [
@@ -41,39 +41,39 @@ class Request extends Model
         'T30_location',
         'T30_remark',
         'T30_type',
-        'T30T10_supported_by_id',
-        'T30_supported_comment',
-        'T30_supported_status',
-        'T30_supported_at',
-        'T30T10_approved_by_id',
-        'T30_approved_comment',
-        'T30_approved_status',
-        'T30_status',
-        'T30_approved_at'
+        'T30T10_support_by_id',
+        'T30_support_comment',
+        'T30_support_status',
+        'T30_support_at',
+        'T30T10_approve_by_id',
+        'T30_approve_comment',
+        'T30_approve_status',
+        'T30_approve_at',
+        'T30_status'
     ];
     public function needSupport()
     {
-        return $this->T30_supported_status === ReviewStatus::PENDING;
+        return $this->T30_support_status === ReviewStatus::PENDING;
     }
     public function isSupported()
     {
-        return $this->T30_supported_status === ReviewStatus::ACCEPTED;
+        return $this->T30_support_status === ReviewStatus::ACCEPTED;
     }
     public function isNotSupported()
     {
-        return $this->T30_supported_status === ReviewStatus::REJECTED;
+        return $this->T30_support_status === ReviewStatus::REJECTED;
     }
     public function needApproval()
     {
-        return $this->T30_supported_status === ReviewStatus::ACCEPTED && $this->T30_approved_status === ReviewStatus::PENDING;
+        return $this->T30_support_status === ReviewStatus::ACCEPTED && $this->T30_approve_status === ReviewStatus::PENDING;
     }
     public function isApproved()
     {
-        return $this->T30_approved_status === ReviewStatus::ACCEPTED;
+        return $this->T30_approve_status === ReviewStatus::ACCEPTED;
     }
     public function isRejected()
     {
-        return $this->T30_approved_status === ReviewStatus::REJECTED;
+        return $this->T30_approve_status === ReviewStatus::REJECTED;
     }
     public function user()
     {
@@ -81,11 +81,11 @@ class Request extends Model
     }
     public function supportedBy()
     {
-        return $this->belongsTo(User::class, 'T30T10_supported_by_id');
+        return $this->belongsTo(User::class, 'T30T10_support_by_id');
     }
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'T30T10_approved_by_id');
+        return $this->belongsTo(User::class, 'T30T10_approve_by_id');
     }
     public function requestAssets()
     {
