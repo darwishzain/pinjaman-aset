@@ -51,4 +51,31 @@ class ManageRequestController extends Controller
             abort(403,'Anda tidak mempunyai kebenaran untuk mengakses halaman ini.');
         }
     }
+    public function pickupRequests()
+    {
+        if(auth()->user()->can('create:transactions')){
+            $user = auth()->user();
+            $title = 'Permohonan Untuk Diambil';
+            $requests = RequestModel::where('T30_status', 'pickup')
+                ->where('T30_support_status', 'accepted')
+                ->where('T30_approve_status', 'accepted')
+                ->get();
+            return view('request', compact('title', 'requests'));
+        }
+        else
+        {
+            abort(403,'Anda tidak mempunyai kebenaran untuk mengakses halaman ini.');
+        }
+    }
+    public function getRequest(Reqest $request, $id)
+    {
+        if(auth()->user()->canany(['create:transactions','view:transactions','view-any:transactions'])){
+            $request = RequestModel::findOrFail($id);
+            return view('transaction', compact('request'));
+        }
+        else
+        {
+            abort(403,'Anda tidak mempunyai kebenaran untuk mengakses halaman ini.');
+        }
+    }
 }

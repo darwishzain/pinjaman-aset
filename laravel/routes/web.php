@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
+    //Route::get('/request/id/{id}', [ManageRequestController::class,'getRequest'])->name('requests.get');
 });
 //  middleware('can:"view-any:requests"')
 Route::middleware(['auth','can:"update:user-roles"'])->group(function(){
