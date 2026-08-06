@@ -31,10 +31,11 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
 Route::middleware(['auth'])->group(function(){
-    Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
-    //Route::get('/request/id/{id}', [ManageRequestController::class,'getRequest'])->name('requests.get');
+    Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
+    Route::get('/transactions', [ManageRequestController::class,'transactions'])->name('requests.transactions');
+    //Route::get('/request/{id}', [ManageRequestController::class,'getRequest'])->name('requests.get');
 });
 //  middleware('can:"view-any:requests"')
 Route::middleware(['auth','can:"update:user-roles"'])->group(function(){

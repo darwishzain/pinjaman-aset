@@ -31,7 +31,7 @@
                     </x-nav-link>
                     @endcanany
                     @canany(['create:transactions','view:transactions','view-any:transactions'])
-                    <x-nav-link >
+                    <x-nav-link :href="route('requests.transactions')" :active="request()->routeIs('requests.transactions')">
                         {{ __('Transaksi Aset') }}
                     </x-nav-link>
                     @endcanany
@@ -106,7 +106,7 @@
             </x-responsive-nav-link>
             @endcanany
             @canany(['create:transactions','view:transactions','view-any:transactions'])
-            <x-responsive-nav-link >
+            <x-responsive-nav-link :href="route('requests.transactions')" :active="request()->routeIs('requests.transactions')">
                 {{ __('Transaksi Aset') }}
             </x-responsive-nav-link>
             @endcanany

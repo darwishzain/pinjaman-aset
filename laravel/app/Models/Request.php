@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Models\User;
 use App\Models\AssetCategory;
 use App\Models\RequestAsset;
+use App\Models\Transaction;
 use App\Enums\RequestStatus;
 use App\Enums\ReviewStatus;
 
@@ -75,6 +76,14 @@ class Request extends Model
     {
         return $this->T30_approve_status === ReviewStatus::REJECTED;
     }
+    public function needTransaction()
+    {
+        return
+        $this->T30_support_status === ReviewStatus::ACCEPTED
+        or
+        $this->T30_approve_status === ReviewStatus::ACCEPTED
+        ;
+    } 
     public function user()
     {
         return $this->belongsTo(User::class, 'T30T10_user_id');
@@ -90,5 +99,9 @@ class Request extends Model
     public function requestAssets()
     {
         return $this->hasMany(RequestAsset::class, 'T31T30_request_id', 'T30_id');
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class,'T40T30_request_id', 'T30_id');
     }
 }

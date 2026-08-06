@@ -43,6 +43,53 @@ class ManageRequestController extends Controller
             $title = 'Luluskan Permohonan';
             $requests = RequestModel::where('T30_approve_status', 'pending')
                 ->where('T30_support_status', 'accepted')
+                ->whereNot('T30_approve_status', 'accepted')
+                ->get();
+            return view('request', compact('title', 'requests'));
+        }
+        else
+        {
+            abort(403,'Anda tidak mempunyai kebenaran untuk mengakses halaman ini.');
+        }
+    }
+    public function requestByStatus($status)
+    {
+        if(auth()->user()->can('view-any:requests')){
+            $user = auth()->user();
+            $title = 'Permohonan '.$status;
+            $requests = RequestModel::where('T30_status', $status)
+                ->where('T30T10_user_id', $user->id)
+                ->get();
+            return view('request', compact('title', 'requests'));
+        }
+        else
+        {
+            abort(403,'Anda tidak mempunyai kebenaran untuk mengakses halaman ini.');
+        }
+    }
+    /*public function requestByGroup($group)
+    {
+        if(auth()->user()->can('view-any:requests')){
+            $user = auth()->user();
+            $title = 'Permohonan '.$group;
+            $requests = RequestModel::where('T30_group', $user()->group)
+                ->where('T30T10_user_id', $user->id)
+                ->get();
+            return view('request', compact('title', 'requests'));
+        }
+        else
+        {
+            abort(403,'Anda tidak mempunyai kebenaran untuk mengakses halaman ini.');
+        }
+    }*/
+    public function transactions()
+    {
+        if(auth()->user()->can('create:transactions')){
+            $user = auth()->user();
+            $title = 'Pergerakan Aset';
+            $requests = RequestModel::where('T30_status', ['pickup','active'])    
+                ->where('T30_support_status', 'accepted')
+                ->where('T30_approve_status', 'accepted')
                 ->get();
             return view('request', compact('title', 'requests'));
         }

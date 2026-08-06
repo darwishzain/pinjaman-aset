@@ -19,7 +19,7 @@
     @endcan
     @can('view-any:transactions')
     <x-ui.module-nav-link>
-        Transaksi Aset
+        Senarai Transaksi Aset
     </x-ui.module-nav-link>
     @endcan
 </div>

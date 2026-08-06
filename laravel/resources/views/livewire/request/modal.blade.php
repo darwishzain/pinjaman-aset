@@ -164,19 +164,19 @@ new class extends Component {
     {
         $this->validate();
         $this->request = Request::findOrFail($this->request_id);
-        $this->request->T30T10_support_by_id = auth()->user()->id;
-        $this->request->T30_support_comment = $this->approve['comment'] ?? '';
+        $this->request->T30T10_approve_by_id = auth()->user()->id;
+        $this->request->T30_approve_comment = $this->approve['comment'] ?? '';
         if($this->approve['status'] === 'declined'){
             $this->request->T30_status = 'declined';
             $this->request->T30_scheduled_pickup_at = null;
         }
-        else if($this->T30_approve['status'] === 'accepted')
+        else if($this->approve['status'] === 'accepted')
         {
             $this->request->T30_status = 'pickup';
             $this->request->T30_scheduled_pickup_at = $this->scheduled_pickup_at;
         }
-        $this->request->T30_support_status = $this->approve['status'];
-        $this->request->T30_support_at = now();
+        $this->request->T30_approve_status = $this->approve['status'];
+        $this->request->T30_approve_at = now();
         $this->request->save();
         $this->activemodal = null;
         $this->dispatch('refresh-request');
@@ -186,7 +186,7 @@ new class extends Component {
 
 <div>
     @if(in_array($activemodal,['create-request','support-request','approve-request']))
-    <x-content-modal title="{{ $title }}">
+    <x-ui.content-modal title="{{ $title }}">
         <div class="text-center">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <x-ui.user-list-item :user="$user"></x-ui.user-list-item>
@@ -283,6 +283,6 @@ new class extends Component {
                 </x-submit-button>
             </form>
         </div>
-    </x-content-modal>
+    </x-ui.content-modal>
     @endif
 </div>
