@@ -17,9 +17,9 @@ enum ReviewStatus:string
     public function color(): string
     {
         return match($this) {
-            self::PENDING  => 'warning', // Yellow/Orange
-            self::DECLINED => 'danger',  // Red
-            self::ACCEPTED => 'success', // Green
+            self::PENDING   => 'bg-yellow-100 text-yellow-800', // Warning
+            self::DECLINED  => 'bg-red-100 text-red-800',      // Danger
+            self::ACCEPTED  => 'bg-blue-100 text-blue-800',    // Info
         };
     }
 }
