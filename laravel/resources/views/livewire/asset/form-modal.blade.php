@@ -113,7 +113,7 @@ new class extends Component {
 
 <div>
     @if(in_array($activemodal, ['create-asset', 'edit-asset', 'view-asset']))
-    <x-content-modal title="{{ $title }}">
+    <x-ui.content-modal title="{{ $title }}">
         @if($activemodal === 'create-asset' or $activemodal === 'edit-asset')
             @canany(['create:assets','update:assets'])
                 <form 
@@ -163,6 +163,6 @@ new class extends Component {
         @elseif($activemodal === 'view-asset')
             {{ $asset->category->name }}
         @endif
-    </x-content-modal>
+    </x-ui.content-modal>
     @endif
 </div>

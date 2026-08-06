@@ -122,7 +122,7 @@ new class extends Component {
 
 <div>
     @if (in_array($activemodal,['create-user','update-user','update-role']))
-    <x-content-modal title="{{ $title }}">
+    <x-ui.content-modal title="{{ $title }}">
         @if($this->activemodal === 'create-user')
             @can('create:users')
                 <form wire:submit="createuser">
@@ -228,6 +228,6 @@ new class extends Component {
                 </form>
             @endcan
         @endif
-    </x-content-modal>
+    </x-ui.content-modal>
     @endif
 </div>
