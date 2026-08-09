@@ -21,7 +21,7 @@ new class extends Component{
 ?>
 <div>
 @canany(['create:users','view:users','view-any:users','update:users','update:user-roles'])
-    <livewire:user.form-modal />
+    <livewire:user.modal />
     <livewire:user.view-modal />
     @can('create:users')
     <x-primary-button wire:click="$dispatch('loadcreateform')">Tambah Pengguna</x-primary-button>

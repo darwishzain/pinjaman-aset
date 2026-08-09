@@ -27,7 +27,7 @@ new class extends Component {
 
 <div>
     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
-        <livewire:asset.form-modal></livewire:asset.form-modal>
+        <livewire:asset.modal></livewire:asset.modal>
         @can('create:assets')
             <x-primary-button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</x-primary-button>
         @endcan
