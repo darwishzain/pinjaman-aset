@@ -8,20 +8,16 @@ use Livewire\Attributes\On;
 
 new class extends Component {
     public AssetCategory $categories;
+    public $assets;
 
     #[Computed]
-    public function assets(){
-        return Asset::with('category')->get();
-    }
-    #[Computed]
-    public function assetcategories(){
-        return AssetCategory::all();
+    public function mount($assets){
+        $this->assets = $assets;
     }
     #[On('refresh-asset')]
     public function refreshList()
     {
-        //unset($this->assets);
-        //$this->dispatch('$refresh');
+
     }
 }; ?>
 
@@ -31,51 +27,51 @@ new class extends Component {
         @can('create:assets')
             <x-primary-button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</x-primary-button>
         @endcan
-        @if($this->assets->isNotEmpty())
-        <table class="w-full border border-collapse">
-            <tr>
-                <th>{{ __('Label') }}</th>
-                <th>{{ __('Type') }}</th>
-                <th>{{ __('Status') }}</th>
-                <th>{{ __('Ownership') }}</th>
-                <th>{{ __('Action') }}</th>
-            </tr>
-            @foreach ($this->assets as $asset)
-                <tr wire:key="asset-row-{{ $asset->id }}">
-                    <td>
-                        <div class="ml-4">
-                            <div class="text-sm font-semibold text-gray-900 dark:text-white">
-                                {{ $asset->T20_tag }}
+        @if($assets->isNotEmpty())
+        <x-ui.table class="w-full border border-collapse">
+            <x-slot name="header">
+                <x-ui.th>{{ __('Label') }}</x-ui.th>
+                <x-ui.th>{{ __('Jenis Aset') }}</x-ui.th>
+                <x-ui.th>{{ __('Status') }}</x-ui.th>
+                <x-ui.th>{{ __('Pemilik') }}</x-ui.th>
+                <x-ui.th>{{ __('Tindakan') }}</x-ui.th>
+            </x-slot>
+            <x-slot name="slot">
+                @foreach ($assets as $asset)
+                    <tr wire:key="asset-row-{{ $asset->T20_id }}">
+                        <x-ui.td>
+                            <div class="ml-4">
+                                <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                                    {{ $asset->T20_tag }}
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ $asset->T20_brand }} {{ $asset->T20_model }}
+                                </div>
                             </div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $asset->T20_brand }} {{ $asset->T20_model }}
-                            </div>
-                        </div>
-                    </td>
+                        </x-ui.td>
 
-                    <td>
-                        <button class="rounded-full bg-blue-400 text-black px-2 py-1">
-                            {{ $asset->category?->name ?? 'Uncategorized' }}
-                        </button>
-                    </td>
+                        <x-ui.td>
+                            <button class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap bg-gray-200">
+                                {{ $asset->category?->name ?? 'Uncategorized' }}
+                            </button>
+                        </x-ui.td>
 
-                    <td>
-                        <button class="rounded-full bg-blue-400 text-black px-2 py-1">
-                            {{ $asset->T20_status }}
-                        </button>
-                    </td>
-                    <td></td>
-                    <td>
-                    @can('update:assets')
-                        <button wire:click="$dispatch('loadeditassetform', { id: '{{ $asset->id }}' })"><x-feathericon-settings /></button>
-                    @endcan
-                    @can('view:assets')
-                        <button wire:click="$dispatch('loadviewasset',{ id: '{{ $asset->id }}' })"><x-feathericon-info /></button>
-                    @endcan
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+                        <x-ui.td>
+                            <x-ui.status-pill :status="$asset->T20_status"></x-ui.status-pill>
+                        </x-ui.td>
+                        <x-ui.td></x-ui.td>
+                        <x-ui.td>
+                        @can('update:assets')
+                            <button wire:click="$dispatch('loadeditassetform', { id: '{{ $asset->T20_id }}' })"><x-feathericon-settings /></button>
+                        @endcan
+                        @can('view:assets')
+                            <button wire:click="$dispatch('loadviewasset',{ id: '{{ $asset->T20_id }}' })"><x-feathericon-info /></button>
+                        @endcan
+                        </x-ui.td>
+                    </tr>
+                @endforeach
+            </x-slot>
+        </x-ui.table>
         @else
         <div class="">
             {{ __('No asset records found' )}}

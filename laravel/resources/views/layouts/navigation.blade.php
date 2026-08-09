@@ -21,7 +21,7 @@
                     </x-nav-link>
                     @endcanany
                     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
-                    <x-nav-link :href="route('asset')" :active="request()->routeIs('asset')">
+                    <x-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.index')">
                         {{ __('Aset') }}
                     </x-nav-link>
                     @endcanany
@@ -96,7 +96,7 @@
             </x-responsive-nav-link>
             @endcanany
             @canany(['create:assets','view:assets','view-any:assets','update:assets'])
-            <x-responsive-nav-link :href="route('asset')" :active="request()->routeIs('asset')">
+            <x-responsive-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.index')">
                 {{ __('Aset') }}
             </x-responsive-nav-link>
             @endcanany

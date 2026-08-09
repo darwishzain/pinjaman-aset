@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManageUserController;
+use App\Http\Controllers\ManageAssetController;
 use App\Http\Controllers\ManageRoleController;
 use App\Http\Controllers\ManageRequestController;
 
@@ -24,13 +25,14 @@ Route::middleware(['auth'])->group(function (){
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
-    Route::get('/asset', function () {return view('asset');})->name('asset');
+    //Route::get('/asset', function () {return view('asset');})->name('asset');
     //Route::get('/user', [UserController::class,'create'])->name('user');
     Route::get('/users/list', [UserController::class,'list'])->name('users.list');
     Route::get('/users/create', [ManageUserController::class,'create'])->name('users.create');
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
 Route::middleware(['auth'])->group(function(){
+    Route::get('/assets', [ManageAssetController::class,'index'])->name('assets.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
     Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');

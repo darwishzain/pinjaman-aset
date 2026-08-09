@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use App\Enums\AssetStatus;
 
 class Asset extends Model
 {
@@ -16,6 +17,7 @@ class Asset extends Model
 
     protected $casts = [
         'T20_specifications' => 'array',
+        'T20_status' => AssetStatus::class,
     ];
     protected $fillable = [
         'T20_tag',
