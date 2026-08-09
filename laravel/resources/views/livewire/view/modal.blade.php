@@ -42,6 +42,12 @@ new class extends Component {
                 <x-ui.title>
                     <x-ui.user-list-item :user="$user"></x-ui.user-list-item>
                 </x-ui.title>
+                @if($user->permissions->isNotEmpty())
+                    <x-ui.title> Kebenaran Tambahan</x-ui.title>
+                    @foreach ($user->permissions as $permission)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap bg-gray-200">{{ $permission->name }}</span>
+                    @endforeach
+                @endif
                 <x-ui.display-field></x-ui.display-field>
             @elseif($activemodal === 'view-request')
                 <x-ui.title>

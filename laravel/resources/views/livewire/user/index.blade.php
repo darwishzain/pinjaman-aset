@@ -7,10 +7,11 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 
 new class extends Component{
-    public $formlabel = '';
+    public $users;
     #[Computed]
-    public function users(){
-        return User::paginate(20);//! need to do eager load
+    public function mount($users){
+        $this->users = $users;
+        //return User::paginate(20);//! need to do eager load
     }
     #[On('refresh-user')]
     public function refreshList()
@@ -22,7 +23,7 @@ new class extends Component{
 <div>
 @canany(['create:users','view:users','view-any:users','update:users','update:user-roles'])
     <livewire:user.modal />
-    <livewire:user.view-modal />
+    <livewire:view.modal />
     @can('create:users')
     <x-primary-button wire:click="$dispatch('loadcreateform')">Tambah Pengguna</x-primary-button>
     @endcan
@@ -38,7 +39,7 @@ new class extends Component{
         <table class="w-full border border-collapse">
             <tr>
                 <th>Nama</th>
-                <th></th>
+                <th>Peranan</th>
                 <th>Kebenaran Tambahan</th>
                 <th>Tindakan</th>
             </tr>
@@ -49,9 +50,6 @@ new class extends Component{
                 </td>
                 <td>
                     <div class="ml-4">
-                        <div class="text-sm font-semibold text-gray-900 dark:text-white">
-                            {{ User::GROUPS[$user->group] ?? ' ' }}
-                        </div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             @foreach ($user->roles as $role)
                                 <span class="mr-2">
@@ -82,7 +80,7 @@ new class extends Component{
             @endforelse
         </table>
         <div class="mt-3">
-            {{ $this->users->links() }}
+            {{-- $this->users->links() --}}
         </div>
     </div>
 @endcanany

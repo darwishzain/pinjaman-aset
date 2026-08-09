@@ -32,6 +32,7 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
 Route::middleware(['auth'])->group(function(){
+    Route::get('/users',[ManageUserController::class,'index'])->name('users.index');
     Route::get('/assets', [ManageAssetController::class,'index'])->name('assets.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');

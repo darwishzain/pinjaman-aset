@@ -16,7 +16,7 @@
                         {{ __('Utama') }}
                     </x-nav-link>
                     @canany(['create:users','view-any:users','update:user-roles'])
-                    <x-nav-link :href="route('users.list')" :active="request()->routeIs('user')">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
                         {{ __('Pengguna') }}
                     </x-nav-link>
                     @endcanany

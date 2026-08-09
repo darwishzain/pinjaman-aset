@@ -10,6 +10,19 @@ use Spatie\Permission\Models\Role;
 
 class ManageUserController extends Controller
 {
+    public function index()
+    {
+        if(auth()->user()->can('view-any:users'))
+        {
+            $title = "Senarai Pengguna";
+            $users = User::get();
+            return view('user', compact('title','users'));
+        }
+        else
+        {
+            abort(403, 'Anda tidak memiliki kebenaran untuk mengakses halaman ini');
+        }
+    }
     public function create()
     {
         $roles = Role::all();
