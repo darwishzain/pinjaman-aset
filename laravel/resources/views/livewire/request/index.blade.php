@@ -21,6 +21,8 @@ new class extends Component {
 }; ?>
 
 <div>
+    <livewire:request.modal></livewire:request.modal>
+    <livewire:view.modal></livewire:view.modal>
     @can('create:requests')
         <x-ui.button wire:click="$dispatch('loadcreaterequest')">Permohonan Baru</x-ui.button>
     @endcan
@@ -30,8 +32,6 @@ new class extends Component {
         </div>
     @else
         @canany(['create:requests','support:requests','approve:requests', 'view:requests', 'view-any:requests'])
-            <livewire:request.modal></livewire:request.modal>
-            <livewire:view.modal></livewire:view.modal>
             <x-ui.table class="text-sm whitespace-nowrap">
                 <x-slot name="header">
                     <tr>

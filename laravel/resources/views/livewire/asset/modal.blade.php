@@ -95,20 +95,6 @@ new class extends Component {
         $this->dispatch('refresh-asset');
         $this->reset(['tag','category_id','brand','model','serial_number']);
     }
-    #[On('loadviewasset')]
-    public function loadviewasset($id)
-    {
-        $this->activemodal = 'view-asset';
-        $this->title = "Aset";
-        $this->asset = Asset::findOrFail($id);
-        $this->asset_id = $this->asset->id;
-        $this->category_id = $this->asset->category_id;
-        $this->tag = $this->asset->tag;
-        $this->brand = $this->asset->brand;
-        $this->serial_number = $this->asset->serial_number;
-        //$this->specifications = $this->asset->specifications;
-        $this->status = $this->asset->status;
-    }
 }; ?>
 
 <div>
@@ -160,8 +146,6 @@ new class extends Component {
                     </x-submit-button>
                 </form>
             @endcanany
-        @elseif($activemodal === 'view-asset')
-            {{ $asset->category->name }}
         @endif
     </x-ui.content-modal>
     @endif

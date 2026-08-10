@@ -7,7 +7,6 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 
 new class extends Component {
-    public AssetCategory $categories;
     public $assets;
 
     #[Computed]
@@ -24,6 +23,7 @@ new class extends Component {
 <div>
     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
         <livewire:asset.modal></livewire:asset.modal>
+        <livewire:view.modal></livewire:view.modal>
         @can('create:assets')
             <x-primary-button wire:click="$dispatch('loadcreateassetform')" class="bg-blue-800 text-white py-2 px-4 rounded">Tambah Aset</x-primary-button>
         @endcan
@@ -52,7 +52,7 @@ new class extends Component {
 
                         <x-ui.td>
                             <button class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap bg-gray-200">
-                                {{ $asset->category?->name ?? 'Uncategorized' }}
+                                {{ $asset->category?->name ?? 'Tiada Kategori' }}
                             </button>
                         </x-ui.td>
 
@@ -65,7 +65,7 @@ new class extends Component {
                             <button wire:click="$dispatch('loadeditassetform', { id: '{{ $asset->T20_id }}' })"><x-feathericon-settings /></button>
                         @endcan
                         @can('view:assets')
-                            <button wire:click="$dispatch('loadviewasset',{ id: '{{ $asset->T20_id }}' })"><x-feathericon-info /></button>
+                            <button wire:click="$dispatch('viewasset',{ id: '{{ $asset->T20_id }}' })"><x-feathericon-info /></button>
                         @endcan
                         </x-ui.td>
                     </tr>
