@@ -76,6 +76,18 @@ class Request extends Model
     {
         return $this->T30_approve_status === ReviewStatus::REJECTED;
     }
+    public function isPending()
+    {
+        return $this->T30_status === RequestStatus::PENDING;
+    }
+    public function isPickup()
+    {
+        return $this->T30_status === RequestStatus::PICKUP;
+    }
+    public function isActive()
+    {
+        return $this->T30_status === RequestStatus::ACTIVE;
+    }
     public function needTransaction()
     {
         return

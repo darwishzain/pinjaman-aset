@@ -13,7 +13,7 @@
     </x-ui.module-nav-link>
     @endcan
     @can('create:transactions')
-    <x-ui.module-nav-link :href="route('requests.transactions')" :active="request()->routeIs('requests.transactions')">
+    <x-ui.module-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.index')">
         Transaksi Aset
     </x-ui.module-nav-link>
     @endcan

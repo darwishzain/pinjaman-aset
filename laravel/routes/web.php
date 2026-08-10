@@ -7,6 +7,7 @@ use App\Http\Controllers\ManageUserController;
 use App\Http\Controllers\ManageAssetController;
 use App\Http\Controllers\ManageRoleController;
 use App\Http\Controllers\ManageRequestController;
+use App\Http\Controllers\ManageTransactionController;
 
 use Illuminate\Support\Facades\Route;
 //* Redirect to login page
@@ -37,8 +38,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
     Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
-    Route::get('/transactions', [ManageRequestController::class,'transactions'])->name('requests.transactions');
-    //Route::get('/request/{id}', [ManageRequestController::class,'getRequest'])->name('requests.get');
+    Route::get('/transactions', [ManageTransactionController::class,'index'])->name('transactions.index');
+    Route::get('/transactions/request/{id}', [ManageTransactionController::class,'request'])->name('transactions.request');
 });
 //  middleware('can:"view-any:requests"')
 Route::middleware(['auth','can:"update:user-roles"'])->group(function(){

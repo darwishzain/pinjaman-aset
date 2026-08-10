@@ -11,7 +11,7 @@ use App\Models\Request;
 class Transaction extends Model
 {
     use HasUlids;
-    protected $table = 'T31_transactions';
+    protected $table = 'T40_transactions';
     protected $primaryKey = 'T40_id';
 
     const CREATED_AT = 'T40_created_at';
