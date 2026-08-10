@@ -88,11 +88,11 @@ class Request extends Model
     {
         return $this->belongsTo(User::class, 'T30T10_user_id');
     }
-    public function supportedBy()
+    public function supportBy()
     {
         return $this->belongsTo(User::class, 'T30T10_support_by_id');
     }
-    public function approvedBy()
+    public function approveBy()
     {
         return $this->belongsTo(User::class, 'T30T10_approve_by_id');
     }

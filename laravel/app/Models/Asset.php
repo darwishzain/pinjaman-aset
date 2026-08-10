@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Enums\AssetStatus;
+use App\Models\Transaction;
 
 class Asset extends Model
 {
@@ -52,6 +53,10 @@ class Asset extends Model
     public function getConnectorLabels():array
     {
         return self::CONNECTORS;
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class,'T40T20_asset_id', 'T20_id');
     }
     public function getIdAttribute(){return $this->attributes['T20_id'] ?? null;}
     public function getTagAttribute(){return $this->attributes['T20_tag'] ?? null;}

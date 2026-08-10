@@ -43,12 +43,8 @@ class User extends Authenticatable
         '091' => 'Bahagian Kewangan',//09
         '101' => 'Bahagian Pengurusan Sumber Manusia'//10
     ];
-
-    public function assets(){
-        return $this->hasMany(Asset::class, 'T20_id');
-    }
     public function requests(){
-        return $this->hasMany(Request::class, 'T30_id');
+        return $this->hasMany(Request::class, 'T30T10_user_id','id');
     }
     public static function getGroupName(?string $code): string
     {
