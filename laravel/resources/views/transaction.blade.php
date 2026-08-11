@@ -18,7 +18,6 @@
                                 <th>Tindakan</th>
                             </tr>
                         </x-slot>
-
                         @foreach($requests as $request)
                             <tr>
                                 <x-ui.td> <x-ui.user-list-item :user="$request->user"/></x-ui.td>
@@ -38,24 +37,7 @@
                         @endforeach
                     </x-ui.table>
                 @elseif(isset($request) && $request)
-                    <x-ui.table>
-                        <x-slot name="header">
-                            <tr>
-                                <x-ui.th>Kategori</x-ui.th>
-                                <x-ui.th>Bilangan</x-ui.th>
-                                <x-ui.th>Tindakan</x-ui.th>
-                            </tr>
-                        </x-slot>
-                        <x-slot name="slot">
-                            @foreach($request->requestAssets as $requestasset)
-                                <tr>
-                                    <td>{{ $requestasset->category->T21_name }}</td>
-                                    <td>{{ $requestasset->T31_quantity }}</td>
-                                </tr>
-                                
-                            @endforeach
-                        </x-slot>
-                    </x-ui.table>
+                    <livewire:transaction.index :request="$request" />
                 @endif
             </div>
         </div>

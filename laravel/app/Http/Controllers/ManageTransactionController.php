@@ -23,6 +23,6 @@ class ManageTransactionController extends Controller
             ->first();
         $transactions = Transaction::where('T40T30_request_id',$request->T30_id)
             ->get();
-        return view('transaction', compact('title','request','transactions'));
+        return view('transaction', compact('title','request'));
     }
 }
