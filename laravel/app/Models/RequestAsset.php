@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\AssetCategory;
+use App\Models\Request;
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class RequestAsset extends Model
@@ -25,5 +27,10 @@ class RequestAsset extends Model
     public function category()
     {
         return $this->belongsTo(AssetCategory::class, 'T31T21_asset_category_id');
+    }
+    public function transactions()
+    {
+        
+        return $this->request->transactions;
     }
 }
