@@ -70,21 +70,7 @@ new class extends Component {
                     <div>Disokong oleh</div>
                     <div>Disahkan oleh</div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3">
-                    <x-ui.user-list-item :user="$request->user" />
-                    @if ($request->supportBy)
-                        <x-ui.user-list-item :user="$request->supportBy" />
-                    @else
-                        <div><x-ui.status-pill :status="$request->T30_support_status"></x-ui.status-pill></div>
-                    @endif
-                    @if ($request->approveBy)
-                        <x-ui.user-list-item :user="$request->approveBy" />
-                    @else
-                        <div><x-ui.status-pill :status="$request->T30_support_status"></x-ui.status-pill></div>
-                    @endif
-                    {{ $request->T30_created_at }}
-
-                </div>
+                <x-ui.request-details :request="$request" />
                 <x-ui.title>
                     {{$request->user->name}}
                     <x-ui.status-pill :status="$request->T30_status"></x-ui.status-pill>
