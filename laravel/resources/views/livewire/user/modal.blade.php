@@ -19,7 +19,7 @@ new class extends Component {
     public string $password = '';
     public string $password_confirmation = '';
 
-    public User $user;
+    public ?User $user;
     public string $userid = '';
     public array $userroles = [];
     public array $userpermissions = [];

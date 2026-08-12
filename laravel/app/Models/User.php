@@ -46,15 +46,6 @@ class User extends Authenticatable
     public function requests(){
         return $this->hasMany(Request::class, 'T30T10_user_id','id');
     }
-    public static function getGroupName(?string $code): string
-    {
-        // If code is null or doesn't exist in the array, default to '000' (Tiada Kumpulan)
-        return self::GROUPS[$code] ?? self::GROUPS['000'];
-    }
-    public function groupName(): string
-    {
-        return $this->getGroupName($this->group);
-    }
     /**
      * The attributes that should be hidden for serialization.
      *

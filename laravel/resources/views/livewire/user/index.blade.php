@@ -16,7 +16,7 @@ new class extends Component{
     #[On('refresh-user')]
     public function refreshList()
     {
-        unset($this->users);
+        //unset($this->users);
     }
 };
 ?>
@@ -43,7 +43,7 @@ new class extends Component{
                 <th>Kebenaran Tambahan</th>
                 <th>Tindakan</th>
             </tr>
-            @forelse ($this->users as $user)
+            @forelse ($users as $user)
             <tr wire:key="user-row-{{ $user->id }}">
                 <td class="flex item-center">
                     <x-ui.user-list-item :user="$user"></x-ui.user-list-item>

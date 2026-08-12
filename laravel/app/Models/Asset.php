@@ -29,6 +29,7 @@ class Asset extends Model
         'T20_specifications',
         'T20_status'
     ];
+    //For specifications. Ignore for now
     public const CONNECTORS = [
         'hdmi'         => 'HDMI',
         'vga'          => 'VGA',
@@ -37,15 +38,6 @@ class Asset extends Model
         'usb_a'        => 'USB-A',
         'usb_c'        => 'USB-C',
     ];
-    public const STATUS = [
-        'pending' => "Processing",
-        'active' => "Already Lended",
-        'available' => 'Available for Lending',
-        'maintenance' => 'Under Maintenance',
-        'lost' => 'Mising',
-        'retired' => 'To be Disposed',
-    ];
-
     public function category()
     {
         return $this->belongsTo(AssetCategory::class,'T20T21_category_id');
