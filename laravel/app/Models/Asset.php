@@ -50,9 +50,14 @@ class Asset extends Model
     {
         return $this->belongsTo(AssetCategory::class,'T20T21_category_id');
     }
-    public function getConnectorLabels():array
+    public function getConnectorLabels(): array
     {
         return self::CONNECTORS;
+    }
+
+    public function getConnectorLabel(string $key, string $default = ''): string
+    {
+        return self::CONNECTORS[$key] ?? $default;
     }
     public function transactions()
     {

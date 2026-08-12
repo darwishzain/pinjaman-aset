@@ -88,14 +88,6 @@ class Request extends Model
     {
         return $this->T30_status === RequestStatus::ACTIVE;
     }
-    public function needTransaction()
-    {
-        return
-        $this->T30_support_status === ReviewStatus::ACCEPTED
-        or
-        $this->T30_approve_status === ReviewStatus::ACCEPTED
-        ;
-    } 
     public function user()
     {
         return $this->belongsTo(User::class, 'T30T10_user_id');
@@ -115,5 +107,15 @@ class Request extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class,'T40T30_request_id', 'T30_id');
+    }
+    public function transactionsIn()
+    {
+        return $this->hasMany(Transaction::class, 'T40T30_request_id','T30_id')
+            ->where('T40_action', 'in');
+    }
+    public function transactionsOut()
+    {
+        return $this->hasMany(Transaction::class, 'T40T30_request_id','T30_id')
+            ->where('T40_action', 'out');
     }
 }

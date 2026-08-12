@@ -28,9 +28,16 @@ class RequestAsset extends Model
     {
         return $this->belongsTo(AssetCategory::class, 'T31T21_asset_category_id');
     }
-    public function transactions()
+    public function transactionCategoryCount($category_id)
     {
-        
-        return $this->request->transactions;
+        return $this->request->transactions->whereIn('asset.T20T21_category_id',$category_id)->count();
+        return $this->T31_quantity;
+        //return $this->request->transactions->asset->category;
+    }
+    public function isRequestAssetFulfilled($category_id)
+    {
+        return $this->request->transactions
+            ->whereIn('asset.T20T21_category_id',$category_id)
+            ->count() >= $this->T31_quantity;
     }
 }

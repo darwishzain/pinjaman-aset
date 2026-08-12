@@ -25,6 +25,30 @@ class Transaction extends Model
         'T40T10_taker_id',
         'T40T10_handler_id'
     ];
+    public CONST ACTIONS = [
+        'out' => 'Transaksi Keluar',
+        'in' => 'Transaksi Masuk',
+    ];
+    public function getActionLabels(): array
+    {
+        return self::ACTIONS;
+    }
+
+    public function getActionLabel(string $key, string $default = ''): string
+    {
+        return self::ACTIONS[$key] ?? $default;
+    }
+    public function getTransactionInAttribute()
+    {
+        return self::where('T40T30_request_id', $this->T40T30_request_id)
+            ->where('T40T20_asset_id', $this->T40T20_asset_id)
+            ->where('T40_action', 'in')
+            ->first();
+    }
+    public function hasTransactionIn(): bool
+    {
+        return $this->transactionIn !== null;
+    }
     public function request()
     {
         return $this->belongsTo(Request::class,'T40T30_request_id');

@@ -34,6 +34,8 @@ new class extends Component {
                         <x-ui.td>{{ $requestasset->category->T21_name }}</x-ui.td>
                         <x-ui.td>{{ $requestasset->T31_quantity }}</x-ui.td>
                         <x-ui.td>
+
+                            @if(!$requestasset->isRequestAssetFulfilled($requestasset->category->T21_id))
                             <x-ui.button
                                 wire:click="dispatch('loadtransactionout',{
                                     request_id:'{{ $request->T30_id}}',
@@ -43,34 +45,47 @@ new class extends Component {
                             >
                                 Transaksi
                             </x-ui.button>
+                            @else
+                            Transaksi Selesai
+                            @endif
                         </x-ui.td>
                     </tr>
                 @endforeach
             </x-slot>
         </x-ui.table>
         <x-ui.divider></x-ui.divider>
-        @if(isset($request->transactions) && $request->transactions)
+        @if($request->transactionsOut())
             <x-ui.title>Pergerakan Aset</x-ui.title>
             <x-ui.table>
                 <x-slot name="header">
                     <tr>
-                        <th>Tarikh</th>
+                        <th>Jenis Aset</th>
+                        <th>Pergerakan Masuk</th>
+                        <th>Pergerakan Keluar</th>
                         <th>Tindakan</th>
                     </tr>
                 </x-slot>
                 <x-slot name="slot">
-                    @foreach($request->transactions as $transaction)
+                    @foreach($request->transactionsOut as $transaction)
                         <tr>
                             <td>
-
+                                {{ $transaction->asset->category->T21_name }}
                             </td>
                             <td>
+                                {{ $transaction->T40_created_at }}
+                            </td>
+                            <td>
+                                @if( $transaction->transactionIn )
+                                    {{ $transaction->transactionIn->T40_created_at }}
+                                @else
                                 <x-ui.button
-                                    wire:click="dispatch('loadtransactionin',{'{{ $request->T30_id}}','{{ $transaction->T40_id}}'})"
+                                    wire:click="dispatch('loadtransactionin',
+                                    {transaction_id:'{{ $transaction->T40_id}}'})"
                                     color="green"
                                 >
                                     Transaksi
                                 </x-ui.button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
