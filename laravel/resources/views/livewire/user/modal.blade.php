@@ -25,7 +25,7 @@ new class extends Component {
     public array $userpermissions = [];
     public array $rolepermissions = [];
 
-    public Role $role;
+    public ?Role $role = null;
     public string $roleid = '';
 
     #[On('loadcreateform')]

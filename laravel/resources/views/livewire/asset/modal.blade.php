@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 use Livewire\Attributes\On;
+use App\Enums\AssetStatus;
 
 new class extends Component {
     public ?string $activemodal = null;
@@ -21,7 +22,7 @@ new class extends Component {
     public string $model = '';
     public ?string $serial_number = null;
     public array $connectors = [] ;
-    public string $status;
+    public ?AssetStatus $status = null;
     protected function rules(): array
     {
         return [
@@ -70,13 +71,13 @@ new class extends Component {
         $this->title = "Kemaskini Aset";
         $this->reset(['tag','category_id','brand','model','serial_number']);
         $this->asset = Asset::findOrFail($id);
-        $this->asset_id = $this->asset->id;
-        $this->category_id = $this->asset->category_id;
-        $this->tag = $this->asset->tag;
-        $this->brand = $this->asset->brand;
-        $this->serial_number = $this->asset->serial_number;
-        //$this->specifications = $this->asset->specifications;
-        $this->status = $this->asset->status;
+        $this->asset_id = $this->asset->T20_id;
+        $this->category_id = $this->asset->T20T21_category_id;
+        $this->tag = $this->asset->T20_tag;
+        $this->brand = $this->asset->T20_brand;
+        $this->serial_number = $this->asset->T20_serial_number;
+        //$this->specifications = $this->asset->T20_specifications;
+        $this->status = $this->asset->T20_status;
     }
     public function updateasset()
     {
@@ -113,11 +114,11 @@ new class extends Component {
                 >
                     @if($asset?->exists)
                     <div class="grid grid-cols-1">
-                        <div>{{ $asset->tag }}</div>
+                        <div>{{ $asset->T20_tag }}</div>
                         <x-ui.input type="hidden" wire:model="asset_id"></x-ui.input>
                     </div>
                     @endif
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <x-ui.grid min="1" max="3">
                         <x-ui.select wire:model.live="category_id" id="category_id" label="Type" required>
                             <option value="" disabled selected>{{ __('Choose Asset Type') }}</option>
                             @foreach (AssetCategory::all() as $category)
@@ -125,18 +126,18 @@ new class extends Component {
                             @endforeach
                         </x-ui.select>
                         <x-ui.input type="text" placeholder="Tag" wire:model="tag" label="Tag" id="tag"></x-ui.input>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    </x-ui.grid>
+                    <x-ui.grid min="1" max="3">
                         <x-ui.input type="text" placeholder="Brand" wire:model="brand" label="Brand" id="brand"></x-ui.input>
                         <x-ui.input type="text" placeholder="Model" wire:model="model" label="Model" id="model"></x-ui.input>
                         <x-ui.input type="text" placeholder="Serial Number" wire:model="serial_number" label="Serial Number" id="serial_number"></x-ui.input>
-                    </div>{{--
+                    </x-ui.grid>{{--
                     <div> Spesifikasi</div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <x-ui.grid min="1" max="3">
                         @foreach(Asset::CONNECTORS as $key => $label )
                             <x-ui.input type="number" wire:model="connectors.{{ $key }}_count" id="{{ $key }}_count" label="Bilangan {{ strtoupper($label) }}"></x-ui.input>
                         @endforeach
-                    </div>--}}
+                    </x-ui.grid>--}}
                     <x-submit-button>
                         @if($asset?->exists)
                                 Update Asset

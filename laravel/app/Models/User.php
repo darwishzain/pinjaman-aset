@@ -43,6 +43,14 @@ class User extends Authenticatable
         '091' => 'Bahagian Kewangan',//09
         '101' => 'Bahagian Pengurusan Sumber Manusia'//10
     ];
+    public static function getGroupName(?string $code): string
+    {
+        return self::GROUPS[$code] ?? self::GROUPS['000'];
+    }
+    public function groupName(): string
+    {
+        return $this->getGroupName($this->group);
+    }
     public function requests(){
         return $this->hasMany(Request::class, 'T30T10_user_id','id');
     }
