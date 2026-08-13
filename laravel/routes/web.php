@@ -8,6 +8,7 @@ use App\Http\Controllers\ManageAssetController;
 use App\Http\Controllers\ManageRoleController;
 use App\Http\Controllers\ManageRequestController;
 use App\Http\Controllers\ManageTransactionController;
+use Livewire\Volt\Volt;
 
 use Illuminate\Support\Facades\Route;
 //* Redirect to login page
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/users/create', [ManageUserController::class,'create'])->name('users.create');
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
+//Volt::route('/assets','asset')->middleware(['auth'])->name('assets.index');
 Route::middleware(['auth'])->group(function(){
     Route::get('/users',[ManageUserController::class,'index'])->name('users.index');
     Route::get('/assets', [ManageAssetController::class,'index'])->name('assets.index');

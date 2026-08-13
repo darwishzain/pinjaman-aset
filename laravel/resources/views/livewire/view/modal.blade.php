@@ -65,11 +65,6 @@ new class extends Component {
                 {{ $asset->T20_brand }}
                 {{ $asset->T20_model }}
             @elseif($activemodal === 'view-request')
-                <div class="grid grid-cols-1 md:grid-cols-3">
-                    <div>Pemohon</div>
-                    <div>Disokong oleh</div>
-                    <div>Disahkan oleh</div>
-                </div>
                 <x-ui.request-details :request="$request" />
                 <x-ui.title>
                     {{$request->user->name}}
@@ -78,6 +73,9 @@ new class extends Component {
                 @foreach($request->requestAssets as $requestasset)
                     {{ $requestasset->T31_quantity }}
                     {{ $requestasset->category->name }}
+                @endforeach
+                @foreach($request->transactions as $transaction)
+                    {{ $transaction->T40_action }}
                 @endforeach
             @endif
         </x-ui.content-modal>
