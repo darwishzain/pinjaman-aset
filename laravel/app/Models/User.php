@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email',
         'group',
         'password',
+        'email_verified_at',
     ];
     public const GROUPS = [
         '000' => 'Tiada Kumpulan',//Default

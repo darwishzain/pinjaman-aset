@@ -55,6 +55,14 @@ class Asset extends Model
     {
         return $this->hasMany(Transaction::class,'T40T20_asset_id', 'T20_id');
     }
+    public function hasTransactions(): bool
+    {
+        return $this->transactions()->exists();
+    }
+    public function isDeletable(): bool
+    {
+        return ! $this->hasTransactions();
+    }
     public function getIdAttribute(){return $this->attributes['T20_id'] ?? null;}
     public function getTagAttribute(){return $this->attributes['T20_tag'] ?? null;}
     public function getCategoryIdAttribute(){return $this->attributes['T20T21_category_id'] ?? null;}

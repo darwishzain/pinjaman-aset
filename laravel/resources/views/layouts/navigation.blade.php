@@ -16,22 +16,22 @@
                         {{ __('Utama') }}
                     </x-nav-link>
                     @canany(['create:users','view-any:users','update:user-roles'])
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                         {{ __('Pengguna') }}
                     </x-nav-link>
                     @endcanany
                     @canany(['create:assets','view:assets','view-any:assets','update:assets'])
-                    <x-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.index')">
+                    <x-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')">
                         {{ __('Aset') }}
                     </x-nav-link>
                     @endcanany
                     @canany(['create:requests','view:requests','view-any:requests','support:requests','approve:requests'])
-                    <x-nav-link :href="route('requests.index')" :active="request()->routeIs(['requests.index','requests.support','requests.approve'])">
+                    <x-nav-link :href="route('requests.index')" :active="request()->routeIs('requests.*')">
                         {{ __('Permohonan') }}
                     </x-nav-link>
                     @endcanany
                     @canany(['create:transactions','view:transactions','view-any:transactions'])
-                    <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.index')">
+                    <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                         {{ __('Transaksi Aset') }}
                     </x-nav-link>
                     @endcanany
@@ -91,22 +91,22 @@
                 {{ __('Utama') }}
             </x-responsive-nav-link>
             @canany(['create:users','view-any:users','update:user-roles'])
-            <x-responsive-nav-link :href="route('users.list')" :active="request()->routeIs('user')">
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                 {{ __('Pengguna') }}
             </x-responsive-nav-link>
             @endcanany
             @canany(['create:assets','view:assets','view-any:assets','update:assets'])
-            <x-responsive-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.index')">
+            <x-responsive-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')">
                 {{ __('Aset') }}
             </x-responsive-nav-link>
             @endcanany
             @canany(['create:requests','view:requests','view-any:requests','support:requests','approve:requests'])
-            <x-responsive-nav-link :href="route('requests.index')" :active="request()->routeIs(['requests.index','requests.support','requests.approve'])">
+            <x-responsive-nav-link :href="route('requests.index')" :active="request()->routeIs('requests.*')">
                 {{ __('Permohonan') }}
             </x-responsive-nav-link>
             @endcanany
             @canany(['create:transactions','view:transactions','view-any:transactions'])
-            <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.index')">
+            <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                 {{ __('Transaksi Aset') }}
             </x-responsive-nav-link>
             @endcanany

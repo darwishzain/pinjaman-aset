@@ -22,7 +22,7 @@ new class extends Component {
     public string $model = '';
     public ?string $serial_number = null;
     public array $connectors = [] ;
-    public ?AssetStatus $status = null;
+    public ?string $status = null;
     protected function rules(): array
     {
         return [
@@ -43,7 +43,8 @@ new class extends Component {
     public function loadcreateasset(){
         $this->activemodal = 'create-asset';
         $this->title = "Tambah Aset";
-        $this->reset(['tag','category_id','brand','model','serial_number']);
+        $this->reset(['tag','category_id','brand','model','serial_number','status']);
+        $this->asset = null;
     }
     public function createasset(){
         $this->serial_number = $this->serial_number ?: null;
@@ -58,18 +59,18 @@ new class extends Component {
             'T20_model' => $this->model,
             'T20_serial_number' => $this->serial_number,
             //'T20_specifications' => $filteredConnectors,
-            'T20_status' => 'available',
+            'T20_status' => $this->status,
         ]);
         $this->activemodal = null;
+        $this->reset(['tag','category_id','brand','model','serial_number','status']);
         $this->dispatch('refresh-asset');
-        $this->reset(['tag','category_id','brand','model','serial_number']);
     }
     #[On('loadeditassetform')]
     public function loadupdateasset($id)
     {
         $this->activemodal = 'edit-asset';
         $this->title = "Kemaskini Aset";
-        $this->reset(['tag','category_id','brand','model','serial_number']);
+        $this->reset(['tag','category_id','brand','model','serial_number','status']);
         $this->asset = Asset::findOrFail($id);
         $this->asset_id = $this->asset->T20_id;
         $this->category_id = $this->asset->T20T21_category_id;
@@ -77,7 +78,7 @@ new class extends Component {
         $this->brand = $this->asset->T20_brand;
         $this->serial_number = $this->asset->T20_serial_number;
         //$this->specifications = $this->asset->T20_specifications;
-        $this->status = $this->asset->T20_status;
+        $this->status = $this->asset->T20_status->value;
     }
     public function updateasset()
     {
@@ -93,8 +94,8 @@ new class extends Component {
             'T20_status' => $this->status,
         ]);
         $this->activemodal = null;
+        $this->reset(['tag','category_id','brand','model','serial_number','status']);
         $this->dispatch('refresh-asset');
-        $this->reset(['tag','category_id','brand','model','serial_number']);
     }
 }; ?>
 
@@ -112,15 +113,17 @@ new class extends Component {
                     @endif
                     "
                 >
-                    @if($asset?->exists)
-                    <div class="grid grid-cols-1">
-                        <div>{{ $asset->T20_tag }}</div>
-                        <x-ui.input type="hidden" wire:model="asset_id"></x-ui.input>
-                    </div>
-                    @endif
+                    <x-ui.title>
+                        Perihal Aset
+                        @if($asset?->exists)
+                            {{ $asset->T20_tag }}
+                            <x-ui.status-pill :status="$asset->T20_status"></x-ui.status-pill>
+                            <x-ui.input type="hidden" wire:model="asset_id"></x-ui.input>
+                        @endif
+                    </x-ui.title>
                     <x-ui.grid min="1" max="3">
                         <x-ui.select wire:model.live="category_id" id="category_id" label="Type" required>
-                            <option value="" disabled selected>{{ __('Choose Asset Type') }}</option>
+                            <option selected>{{ __('Pilih Jenis Aset') }}</option>
                             @foreach (AssetCategory::all() as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
@@ -128,11 +131,16 @@ new class extends Component {
                         <x-ui.input type="text" placeholder="Tag" wire:model="tag" label="Tag" id="tag"></x-ui.input>
                     </x-ui.grid>
                     <x-ui.grid min="1" max="3">
-                        <x-ui.input type="text" placeholder="Brand" wire:model="brand" label="Brand" id="brand"></x-ui.input>
+                        <x-ui.input type="text" placeholder="Brand" wire:model="brand" label="Jenama" id="brand"></x-ui.input>
                         <x-ui.input type="text" placeholder="Model" wire:model="model" label="Model" id="model"></x-ui.input>
-                        <x-ui.input type="text" placeholder="Serial Number" wire:model="serial_number" label="Serial Number" id="serial_number"></x-ui.input>
-                    </x-ui.grid>{{--
-                    <div> Spesifikasi</div>
+                        <x-ui.input type="text" placeholder="Serial Number" wire:model="serial_number" label="Nombor Siri" id="serial_number"></x-ui.input>
+                        <x-ui.select wire:model="status" id="status" label="Status Penyelenggaraan">
+                            <option value="available" selected>Dalam Simpanan</option>
+                            <option value="maintenance">Penyelenggaraan</option>
+                        </x-ui.select>
+                    </x-ui.grid>
+                    {{--
+                    <x-ui.title> Spesifikasi</x-ui.title>
                     <x-ui.grid min="1" max="3">
                         @foreach(Asset::CONNECTORS as $key => $label )
                             <x-ui.input type="number" wire:model="connectors.{{ $key }}_count" id="{{ $key }}_count" label="Bilangan {{ strtoupper($label) }}"></x-ui.input>
@@ -140,11 +148,16 @@ new class extends Component {
                     </x-ui.grid>--}}
                     <x-submit-button>
                         @if($asset?->exists)
-                                Update Asset
+                            Kemaskini Aset
                         @else
-                                Tambah Aset
+                            Tambah Aset
                         @endif
                     </x-submit-button>
+                    @if($asset?->exists && $asset->isDeletable())
+                        <x-ui.button color="red">
+                            Padam Aset
+                        </x-ui.button>
+                    @endif
                 </form>
             @endcanany
         @endif

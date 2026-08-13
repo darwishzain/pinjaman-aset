@@ -16,6 +16,7 @@ new class extends Component {
 
     public string $name = '';
     public string $email = '';
+    public string $group = '';
     public string $password = '';
     public string $password_confirmation = '';
 
@@ -37,12 +38,18 @@ new class extends Component {
         $validated =$this->validate([
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users,email'],
+            'group' => [
+                'required',
+                'string',
+                Rule::in(array_keys(User::GROUPS)),
+            ],
             'password' => ['required', 'min:8','confirmed'],
         ]);
         User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
+            'group' => $this->group ?? '000',
         ]);
         $this->reset('name', 'email', 'password', 'password_confirmation');
         $this->activemodal = null;
