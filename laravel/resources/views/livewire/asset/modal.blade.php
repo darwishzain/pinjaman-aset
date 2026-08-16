@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 use Livewire\Attributes\On;
 use App\Enums\AssetStatus;
+use Masmerise\Toaster\Toaster;
 
 new class extends Component {
     public ?string $activemodal = null;
@@ -39,11 +40,22 @@ new class extends Component {
             'connectors.*' => 'nullable|integer|min:0',
         ];
     }
+    public function resetForm()
+    {
+        $this->reset(['tag', 'category_id', 'brand', 'model', 'serial_number', 'status', 'asset_id']);
+        $this->resetValidation();
+    }
+    public function closeModal()
+    {
+        $this->activemodal = null;
+        $this->resetForm();
+        $this->dispatch('refresh-asset');
+    }
     #[On('loadcreateassetform')]
     public function loadcreateasset(){
         $this->activemodal = 'create-asset';
         $this->title = "Tambah Aset";
-        $this->reset(['tag','category_id','brand','model','serial_number','status']);
+        $this->resetForm();
         $this->asset = null;
     }
     public function createasset(){
@@ -61,16 +73,15 @@ new class extends Component {
             //'T20_specifications' => $filteredConnectors,
             'T20_status' => $this->status,
         ]);
-        $this->activemodal = null;
-        $this->reset(['tag','category_id','brand','model','serial_number','status']);
-        $this->dispatch('refresh-asset');
+        Toaster::success('Aset ditambah ke Inventori');
+        $this->closeModal();
     }
     #[On('loadeditassetform')]
     public function loadupdateasset($id)
     {
         $this->activemodal = 'edit-asset';
         $this->title = "Kemaskini Aset";
-        $this->reset(['tag','category_id','brand','model','serial_number','status']);
+        $this->resetForm();
         $this->asset = Asset::findOrFail($id);
         $this->asset_id = $this->asset->T20_id;
         $this->category_id = $this->asset->T20T21_category_id;
@@ -93,9 +104,19 @@ new class extends Component {
             'T20_serial_number' => $this->serial_number,
             'T20_status' => $this->status,
         ]);
-        $this->activemodal = null;
-        $this->reset(['tag','category_id','brand','model','serial_number','status']);
-        $this->dispatch('refresh-asset');
+        $this->closeModal();
+    }
+    public function deleteasset()
+    {
+        $asset = Asset::where('T20_id', $this->asset_id)->firstOrFail();
+        if($asset->isDeletable())
+        {
+            Toaster::error('Aset tidak boleh dipadam');
+            return;
+        }
+        $asset->delete();
+        Toaster::error('Aset telah berjaya dipadam');
+        $this->closeModal();
     }
 }; ?>
 
@@ -104,7 +125,7 @@ new class extends Component {
     <x-ui.content-modal title="{{ $title }}">
         @if($activemodal === 'create-asset' or $activemodal === 'edit-asset')
             @canany(['create:assets','update:assets'])
-                <form 
+                <form
                     wire:submit="
                     @if($asset?->exists)
                     updateasset
@@ -134,9 +155,13 @@ new class extends Component {
                         <x-ui.input type="text" placeholder="Brand" wire:model="brand" label="Jenama" id="brand"></x-ui.input>
                         <x-ui.input type="text" placeholder="Model" wire:model="model" label="Model" id="model"></x-ui.input>
                         <x-ui.input type="text" placeholder="Serial Number" wire:model="serial_number" label="Nombor Siri" id="serial_number"></x-ui.input>
-                        <x-ui.select wire:model="status" id="status" label="Status Penyelenggaraan">
-                            <option value="available" selected>Dalam Simpanan</option>
-                            <option value="maintenance">Penyelenggaraan</option>
+                        <x-ui.select wire:model="status" id="status" label="Status Penyelenggaraan" required>
+                            <option value="" >--Pilih Status Aset--</option>
+                            @foreach(AssetStatus::cases() as $case)
+                                <option value="{{ $case->value }}" {{ old('status', $order->status->value ?? '') === $case->value ? 'selected' : '' }}>
+                                    {{ ucfirst($case->label()) }}
+                                </option>
+                            @endforeach
                         </x-ui.select>
                     </x-ui.grid>
                     {{--
@@ -146,15 +171,18 @@ new class extends Component {
                             <x-ui.input type="number" wire:model="connectors.{{ $key }}_count" id="{{ $key }}_count" label="Bilangan {{ strtoupper($label) }}"></x-ui.input>
                         @endforeach
                     </x-ui.grid>--}}
-                    <x-submit-button>
+                    <x-ui.button type="submit" color="blue">
                         @if($asset?->exists)
                             Kemaskini Aset
                         @else
                             Tambah Aset
                         @endif
-                    </x-submit-button>
+                    </x-ui.button>
                     @if($asset?->exists && $asset->isDeletable())
-                        <x-ui.button color="red">
+                        <x-ui.button
+                            wire:click="deleteasset"
+                            wire:confirm="Adakah anda pasti untuk memadam aset ini?"
+                            type="button" color="red">
                             Padam Aset
                         </x-ui.button>
                     @endif
