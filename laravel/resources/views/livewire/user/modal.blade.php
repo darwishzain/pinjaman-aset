@@ -3,11 +3,11 @@
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
 use Livewire\Attributes\On;
-
 new class extends Component {
     public ?string $activemodal = null;
     public string $title = '';
@@ -29,8 +29,8 @@ new class extends Component {
     public ?Role $role = null;
     public string $roleid = '';
 
-    #[On('loadcreateform')]
-    public function loadcreateform(){
+    #[On('loadcreateuserform')]
+    public function loadcreateuserform(){
         $this->title = 'Tambah Pengguna';
         $this->activemodal = 'create-user';
     }
