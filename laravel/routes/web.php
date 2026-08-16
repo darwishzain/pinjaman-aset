@@ -33,10 +33,11 @@ Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/users/create', [ManageUserController::class,'create'])->name('users.create');
     Route::post('/users/store', [ManageUserController::class,'store'])->name('users.store');
 });
-//Volt::route('/assets','asset')->middleware(['auth'])->name('assets.index');
 Route::middleware(['auth'])->group(function(){
-    Route::get('/users',[ManageUserController::class,'index'])->name('users.index');
-    Route::get('/assets', [ManageAssetController::class,'index'])->name('assets.index');
+    Volt::route('/users','user')->name('users.index');
+    //Route::get('/users',[ManageUserController::class,'index'])->name('users.index');
+    Volt::route('/assets','asset')->name('assets.index');
+    //Route::get('/assets', [ManageAssetController::class,'index'])->name('assets.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
     Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
