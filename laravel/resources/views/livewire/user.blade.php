@@ -37,16 +37,18 @@ new class extends Component {
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <x-ui.module-nav-group />
+                <x-ui.module-nav-group>
+                    @can('create:users')
+                    <x-ui.module-nav-button wire:click="$dispatch('loadcreateuserform')">Tambah Pengguna</x-ui.module-nav-button>
+                    @endcan
+                    @can('update:role-permissions')
+                    <x-ui.module-nav-button wire:click="$dispatch('loadeditroleform')">Tetapan Peranan</x-ui.module-navvbutton>
+                    @endcan
+                </x-ui.module-nav-group>
                 @canany(['create:users','view-any:users','update:user-roles','update:user-permissions','update:role-permissions'])
                     <livewire:user.modal/>
                     <livewire:view.modal/>
-                    @can('create:users')
-                    <x-ui.button wire:click="$dispatch('loadcreateuserform')">Tambah Pengguna</x-ui.button>
-                    @endcan
-                    @can('update:role-permissions')
-                    <x-ui.button wire:click="$dispatch('loadeditroleform')">Tetapan Peranan</x-ui.button>
-                    @endcan
+                    
                     @if($this->users->isEmpty())
                         <x-ui.title>Tiada Pengguna</x-ui.title>
                     @else

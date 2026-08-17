@@ -36,7 +36,11 @@ new class extends Component {
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <x-ui.module-nav-group />
+                <x-ui.module-nav-group>
+                    @can('create:assets')
+                    <x-ui.module-nav-button wire:click="$dispatch('loadcreateassetform')">Tambah Aset</x-ui.module-nav-button>
+                    @endcan
+                </x-ui.module-nav-group>
                 @canany(['create:assets','view:assets','view-any:assets','update:assets'])
                     <livewire:asset.modal></livewire:asset.modal>
                     <livewire:view.modal></livewire:view.modal>
