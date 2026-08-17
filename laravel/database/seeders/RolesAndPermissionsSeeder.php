@@ -31,6 +31,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'update:assets']);
         //* Request Permissions
         Permission::firstOrCreate(['name' => 'create:requests']);
+        Permission::firstOrCreate(['name' => 'update:requests']);
         Permission::firstOrCreate(['name' => 'view:requests']);
         Permission::firstOrCreate(['name' => 'view-any:requests']);
         Permission::firstOrCreate(['name' => 'support:requests']);// Department manager
