@@ -11,7 +11,7 @@ new class extends Component {
     public string $title = "Senarai Pengguna";
     public function mount()
     {
-        if(!auth()->user()->canAny(['create:users']))
+        if(!auth()->user()->canAny(['create:users','view-any:users','update:user-roles','update:user-permissions','update:role-permissions']))
         {
             abort(403,"Tiada kebenaran untuk mengakses halaman ini");
         }
@@ -38,11 +38,14 @@ new class extends Component {
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <x-ui.module-nav-group />
-                @canany(['create:users','view:users','view-any:users'])
+                @canany(['create:users','view-any:users','update:user-roles','update:user-permissions','update:role-permissions'])
                     <livewire:user.modal/>
                     <livewire:view.modal/>
                     @can('create:users')
                     <x-ui.button wire:click="$dispatch('loadcreateuserform')">Tambah Pengguna</x-ui.button>
+                    @endcan
+                    @can('update:role-permissions')
+                    <x-ui.button wire:click="$dispatch('loadeditroleform')">Tetapan Peranan</x-ui.button>
                     @endcan
                     @if($this->users->isEmpty())
                         <x-ui.title>Tiada Pengguna</x-ui.title>

@@ -58,6 +58,7 @@ new class extends Component {
     public string $user_id = '';
     public array $userroles = [];
     public array $userpermissions = [];
+    public string $selectRole = '';
     public array $rolepermissions = [];
 
     public ?Role $role = null;
@@ -65,7 +66,7 @@ new class extends Component {
 
     public function resetForm()
     {
-        $this->reset(['user_id','name', 'email', 'group', 'password', 'password_confirmation','userpermissions', 'userroles']);
+        $this->reset(['user_id','name', 'email', 'group', 'password', 'password_confirmation', 'userroles', 'userpermissions', 'rolepermissions']);
         $this->resetValidation();
     }
     public function closeModal()
@@ -164,16 +165,26 @@ new class extends Component {
         $this->closeModal();
     }
     #[On('loadeditroleform')]
-    public function loadeditroleform($id){
-        $this->title = 'Kemaskini Peranan';
+    public function loadeditroleform()
+    {
+        $this->title = "Tetapan Kebenaran Peranan";
         $this->activemodal = 'update-role';
-        $this->role = Role::findOrFail($id);
-        $this->roleid = $this->role->id;
-        $this->allpermissions = Permission::all();
-        $this->rolepermissions = $this->role
-            ->permissions->pluck('id')
-            ->mapWithKeys(fn ($id) => [$id => true])
-            ->toArray();
+        $this->resetForm();
+    }
+    public function updatedSelectRole($value)
+    {
+        if (empty($value)) {
+            $this->rolepermissions = [];
+            return;
+        }
+        $role = Role::find($value);
+        if ($role) {
+            $this->rolepermissions = $role->permissions
+                ->pluck('id')
+                ->mapWithKeys(fn ($id) => [$id => true])
+                ->toArray();
+        }
+        Toaster::success('Memuatkan tetapan kebenaran bagi peranan '.$role->name);
     }
     public function updaterole(){
         if (!$this->roleid) {
@@ -288,36 +299,34 @@ new class extends Component {
                         @endif
                 </form>
             @endcan
-        @elseif($this->activemodal === 'update-role' && $role)
-            @can('update:user-roles')
-                <form wire:submit="updaterole">
-                    <input
-                        type="hidden"
-                        wire:model="roleid"
-                    >
-                    <div class="grid grid-cols-1 gap-1">
-                        <div>
-                            <div class="text-sm text-gray-500">Nama Peranan</div>
-                            <div class="font-medium">{{ $role->name }}</div>
-                        </div>
-                    </div>
-                    {{--Permissions--}}
-                    <h3>Kebenaran</h3>
-                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        @foreach ($allpermissions as $permission)
-                            <label class="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    wire:model="rolepermissions.{{ $permission->id }}" 
-                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                >
-                                <span>{{ $permission->name }}</span>
-                            </label>
+        @elseif($this->activemodal === 'update-role')
+            @can('update:role-permissions')
+                <x-ui.grid min="1" max="1">
+                    <x-ui.select wire:model.live="selectRole">
+                        <option value="">--Sila Pilih Peranan--</option>
+                        @foreach(Role::all() as $role)
+                            <option value="{{$role->id}}">{{strtoupper($role->name)}}</option>
                         @endforeach
-                    </div>
-                    <x-submit-button>
-                        Kemaskini
-                    </x-submit-button>
+                    </x-ui.select>
+                </x-ui.grid>
+                <form wire:submit="updaterole">
+                    <x-ui.title>Kebenaran Peranan</x-ui.title>
+                    <x-ui.grid min="1" max="3">
+                    @foreach (Permission::all() as $permission)
+                        <label class="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                wire:model="rolepermissions.{{ $permission->id }}" 
+                                @disabled(empty($selectRole))
+                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            >
+                            <span>{{ $permission->name }}</span>
+                        </label>
+                    @endforeach
+                    </x-ui.grid>
+                    <x-ui.button type="submit" color="blue">
+                        Kemaskini Kebenaran Peranan
+                    </x-ui.button>
                 </form>
             @endcan
         @endif
