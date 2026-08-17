@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Asset;
 use App\Models\Request;
+use App\Models\Transaction;
 
 class User extends Authenticatable
 {
@@ -54,6 +55,29 @@ class User extends Authenticatable
     }
     public function requests(){
         return $this->hasMany(Request::class, 'T30T10_user_id','id');
+    }
+    public function hasRequests(): bool
+    {
+        return $this->requests()->exists();
+    }
+    public function transactions()
+    {
+        return $this->hasManyThrough(
+            Transaction::class,
+            Request::class,
+            'T30T10_user_id',
+            'T40T30_request_id',
+            'id',
+            'T30_id'
+        );
+    }
+    public function hasTransactions(): bool
+    {
+        return $this->transactions()->exists();
+    }
+    public function isDeletable(): bool
+    {
+        return !$this->hasTransactions() && !$this->hasRequests();
     }
     /**
      * The attributes that should be hidden for serialization.

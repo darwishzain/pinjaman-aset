@@ -52,6 +52,8 @@ new class extends Component {
                                 <tr>
                                     <x-ui.th>Pengguna</x-ui.th>
                                     <x-ui.th>Peranan</x-ui.th>
+                                    <x-ui.th>Permohonan</x-ui.th>
+                                    <x-ui.th>Aset</x-ui.th>
                                     <x-ui.th>Tindakan</x-ui.th>
                                 </tr>
                             </x-slot>
@@ -65,6 +67,8 @@ new class extends Component {
                                         {{$role->name}}
                                     @endforeach
                                 </x-ui.td>
+                                <x-ui.td>{{$user->requests()->count()}}</x-ui.td>
+                                <x-ui.td>{{$user->transactions()->count()}}</x-ui.td>
                                 <x-ui.td>
                                     @can('update:user-roles')
                                     <x-ui.button wire:click="$dispatch('loadedituserform',{id:'{{ $user->id }}'})">
@@ -78,6 +82,7 @@ new class extends Component {
                             </tr>
                         @endforeach
                         </x-ui.table>
+                        {{ $this->users->links() }}
                     @endif
                 @endcanany
             </div>

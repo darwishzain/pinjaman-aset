@@ -73,7 +73,7 @@ new class extends Component {
             //'T20_specifications' => $filteredConnectors,
             'T20_status' => $this->status,
         ]);
-        Toaster::success('Aset ditambah ke Inventori');
+        Toaster::success('Aset ditambah ke inventori');
         $this->closeModal();
     }
     #[On('loadeditassetform')]
@@ -109,13 +109,14 @@ new class extends Component {
     public function deleteasset()
     {
         $asset = Asset::where('T20_id', $this->asset_id)->firstOrFail();
-        if($asset->isDeletable())
+        if(!$asset->isDeletable())
         {
             Toaster::error('Aset tidak boleh dipadam');
             return;
         }
         $asset->delete();
-        Toaster::error('Aset telah berjaya dipadam');
+        $this->asset = null;
+        Toaster::success('Aset telah berjaya dipadam');
         $this->closeModal();
     }
 }; ?>
@@ -180,9 +181,10 @@ new class extends Component {
                     </x-ui.button>
                     @if($asset?->exists && $asset->isDeletable())
                         <x-ui.button
+                            type="button" color="red"
                             wire:click="deleteasset"
                             wire:confirm="Adakah anda pasti untuk memadam aset ini?"
-                            type="button" color="red">
+                        >
                             Padam Aset
                         </x-ui.button>
                     @endif
