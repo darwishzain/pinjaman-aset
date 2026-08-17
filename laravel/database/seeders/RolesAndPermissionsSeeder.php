@@ -22,6 +22,8 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'view:users']);
         Permission::firstOrCreate(['name' => 'view-any:users']);
         Permission::firstOrCreate(['name' => 'update:user-roles']);
+        Permission::firstOrCreate(['name' => 'update:user-permissions']);
+        Permission::firstOrCreate(['name' => 'update:role-permissions']);
         //* Asset Permissions
         Permission::firstOrCreate(['name' => 'create:assets']);
         Permission::firstOrCreate(['name' => 'view:assets']);
