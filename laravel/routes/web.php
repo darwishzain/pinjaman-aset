@@ -38,9 +38,10 @@ Route::middleware(['auth'])->group(function(){
     //Route::get('/users',[ManageUserController::class,'index'])->name('users.index');
     Volt::route('/assets','asset')->name('assets.index');
     //Route::get('/assets', [ManageAssetController::class,'index'])->name('assets.index');
+    Volt::route('/requests','request')->name('requests.index');
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
-    Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
+    //Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
     Route::get('/transactions', [ManageTransactionController::class,'index'])->name('transactions.index');
     Route::get('/transactions/request/{id}', [ManageTransactionController::class,'request'])->name('transactions.request');
 });

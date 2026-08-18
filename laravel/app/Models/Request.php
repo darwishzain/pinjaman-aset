@@ -54,7 +54,9 @@ class Request extends Model
     ];
     public function needSupport()
     {
-        return $this->T30_support_status === ReviewStatus::PENDING;
+        return $this->T30_support_status === ReviewStatus::PENDING
+        && $this->T30_approve_status === ReviewStatus::PENDING
+        && $this->T30_status === RequestStatus::PENDING;
     }
     public function isSupported()
     {
@@ -64,9 +66,11 @@ class Request extends Model
     {
         return $this->T30_support_status === ReviewStatus::REJECTED;
     }
-    public function needApproval()
+    public function needApprove()
     {
-        return $this->T30_support_status === ReviewStatus::ACCEPTED && $this->T30_approve_status === ReviewStatus::PENDING;
+        return $this->T30_support_status === ReviewStatus::ACCEPTED
+        && $this->T30_approve_status === ReviewStatus::PENDING
+        && $this->T30_status === RequestStatus::PENDING;
     }
     public function isApproved()
     {
@@ -117,5 +121,25 @@ class Request extends Model
     {
         return $this->hasMany(Transaction::class, 'T40T30_request_id','T30_id')
             ->where('T40_action', 'out');
+    }
+    public function canUpdate():bool
+    {
+        return $this->T30_status == RequestStatus::PENDING
+        && $this->T30_support_status == ReviewStatus::PENDING
+        && $this->T30_approve_status == ReviewStatus::PENDING
+        && $this->T30T10_user_id === auth()->user()->id;
+    }
+    public function canSupport():bool
+    {
+        $authuser = auth()->user();
+        return $this->needSupport()
+        && $this->user?->group == $authuser?->group
+        && $authuser?->can('support:requests');
+    }
+    public function canApprove():bool
+    {
+        $authuser = auth()->user();
+        return $this->needApprove()
+        && $authuser?->can('approve:requests');
     }
 }

@@ -62,11 +62,11 @@ new class extends Component {
     public array $rolepermissions = [];
 
     public ?Role $role = null;
-    public string $roleid = '';
+    public string $role_id = '';
 
     public function resetForm()
     {
-        $this->reset(['user_id','name', 'email', 'group', 'password', 'password_confirmation', 'userroles', 'userpermissions', 'rolepermissions']);
+        $this->reset(['user_id','name', 'email', 'group', 'password', 'password_confirmation', 'userroles', 'userpermissions', 'selectRole', 'role_id', 'rolepermissions']);
         $this->resetValidation();
     }
     public function closeModal()
@@ -179,6 +179,7 @@ new class extends Component {
         }
         $role = Role::find($value);
         if ($role) {
+            $this->role_id = $role->id;
             $this->rolepermissions = $role->permissions
                 ->pluck('id')
                 ->mapWithKeys(fn ($id) => [$id => true])
@@ -187,20 +188,18 @@ new class extends Component {
         Toaster::success('Memuatkan tetapan kebenaran bagi peranan '.$role->name);
     }
     public function updaterole(){
-        if (!$this->roleid) {
+        if (!$this->role_id) {
             return;
         }
-        $this->role = Role::findOrFail($this->roleid);
+        $role = Role::findOrFail($this->role_id);
         $permissionids = collect($this->rolepermissions)
             ->filter(fn ($value) => (bool) $value)
             ->keys()
             ->map(fn ($id) => (int) $id)
             ->toArray();
-        $this->role->syncPermissions($permissionids);
-        $this->reset(['roleid','rolepermissions']);
-        $this->activemodal = null;
-        $this->dispatch('refresh-user');
-        $this->dispatch('refresh-role');
+        $role->syncPermissions($permissionids);
+        Toaster::success('Kebenaran peranan '.strtoupper($role->name).' berjaya dikemaskini');
+        $this->closeModal();
     }
 
 }; ?>
@@ -311,6 +310,7 @@ new class extends Component {
                 </x-ui.grid>
                 <form wire:submit="updaterole">
                     <x-ui.title>Kebenaran Peranan</x-ui.title>
+                    <x-ui.input wire:model="role_id" type="hidden" id="role_id"></x-ui.input>
                     <x-ui.grid min="1" max="3">
                     @foreach (Permission::all() as $permission)
                         <label class="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer">

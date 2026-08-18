@@ -58,7 +58,7 @@ new class extends Component {
                                     @endif
                                 @endcan
                                 @can('approve:requests')
-                                    @if($request->needApproval())
+                                    @if($request->needApprove())
                                         <x-ui.button color="blue" wire:click="$dispatch('loadapproverequest', { id: '{{ $request->T30_id }}' })">LULUSKAN</x-ui.button>
                                     @endif
                                 @endcan
