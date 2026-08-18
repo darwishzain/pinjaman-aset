@@ -142,4 +142,13 @@ class Request extends Model
         return $this->needApprove()
         && $authuser?->can('approve:requests');
     }
+    public function canGive():bool
+    {
+        
+        return $this->hasMany(RequestAsset::class,'T31T30_request_id','T30_id');
+    }
+    public function canTake():bool
+    {
+
+    }
 }

@@ -42,7 +42,7 @@ new class extends Component {
     public function loadtransactionout($request_id,$asset_category_id)
     {
         $this->activemodal = 'transaction-out';
-        $this->title = 'Pergerakan Masuk Aset';
+        $this->title = 'Pergerakan Keluar Aset';
         $this->reset(['asset_id','request_id','action','giver_id','taker_id']);
         $this->action = 'out';
         $this->users = User::all();
@@ -76,6 +76,7 @@ new class extends Component {
                 $asset->update(['T20_status' => AssetStatus::AVAILABLE,]);
             }
             $this->activemodal = null;
+            $this->dispatch('refresh-transaction');
         }
     }
 }; ?>

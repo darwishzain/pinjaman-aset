@@ -42,8 +42,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/requests/support', [ManageRequestController::class,'supportRequests'])->name('requests.support');
     Route::get('/requests/approve', [ManageRequestController::class,'approveRequests'])->name('requests.approve');
     //Route::get('/requests', [ManageRequestController::class,'index'])->name('requests.index');
-    Route::get('/transactions', [ManageTransactionController::class,'index'])->name('transactions.index');
-    Route::get('/transactions/request/{id}', [ManageTransactionController::class,'request'])->name('transactions.request');
+    Volt::route('transactions','transaction')->name('transactions.index');
+    Volt::route('/transactions/{request}','transaction')->name('transactions.request');
+    //Route::get('/transactions', [ManageTransactionController::class,'index'])->name('transactions.index');
+    //Route::get('/transactions/request/{id}', [ManageTransactionController::class,'request'])->name('transactions.request');
 });
 //  middleware('can:"view-any:requests"')
 Route::middleware(['auth','can:"update:user-roles"'])->group(function(){
