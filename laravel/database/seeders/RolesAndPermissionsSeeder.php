@@ -40,5 +40,20 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'create:transactions']);
         Permission::firstOrCreate(['name' => 'view:transactions']);
         Permission::firstOrCreate(['name' => 'view-any:transactions']);
+        //* Assign permission
+        $adminRole->syncPermissions([
+            "create:users","view:users","view-any:users",
+            "update:user-roles","update:user-permissions","update:role-permissions",
+            "create:assets","update:assets","view:assets","view-any:assets",
+            "create:requests","update:requests","view:requests","view-any:requests","approve:requests",
+            "create:transactions","view-any:transactions"
+        ]);
+        $managerRole->syncPermissions([
+            "view:users",
+            "create:requests","update:requests","view:requests","view-any:requests","support:requests",
+        ]);
+        $staffRole->syncPermissions([
+            "create:requests","update:requests"
+        ]);
     }
 }
