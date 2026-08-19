@@ -8,6 +8,8 @@ use App\Models\Asset;
 use App\Models\Request;
 use App\Models\Transaction;
 use App\Enums\AssetStatus;
+use App\Enums\RequestStatus;
+use Masmerise\Toaster\Toaster;
 
 new class extends Component {
     public ?string $activemodal = null;
@@ -16,26 +18,37 @@ new class extends Component {
     public ?Collection $assets = null;
 
     public ?Request $request = null;
-    public ?Transaction $transaction = null;
     public ?asset $asset = null;
     public ?string $request_id = null;
+    public ?string $transaction_id = null;
     public ?string $action = null;
     public ?string $asset_id = null;
     public ?string $giver_id = null;
     public ?string $taker_id = null;
+    public function resetForm()
+    {
+        $this->reset(['asset_id','request_id','action','giver_id','taker_id']);
+        $this->resetValidation();
+    }
+    public function closeModal()
+    {
+        $this->activemodal = null;
+        $this->resetForm();
+        $this->dispatch('refresh-transaction');
+    }
     #[On('loadtransactionin')]
     public function loadtransactionin($transaction_id)
     {
         $this->activemodal = 'transaction-in';
         $this->title = 'Pergerakan Masuk Aset';
-        $this->reset(['asset_id','request_id','action','giver_id','taker_id']);
+        $this->resetForm();
         $this->action = 'in';
-        $this->transaction = Transaction::find($transaction_id);
+        $transaction = Transaction::find($transaction_id);
         $this->users = User::all();
-        $this->asset = Asset::find($this->transaction->T40T20_asset_id)->first();
+        $this->asset = Asset::find($transaction->T40T20_asset_id);
         $this->asset_id = $this->asset->T20_id;
-        $this->request_id = $this->transaction->request->T30_id;
-        $this->giver_id = $this->transaction->request->T30T10_user_id;
+        $this->request_id = $transaction->request->T30_id;
+        $this->giver_id = $transaction->request->T30T10_user_id;
         $this->taker_id = auth()->user()->id;
     }
     #[On('loadtransactionout')]
@@ -43,7 +56,8 @@ new class extends Component {
     {
         $this->activemodal = 'transaction-out';
         $this->title = 'Pergerakan Keluar Aset';
-        $this->reset(['asset_id','request_id','action','giver_id','taker_id']);
+        $this->resetForm();
+        $this->request = null;
         $this->action = 'out';
         $this->users = User::all();
         $this->assets = Asset::where('T20T21_category_id',$asset_category_id)
@@ -67,16 +81,29 @@ new class extends Component {
         if($transaction)
         {
             $asset = Asset::find($this->asset_id);
+            $request = Request::find($this->request_id);
             if($this->action == 'out')
             {
+                $request->update(['T30_status'=>RequestStatus::ACTIVE]);
                 $asset->update(['T20_status' => AssetStatus::ACTIVE,]);
+                Toaster::success('Aset '.$asset->T20_tag.' berjaya diserahkan');
             }
             else if($this->action == 'in')
             {
+                $updatedrequest = Request::find($this->request_id);
+                if($updatedrequest->transactionCompleted())
+                {
+                    Toaster::warning('not pass here');
+                    $updatedrequest->update(['T30_status'=>RequestStatus::COMPLETED]);
+                }
+                else
+                {
+                    Toaster::warning('Not all return');
+                }
                 $asset->update(['T20_status' => AssetStatus::AVAILABLE,]);
+                Toaster::success('Aset '.$asset->T20_tag.' berjaya diterima');
             }
-            $this->activemodal = null;
-            $this->dispatch('refresh-transaction');
+            $this->closeModal();
         }
     }
 }; ?>
@@ -113,7 +140,13 @@ new class extends Component {
                     <option value="{{$user->id}}">{{$user->name}}</option>
                     @endforeach
                 </x-ui.select>
-                <x-ui.button>Simpan</x-ui.button>
+                <x-ui.button>
+                    @if(isset($asset_id))
+                        Terima
+                    @else
+                        Serah
+                    @endif
+                </x-ui.button>
             </x-ui.grid>
         </form>
     </x-ui.content-modal>

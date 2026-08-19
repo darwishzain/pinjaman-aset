@@ -28,6 +28,16 @@ class RequestAsset extends Model
     {
         return $this->belongsTo(AssetCategory::class, 'T31T21_asset_category_id');
     }
+    public function canGive():bool
+    {
+        $category_id = $this->category->T21_id;
+        $transactionsout = Transaction::where('T40T30_request_id',$this->T31T30_request_id)
+            ->where('T40_action','out')
+            ->whereHas('asset', function ($query) use ($category_id) {
+                $query->where('T20T21_category_id', $category_id);
+            });
+        return (int)$this->T31_quantity > $transactionsout->count();
+    }
     public function transactionCategoryCount($category_id)
     {
         return $this->request->transactions->whereIn('asset.T20T21_category_id',$category_id)->count();

@@ -90,7 +90,7 @@ new class extends Component {
                     <livewire:transaction.modal />
                     @if($this->request && $this->request->exists)
                         <x-ui.request-details :request="$request" />
-                        <x-ui.title>Perihal Kuntiti Aset</x-ui.title>
+                        <x-ui.title>Perihal Kuantiti Aset</x-ui.title>
                         <x-ui.table>
                             <x-slot name="header">
                                 <tr>
@@ -102,9 +102,9 @@ new class extends Component {
                             @foreach($this->requestassets as $requestasset)
                                 <tr wire:key="requestasset-row-{{$requestasset->T31_id}}">
                                     <x-ui.td>{{ $requestasset->category->T21_name }} x {{ $requestasset->T31_quantity }}</x-ui.td>
-                                    <x-ui.td></x-ui.td>
+                                    <x-ui.td>{{ $requestasset->canGive()}}</x-ui.td>
                                     <x-ui.td>
-                                        @if(!$requestasset->isRequestAssetFulfilled($requestasset->category->T21_id))
+                                        @if($requestasset->canGive())
                                         <x-ui.button
                                             wire:click="dispatch('loadtransactionout',{
                                                 request_id:'{{ $request->T30_id}}',
@@ -121,7 +121,7 @@ new class extends Component {
                                 </tr>
                             @endforeach
                         </x-ui.table>
-                        @if($this->transactions->where('T40_action','in'))
+                        @if($transactions = $this->transactions)
                             <x-ui.title>Pergerakan Aset</x-ui.title>
                             <x-ui.table>
                                 <x-slot name="header">
@@ -132,20 +132,23 @@ new class extends Component {
                                         <th>Tindakan</th>
                                     </tr>
                                 </x-slot>
-                                @foreach($request->transactionsOut as $transaction)
-                                    <tr>
-                                        <td>{{ $transaction->asset->category->T21_name }}</td>
-                                        <td>{{ $transaction->T40_created_at }}</td>
+                                @foreach($this->transactions->where('T40_action','out') as $transactionout)
+                                    <tr wire:key="transaction-out-row-{{$transactionout->T40_id}}">
                                         <td>
-                                            @if( $transaction->transactionIn )
-                                                {{ $transaction->transactionIn->T40_created_at }}
-                                            @else
+                                            {{ $transactionout->asset->category->T21_name }}
+                                            {{ $transactionout->asset->T20_tag}}
+                                        </td>
+                                        <td>{{ $transactionout->T40_created_at }}</td>
+                                        <td>
+                                            @if($transactionout->hasTransactionIn())
+                                            {{ $transactionout->transactionIn->T40_created_at }}
+                                            @elseif( $transactionout->canTake() )
                                             <x-ui.button
                                                 wire:click="dispatch('loadtransactionin',
-                                                {transaction_id:'{{ $transaction->T40_id}}'})"
+                                                {transaction_id:'{{ $transactionout->T40_id}}'})"
                                                 color="green"
                                             >
-                                                Transaksi
+                                                Transaksi Masuk
                                             </x-ui.button>
                                             @endif
                                         </td>

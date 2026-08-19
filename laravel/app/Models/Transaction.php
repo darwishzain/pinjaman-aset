@@ -69,4 +69,15 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class,'T40T10_handler_id');
     }
+    public function canTake():bool
+    {
+        if($this->T40_action !== 'out')
+        {
+            return false;
+        }
+        return !self::where('T40T30_request_id',$this->T40_T30_request_id)
+            ->where('T40T20_asset_id',$this->T40T20_asset_id)
+            ->where('T40_action','in')
+            ->exists();
+    }
 }

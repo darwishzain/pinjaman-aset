@@ -142,13 +142,14 @@ class Request extends Model
         return $this->needApprove()
         && $authuser?->can('approve:requests');
     }
-    public function canGive():bool
+    public function transactionCompleted():bool
     {
-        
-        return $this->hasMany(RequestAsset::class,'T31T30_request_id','T30_id');
-    }
-    public function canTake():bool
-    {
-
+        $transactionoutCount = Transaction::where('T40T30_request_id',$this->T30_id)
+            ->where('T40_action','out')
+            ->count();
+        $transactioninCount = Transaction::where('T40T30_request_id',$this->T30_id)
+            ->where('T40_action','in')
+            ->count();
+        return $transactionoutCount > 0 && $transactionoutCount === $transactioninCount;
     }
 }

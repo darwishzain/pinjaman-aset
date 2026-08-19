@@ -32,29 +32,34 @@ new class extends Component {
     {
         $user = auth()->user();
         $query = Request::query();
-        if($user->can('view-any:requests'))
-        {
-            $query->where('T30_status','!=',RequestStatus::COMPLETED);
-        }
-        else if($user->can('approve:requests'))
-        {
-            $query->where('T30_status','!=',RequestStatus::COMPLETED)
-            ->where('T30_status',RequestStatus::PENDING)
-            ->where('T30_support_status',ReviewStatus::ACCEPTED)
-            ->where('T30_approve_status',ReviewStatus::PENDING);
-        }
-        else if($user->can('support:requests'))
-        {
-            $query->where('T30_status','!=',RequestStatus::COMPLETED)
-            ->where('T30_status',RequestStatus::PENDING)
-            ->where('T30_support_status',ReviewStatus::PENDING)
-            ->where('T30_approve_status',ReviewStatus::PENDING)
-            ->where('group',$user->group);
-        }
-        else
-        {
-            $query->where('T30T10_user_id',$user->id);
-        }
+        $query->where(function ($q) use ($user) {
+            $q->where('T30T10_user_id', $user->id);
+
+            if ($user->can('view-any:requests')) {
+                $q->orWhere(function ($viewAnyQ) {
+                    $viewAnyQ->whereNotNull('T30_id'); // Matches all records
+                });
+            }
+            elseif ($user->can('approve:requests')) {
+                $q->orWhere(function ($approveQ) {
+                    $approveQ->where('T30_status', '!=', RequestStatus::COMPLETED)
+                        ->where('T30_status', RequestStatus::PENDING)
+                        ->where('T30_support_status', ReviewStatus::ACCEPTED)
+                        ->where('T30_approve_status', ReviewStatus::PENDING);
+                });
+            } 
+            elseif ($user->can('support:requests')) {
+                $q->orWhere(function ($supportQ) use ($user) {
+                    $supportQ->where('T30_status', '!=', RequestStatus::COMPLETED)
+                        ->where('T30_status', RequestStatus::PENDING)
+                        ->where('T30_support_status', ReviewStatus::PENDING)
+                        ->where('T30_approve_status', ReviewStatus::PENDING)
+                        ->whereHas('user', function ($userQ) use ($user) {
+                            $userQ->where('group', $user->group);
+                        });
+                });
+            }
+        });
         return $query->paginate(10);
     }
     #[On('refresh-request')]
