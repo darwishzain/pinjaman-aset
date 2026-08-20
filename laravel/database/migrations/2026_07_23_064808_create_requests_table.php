@@ -55,11 +55,11 @@ return new class extends Migration
         });
         Schema::create('T40_transactions', function (Blueprint $table) {
             $table->ulid('T40_id')->primary();
-            $table->foreignUlid('T40T30_request_id')//Link to request
-                ->constrained(table:'T30_requests',column:'T30_id')
-                ->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignUlid('T40T20_asset_id')
                 ->constrained(table:'T20_assets',column:'T20_id')
+                ->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignUlid('T40T30_request_id')//Link to request
+                ->constrained(table:'T30_requests',column:'T30_id')
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->string('T40_action');
             $table->foreignUlid('T40T10_giver_id')//default to handler->id (in) or request->user->id (out)
